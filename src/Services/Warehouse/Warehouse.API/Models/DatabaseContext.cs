@@ -18,6 +18,9 @@ namespace Warehouse.API.Models
         public DbSet<Section> Sections { get; set; }
         public DbSet<StoredItem> StoredItems { get; set; }
         public DbSet<Warehouse> Warehouses { get; set; }
+
+        public DbSet<StockTaking.StockTaking> StockTakings { get; set; }
+        public DbSet<StockTaking.StockTakingItem> GetStockTakingItems { get; set; }
         #endregion
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
