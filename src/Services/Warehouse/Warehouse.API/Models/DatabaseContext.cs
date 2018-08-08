@@ -115,6 +115,12 @@ namespace Warehouse.API.Models
             modelBuilder.Entity<StockTaking.StockTaking>()
                 .Property(x => x.DateTime)
                 .ValueGeneratedOnAdd();
+
+            modelBuilder.Entity<StockTaking.StockTaking>()
+                .HasOne(st => st.Warehouse)
+                .WithMany(w => w.StockTakings)
+                .HasForeignKey(st => st.WarehouseId)
+                .OnDelete(DeleteBehavior.Restrict);
             #endregion
             #region StockTakingItem
             modelBuilder.Entity<StockTaking.StockTakingItem>()

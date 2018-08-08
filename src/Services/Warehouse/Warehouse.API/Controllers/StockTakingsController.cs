@@ -5,7 +5,9 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Warehouse.API.Models;
+using Warehouse.API.Models.Extensions;
 using Warehouse.API.Models.StockTaking;
 
 namespace Warehouse.API.Controllers
@@ -47,6 +49,74 @@ namespace Warehouse.API.Controllers
             return Ok(stockTaking);
         }
 
+        [HttpGet("{id}")]
+        public async Task<IActionResult> CreateStockTakingWithWarehouseId([FromRoute] int id)
+        {
+            if (!ModelState.IsValid || !_context.Warehouses.Any(x => x.Id == id))
+            {
+                return BadRequest(ModelState);
+            }
+
+            StockTaking stockTaking = new StockTaking
+            {
+                Id = 0,
+                StockTakingItems = (from warehouse in _context.Warehouses
+                                    join section in _context.Sections on warehouse.Id equals section.WarehouseId
+                                    join position in _context.Positions on section.Id equals position.SectionId
+                                    join movement in _context.Movements on position.Id equals movement.PositionId
+                                    join storedItem in _context.StoredItems on movement.StoredItemId equals storedItem.Id
+                                    where warehouse.Id == id
+                                    select new StockTakingItem()
+                                    {
+                                        StockTakingId = 0,
+                                        StoredItemId = storedItem.Id,
+                                        PositionId = position.Id,
+                                        CurrentStock = storedItem.Count(),
+                                        CountedStock = 0
+                                    }).ToList(),
+                WarehouseId = id,
+                Area = StockTakingArea.Warehouse
+            };
+
+            EntityEntry<StockTaking> entry = await _context.StockTakings.AddAsync(stockTaking);
+
+            return Ok(entry.Entity);
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> CreateStockTakingWithSectionId([FromRoute] int id)
+        {
+            if (!ModelState.IsValid || !_context.Sections.Any(x => x.Id == id))
+            {
+                return BadRequest(ModelState);
+            }
+
+            StockTaking stockTaking = new StockTaking
+            {
+                Id = 0,
+                StockTakingItems = (from warehouse in _context.Warehouses
+                                    join section in _context.Sections on warehouse.Id equals section.WarehouseId
+                                    join position in _context.Positions on section.Id equals position.SectionId
+                                    join movement in _context.Movements on position.Id equals movement.PositionId
+                                    join storedItem in _context.StoredItems on movement.StoredItemId equals storedItem.Id
+                                    where section.Id == id
+                                    select new StockTakingItem()
+                                    {
+                                        StockTakingId = 0,
+                                        StoredItemId = storedItem.Id,
+                                        PositionId = position.Id,
+                                        CurrentStock = storedItem.Count(),
+                                        CountedStock = 0
+                                    }).ToList(),
+                WarehouseId = _context.Sections.Where(x => x.Id == id).FirstOrDefault().WarehouseId,
+                Area = StockTakingArea.Section
+            };
+
+            EntityEntry<StockTaking> entry = await _context.StockTakings.AddAsync(stockTaking);
+
+            return Ok(entry.Entity);
+        }
+
         // PUT: api/StockTakings/5
         [HttpPut("{id}")]
         public async Task<IActionResult> PutStockTaking([FromRoute] int id, [FromBody] StockTaking stockTaking)
@@ -80,22 +150,6 @@ namespace Warehouse.API.Controllers
             }
 
             return NoContent();
-        }
-
-        // POST: api/StockTakings
-        [HttpPost]
-        public async Task<IActionResult> PostStockTaking([FromBody] StockTaking stockTaking)
-        {
-            this.ModelState.Remove("Id");
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            _context.StockTakings.Add(stockTaking);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetStockTaking", new { id = stockTaking.Id }, stockTaking);
         }
 
         // DELETE: api/StockTakings/5

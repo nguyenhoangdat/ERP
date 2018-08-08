@@ -12,6 +12,13 @@ namespace Warehouse.API.Models.StockTaking
 
         public DateTime DateTime { get; set; }
 
+        [Required]
+        public int WarehouseId { get; set; }
+        public virtual Warehouse Warehouse { get; set; }
+
+        [Required]
+        public StockTakingArea Area { get; set; }
+
         public virtual ICollection<StockTakingItem> StockTakingItems { get; set; }
     }
 }
