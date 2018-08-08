@@ -49,7 +49,7 @@ namespace Warehouse.API.Controllers
             return Ok(stockTaking);
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("CreateWithWarehouseId/{id}")]
         public async Task<IActionResult> CreateStockTakingWithWarehouseId([FromRoute] int id)
         {
             if (!ModelState.IsValid || !_context.Warehouses.Any(x => x.Id == id))
@@ -83,7 +83,7 @@ namespace Warehouse.API.Controllers
             return Ok(entry.Entity);
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("CreateWithSectionId/{id}")]
         public async Task<IActionResult> CreateStockTakingWithSectionId([FromRoute] int id)
         {
             if (!ModelState.IsValid || !_context.Sections.Any(x => x.Id == id))
