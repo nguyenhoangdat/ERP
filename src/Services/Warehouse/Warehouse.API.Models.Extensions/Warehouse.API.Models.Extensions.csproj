@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\src\Services\Warehouse\Warehouse.API.Models\Warehouse.API.Models.csproj" />
+    <ProjectReference Include="..\Warehouse.API.Models\Warehouse.API.Models.csproj" />
   </ItemGroup>
 
 </Project>

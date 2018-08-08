@@ -4,15 +4,12 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 15.0.27703.2047
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Warehouse.API", "src\Services\Warehouse\Warehouse.API\Warehouse.API.csproj", "{E7AE9B67-E430-46CF-A71F-5101256A7400}"
-	ProjectSection(ProjectDependencies) = postProject
-		{8DAB4CC5-FC46-4E4A-B029-F79CC18D330A} = {8DAB4CC5-FC46-4E4A-B029-F79CC18D330A}
-	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Warehouse.API.Models", "src\Services\Warehouse\Warehouse.API.Models\Warehouse.API.Models.csproj", "{67517EDE-A1D8-4BB6-87B7-7763C5894D2F}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Restmium.Models", "src\BuildingBlocks\Restmium.Models\Restmium.Models.csproj", "{3B501BB9-0BB8-479F-99BF-E17B9BF8DD7D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Warehouse.API.Models.Extensions", "Warehouse.API.Models.Extensions\Warehouse.API.Models.Extensions.csproj", "{8DAB4CC5-FC46-4E4A-B029-F79CC18D330A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Warehouse.API.Models.Extensions", "src\Services\Warehouse\Warehouse.API.Models.Extensions\Warehouse.API.Models.Extensions.csproj", "{7B295F36-03F9-48DC-AE0C-8BF8BC7DA04A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -32,10 +29,10 @@ Global
 		{3B501BB9-0BB8-479F-99BF-E17B9BF8DD7D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3B501BB9-0BB8-479F-99BF-E17B9BF8DD7D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3B501BB9-0BB8-479F-99BF-E17B9BF8DD7D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{8DAB4CC5-FC46-4E4A-B029-F79CC18D330A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8DAB4CC5-FC46-4E4A-B029-F79CC18D330A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8DAB4CC5-FC46-4E4A-B029-F79CC18D330A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8DAB4CC5-FC46-4E4A-B029-F79CC18D330A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7B295F36-03F9-48DC-AE0C-8BF8BC7DA04A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7B295F36-03F9-48DC-AE0C-8BF8BC7DA04A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7B295F36-03F9-48DC-AE0C-8BF8BC7DA04A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7B295F36-03F9-48DC-AE0C-8BF8BC7DA04A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
