@@ -20,7 +20,7 @@ namespace Warehouse.API.Models
         public DbSet<Warehouse> Warehouses { get; set; }
 
         public DbSet<StockTaking.StockTaking> StockTakings { get; set; }
-        public DbSet<StockTaking.StockTakingItem> GetStockTakingItems { get; set; }
+        public DbSet<StockTaking.StockTakingItem> StockTakingItems { get; set; }
         #endregion
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

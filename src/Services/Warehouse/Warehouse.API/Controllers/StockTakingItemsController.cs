@@ -25,7 +25,7 @@ namespace Warehouse.API.Controllers
         [HttpGet]
         public IEnumerable<StockTakingItem> GetGetStockTakingItems()
         {
-            return _context.GetStockTakingItems;
+            return _context.StockTakingItems;
         }
 
         // GET: api/StockTakingItems/5
@@ -37,7 +37,7 @@ namespace Warehouse.API.Controllers
                 return BadRequest(ModelState);
             }
 
-            var stockTakingItem = await _context.GetStockTakingItems.FindAsync(id);
+            var stockTakingItem = await _context.StockTakingItems.FindAsync(id);
 
             if (stockTakingItem == null)
             {
@@ -92,7 +92,7 @@ namespace Warehouse.API.Controllers
                 return BadRequest(ModelState);
             }
 
-            _context.GetStockTakingItems.Add(stockTakingItem);
+            _context.StockTakingItems.Add(stockTakingItem);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetStockTakingItem", new { id = stockTakingItem.Id }, stockTakingItem);
@@ -107,13 +107,13 @@ namespace Warehouse.API.Controllers
                 return BadRequest(ModelState);
             }
 
-            var stockTakingItem = await _context.GetStockTakingItems.FindAsync(id);
+            var stockTakingItem = await _context.StockTakingItems.FindAsync(id);
             if (stockTakingItem == null)
             {
                 return NotFound();
             }
 
-            _context.GetStockTakingItems.Remove(stockTakingItem);
+            _context.StockTakingItems.Remove(stockTakingItem);
             await _context.SaveChangesAsync();
 
             return Ok(stockTakingItem);
@@ -121,7 +121,7 @@ namespace Warehouse.API.Controllers
 
         private bool StockTakingItemExists(long id)
         {
-            return _context.GetStockTakingItems.Any(e => e.Id == id);
+            return _context.StockTakingItems.Any(e => e.Id == id);
         }
     }
 }
