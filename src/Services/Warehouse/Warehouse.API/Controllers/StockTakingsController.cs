@@ -71,7 +71,7 @@ namespace Warehouse.API.Controllers
                                         StockTakingId = 0,
                                         StoredItemId = storedItem.Id,
                                         PositionId = position.Id,
-                                        CurrentStock = storedItem.Count(),
+                                        CurrentStock = position.Count(),
                                         CountedStock = 0
                                     }).ToList(),
                 WarehouseId = id,
@@ -105,7 +105,7 @@ namespace Warehouse.API.Controllers
                                         StockTakingId = 0,
                                         StoredItemId = storedItem.Id,
                                         PositionId = position.Id,
-                                        CurrentStock = storedItem.Count(),
+                                        CurrentStock = position.Count(),
                                         CountedStock = 0
                                     }).ToList(),
                 WarehouseId = _context.Sections.Where(x => x.Id == id).FirstOrDefault().WarehouseId,
