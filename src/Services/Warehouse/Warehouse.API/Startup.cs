@@ -30,6 +30,16 @@ namespace Warehouse.API
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1).AddJsonOptions(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
 
             services.AddDbContext<DatabaseContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultMSSQLConnection"), opt => opt.EnableRetryOnFailure()));
+
+            services.AddSwaggerGen(swagger => {
+                swagger.SwaggerDoc(
+                    "2019.1.1",
+                    new Swashbuckle.AspNetCore.Swagger.Info()
+                    {
+                        Title = "Warehouse.API",
+                        Version = "2019.1.1"
+                    });
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -46,6 +56,10 @@ namespace Warehouse.API
 
             app.UseHttpsRedirection();
             app.UseMvc();
+            app.UseSwagger();
+            app.UseSwaggerUI(c => {
+                c.SwaggerEndpoint("/swagger/2019.1.1/swagger.json", "Warehouse.API 2019.1.1");
+            });
         }
     }
 }
