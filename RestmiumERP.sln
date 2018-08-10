@@ -11,6 +11,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Restmium.Models", "src\Buil
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Warehouse.API.Models.Extensions", "src\Services\Warehouse\Warehouse.API.Models.Extensions\Warehouse.API.Models.Extensions.csproj", "{7B295F36-03F9-48DC-AE0C-8BF8BC7DA04A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Warehouse.API.Tests", "test\ServicesTests\Warehouse.API.Tests\Warehouse.API.Tests.csproj", "{0C325698-738D-43EE-ADAD-886317C7EDCD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{7B295F36-03F9-48DC-AE0C-8BF8BC7DA04A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7B295F36-03F9-48DC-AE0C-8BF8BC7DA04A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7B295F36-03F9-48DC-AE0C-8BF8BC7DA04A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0C325698-738D-43EE-ADAD-886317C7EDCD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0C325698-738D-43EE-ADAD-886317C7EDCD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0C325698-738D-43EE-ADAD-886317C7EDCD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0C325698-738D-43EE-ADAD-886317C7EDCD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
