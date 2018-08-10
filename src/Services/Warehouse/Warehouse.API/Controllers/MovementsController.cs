@@ -91,6 +91,7 @@ namespace Warehouse.API.Controllers
             }
 
             _context.Movements.Add(movement);
+            _context.Positions.Where(x => x.Id == movement.PositionId).FirstOrDefault().StoredItemId = movement.StoredItemId;
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetMovement", new { id = movement.Id }, movement);
