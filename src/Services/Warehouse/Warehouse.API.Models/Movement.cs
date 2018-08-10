@@ -30,7 +30,6 @@ namespace Warehouse.API.Models
 
         public DateTime DateCreated { get; set; }
 
-        [Required]
         public DateTime? DateMoved { get; set; }
     }
 }
