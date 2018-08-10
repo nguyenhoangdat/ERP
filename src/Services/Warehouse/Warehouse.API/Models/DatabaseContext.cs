@@ -52,7 +52,7 @@ namespace Warehouse.API.Models
                 .HasForeignKey(m => m.PositionId);
 
             modelBuilder.Entity<Movement>()
-                .Property(m => m.MovementDate)
+                .Property(m => m.DateCreated)
                 .ValueGeneratedOnAdd();
             #endregion
             #region Position

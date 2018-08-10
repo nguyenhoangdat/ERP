@@ -63,6 +63,11 @@ namespace Warehouse.API.Controllers
                 return BadRequest(ModelState);
             }
 
+            if (positionFrom.Movements.Any(x => x.DateMoved == null && x.EntryContent != EntryContent.PositionTransfer))
+            {
+                return BadRequest(ModelState);
+            }
+
             int countChange = positionFrom.Count();
 
             Movement movementFrom = new Movement()
@@ -73,7 +78,8 @@ namespace Warehouse.API.Controllers
                 Direction = Direction.Out,
                 EntryContent = EntryContent.PositionTransfer,
                 CountChange = -countChange,
-                CountTotal = 0
+                CountTotal = 0,
+                DateMoved = DateTime.UtcNow
             };
             Movement movementTo = new Movement()
             {
@@ -83,7 +89,8 @@ namespace Warehouse.API.Controllers
                 Direction = Direction.In,
                 EntryContent = EntryContent.PositionTransfer,
                 CountChange = countChange,
-                CountTotal = positionTo.Count() + countChange
+                CountTotal = positionTo.Count() + countChange,
+                DateMoved = DateTime.UtcNow
             };
             positionTo.StoredItemId = positionFrom.StoredItemId;
             positionFrom.StoredItemId = null;
