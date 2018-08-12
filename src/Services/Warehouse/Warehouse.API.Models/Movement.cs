@@ -17,7 +17,7 @@ namespace Warehouse.API.Models
         public virtual Position Position { get; set; }
 
         [Required]
-        public Direction Direction { get; set; } //TODO: Do we need this prop?
+        public Direction Direction { get; set; }
 
         [Required]
         public EntryContent EntryContent { get; set; }
