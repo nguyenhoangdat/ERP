@@ -107,8 +107,6 @@ namespace Warehouse.API.Tests
             });
             getAddress.Wait();
 
-            //TODO: InMemoryDatabase does'n hold the data
-
             Address actual = ((getAddress.Result as OkObjectResult).Value as Address);
 
             Assert.IsTrue(
