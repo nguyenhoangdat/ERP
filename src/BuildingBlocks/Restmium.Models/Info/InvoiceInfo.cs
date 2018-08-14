@@ -3,12 +3,11 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Restmium.Models.Info
 {
-
-    public partial class InvoiceInfo
+    public class InvoiceInfo
     {
         [Required]
         public string Name { get; set; }
 
-        public Address Address { get; set; }
+        public virtual Address Address { get; set; }
     }
 }

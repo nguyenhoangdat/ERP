@@ -2,7 +2,7 @@
 
 namespace Restmium.Models.Info
 {
-    public partial class CompanyInfo
+    public class CompanyInfo
     {
         [Required]
         public string CompanyId { get; set; }
