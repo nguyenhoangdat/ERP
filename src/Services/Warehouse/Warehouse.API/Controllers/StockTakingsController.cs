@@ -64,12 +64,12 @@ namespace Warehouse.API.Controllers
                                     join section in _context.Sections on warehouse.Id equals section.WarehouseId
                                     join position in _context.Positions on section.Id equals position.SectionId
                                     join movement in _context.Movements on position.Id equals movement.PositionId
-                                    join storedItem in _context.StoredItems on movement.StoredItemId equals storedItem.Id
+                                    join ware in _context.Wares on movement.WareId equals ware.Id
                                     where warehouse.Id == id
                                     select new StockTakingItem()
                                     {
                                         StockTakingId = 0,
-                                        StoredItemId = storedItem.Id,
+                                        WareId = ware.Id,
                                         PositionId = position.Id,
                                         CurrentStock = position.Count(),
                                         CountedStock = 0
@@ -98,12 +98,12 @@ namespace Warehouse.API.Controllers
                                     join section in _context.Sections on warehouse.Id equals section.WarehouseId
                                     join position in _context.Positions on section.Id equals position.SectionId
                                     join movement in _context.Movements on position.Id equals movement.PositionId
-                                    join storedItem in _context.StoredItems on movement.StoredItemId equals storedItem.Id
+                                    join ware in _context.Wares on movement.WareId equals ware.Id
                                     where section.Id == id
                                     select new StockTakingItem()
                                     {
                                         StockTakingId = 0,
-                                        StoredItemId = storedItem.Id,
+                                        WareId = ware.Id,
                                         PositionId = position.Id,
                                         CurrentStock = position.Count(),
                                         CountedStock = 0

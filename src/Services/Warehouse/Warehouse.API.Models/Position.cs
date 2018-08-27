@@ -16,8 +16,8 @@ namespace Warehouse.API.Models
         public int SectionId { get; set; }
         public virtual Section Section { get; set; }
 
-        public int? StoredItemId { get; set; }
-        public virtual StoredItem StoredItem { get; set; }
+        public int? WareId { get; set; }
+        public virtual Ware Ware { get; set; }
 
         public virtual ICollection<Movement> Movements { get; set; }
         public virtual ICollection<StockTakingItem> StockTakingItems { get; set; }

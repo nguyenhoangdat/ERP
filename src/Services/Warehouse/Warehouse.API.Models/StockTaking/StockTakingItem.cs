@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Text;
 
 namespace Warehouse.API.Models.StockTaking
 {
@@ -16,8 +13,8 @@ namespace Warehouse.API.Models.StockTaking
         public virtual StockTaking StockTaking { get; set; }
 
         [Required]
-        public int StoredItemId { get; set; }
-        public virtual StoredItem StoredItem { get; set; }
+        public int WareId { get; set; }
+        public virtual Ware Ware { get; set; }
 
         [Required]
         public long PositionId { get; set; }

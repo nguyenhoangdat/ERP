@@ -9,8 +9,8 @@ namespace Warehouse.API.Models
         public long Id { get; set; }
 
         [Required]
-        public int StoredItemId { get; set; }
-        public virtual StoredItem StoredItem { get; set; }
+        public int WareId { get; set; }
+        public virtual Ware Ware { get; set; }
 
         [Required]
         public long PositionId { get; set; }

@@ -11,56 +11,56 @@ namespace Warehouse.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class StoredItemsController : ControllerBase
+    public class WaresController : ControllerBase
     {
         private readonly DatabaseContext _context;
 
-        public StoredItemsController(DatabaseContext context)
+        public WaresController(DatabaseContext context)
         {
             _context = context;
         }
 
-        // GET: api/StoredItems
+        // GET: api/Wares
         [HttpGet]
-        public IEnumerable<StoredItem> GetStoredItems()
+        public IEnumerable<Ware> GetWares()
         {
-            return _context.StoredItems;
+            return _context.Wares;
         }
 
-        // GET: api/StoredItems/5
+        // GET: api/Wares/5
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetStoredItem([FromRoute] int id)
+        public async Task<IActionResult> GetWare([FromRoute] int id)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var storedItem = await _context.StoredItems.FindAsync(id);
+            var ware = await _context.Wares.FindAsync(id);
 
-            if (storedItem == null)
+            if (ware == null)
             {
                 return NotFound();
             }
 
-            return Ok(storedItem);
+            return Ok(ware);
         }
 
-        // PUT: api/StoredItems/5
+        // PUT: api/Wares/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutStoredItem([FromRoute] int id, [FromBody] StoredItem storedItem)
+        public async Task<IActionResult> PutWare([FromRoute] int id, [FromBody] Ware ware)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            if (id != storedItem.Id)
+            if (id != ware.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(storedItem).State = EntityState.Modified;
+            _context.Entry(ware).State = EntityState.Modified;
 
             try
             {
@@ -68,7 +68,7 @@ namespace Warehouse.API.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!StoredItemExists(id))
+                if (!WareExists(id))
                 {
                     return NotFound();
                 }
@@ -81,45 +81,46 @@ namespace Warehouse.API.Controllers
             return NoContent();
         }
 
-        // POST: api/StoredItems
+        // POST: api/Wares
         [HttpPost]
-        public async Task<IActionResult> PostStoredItem([FromBody] StoredItem storedItem)
+        public async Task<IActionResult> PostWare([FromBody] Ware ware)
         {
+            ModelState.Remove("Id");
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            _context.StoredItems.Add(storedItem);
+            _context.Wares.Add(ware);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetStoredItem", new { id = storedItem.Id }, storedItem);
+            return CreatedAtAction("GetWare", new { id = ware.Id }, ware);
         }
 
-        // DELETE: api/StoredItems/5
+        // DELETE: api/Wares/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteStoredItem([FromRoute] int id)
+        public async Task<IActionResult> DeleteWare([FromRoute] int id)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var storedItem = await _context.StoredItems.FindAsync(id);
-            if (storedItem == null)
+            var ware = await _context.Wares.FindAsync(id);
+            if (ware == null)
             {
                 return NotFound();
             }
 
-            _context.StoredItems.Remove(storedItem);
+            _context.Wares.Remove(ware);
             await _context.SaveChangesAsync();
 
-            return Ok(storedItem);
+            return Ok(ware);
         }
 
-        private bool StoredItemExists(int id)
+        private bool WareExists(int id)
         {
-            return _context.StoredItems.Any(e => e.Id == id);
+            return _context.Wares.Any(e => e.Id == id);
         }
     }
 }

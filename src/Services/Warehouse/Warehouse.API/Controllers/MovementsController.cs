@@ -58,7 +58,7 @@ namespace Warehouse.API.Controllers
             Position positionFrom = await this._context.Positions.FindAsync(fromId);
             Position positionTo = await this._context.Positions.FindAsync(toId);
 
-            if (positionFrom.Count() == 0 || positionFrom.StoredItemId.Value != positionTo.StoredItemId.Value)
+            if (positionFrom.Count() == 0 || positionFrom.WareId.Value != positionTo.WareId.Value)
             {
                 return BadRequest(ModelState);
             }
@@ -73,7 +73,7 @@ namespace Warehouse.API.Controllers
             Movement movementFrom = new Movement()
             {
                 Id = 0,
-                StoredItemId = positionFrom.StoredItemId.Value,
+                WareId = positionFrom.WareId.Value,
                 PositionId = fromId,
                 Direction = Direction.Out,
                 EntryContent = EntryContent.PositionTransfer,
@@ -84,7 +84,7 @@ namespace Warehouse.API.Controllers
             Movement movementTo = new Movement()
             {
                 Id = 0,
-                StoredItemId = positionFrom.StoredItemId.Value,
+                WareId = positionFrom.WareId.Value,
                 PositionId = toId,
                 Direction = Direction.In,
                 EntryContent = EntryContent.PositionTransfer,
@@ -92,8 +92,8 @@ namespace Warehouse.API.Controllers
                 CountTotal = positionTo.Count() + countChange,
                 DateMoved = DateTime.UtcNow
             };
-            positionTo.StoredItemId = positionFrom.StoredItemId;
-            positionFrom.StoredItemId = null;
+            positionTo.WareId = positionFrom.WareId;
+            positionFrom.WareId = null;
 
             _context.Entry(positionFrom).State = EntityState.Modified;
             _context.Entry(positionTo).State = EntityState.Modified;
@@ -151,7 +151,7 @@ namespace Warehouse.API.Controllers
             }
 
             _context.Movements.Add(movement);
-            _context.Positions.Where(x => x.Id == movement.PositionId).FirstOrDefault().StoredItemId = movement.StoredItemId;
+            _context.Positions.Where(x => x.Id == movement.PositionId).FirstOrDefault().WareId = movement.WareId;
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetMovement", new { id = movement.Id }, movement);

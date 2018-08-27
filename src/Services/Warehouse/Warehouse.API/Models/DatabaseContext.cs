@@ -16,7 +16,7 @@ namespace Warehouse.API.Models
         public DbSet<Movement> Movements { get; set; }
         public DbSet<Position> Positions { get; set; }
         public DbSet<Section> Sections { get; set; }
-        public DbSet<StoredItem> StoredItems { get; set; }
+        public DbSet<Ware> Wares { get; set; }
         public DbSet<Warehouse> Warehouses { get; set; }
 
         public DbSet<StockTaking.StockTaking> StockTakings { get; set; }
@@ -42,9 +42,9 @@ namespace Warehouse.API.Models
                 .ValueGeneratedOnAdd();
 
             modelBuilder.Entity<Movement>()
-                .HasOne(m => m.StoredItem)
+                .HasOne(m => m.Ware)
                 .WithMany(s => s.Movements)
-                .HasForeignKey(m => m.StoredItemId);
+                .HasForeignKey(m => m.WareId);
 
             modelBuilder.Entity<Movement>()
                 .HasOne(m => m.Position)
@@ -68,9 +68,9 @@ namespace Warehouse.API.Models
                 .HasForeignKey(p => p.SectionId);
 
             modelBuilder.Entity<Position>()
-                .HasOne(p => p.StoredItem)
+                .HasOne(p => p.Ware)
                 .WithMany(s => s.Positions)
-                .HasForeignKey(p => p.StoredItemId)
+                .HasForeignKey(p => p.WareId)
                 .OnDelete(DeleteBehavior.SetNull);
             #endregion
             #region Section
@@ -85,10 +85,10 @@ namespace Warehouse.API.Models
                 .WithMany(w => w.Sections)
                 .HasForeignKey(s => s.WarehouseId);
             #endregion
-            #region StoredItem
-            modelBuilder.Entity<StoredItem>()
+            #region Ware
+            modelBuilder.Entity<Ware>()
                 .HasKey(x => x.Id);
-            modelBuilder.Entity<StoredItem>()
+            modelBuilder.Entity<Ware>()
                 .Property(x => x.Id)
                 .ValueGeneratedOnAdd();
             #endregion
@@ -135,9 +135,9 @@ namespace Warehouse.API.Models
                 .HasForeignKey(i => i.StockTakingId);
 
             modelBuilder.Entity<StockTaking.StockTakingItem>()
-                .HasOne(i => i.StoredItem)
+                .HasOne(i => i.Ware)
                 .WithMany(s => s.StockTakingItems)
-                .HasForeignKey(i => i.StoredItemId)
+                .HasForeignKey(i => i.WareId)
                 .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<StockTaking.StockTakingItem>()

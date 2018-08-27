@@ -4,7 +4,7 @@ using Warehouse.API.Models.StockTaking;
 
 namespace Warehouse.API.Models
 {
-    public class StoredItem
+    public class Ware
     {
         [Required]
         public int Id { get; set; }
