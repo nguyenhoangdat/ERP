@@ -18,7 +18,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\BuildingBlocks\EventBusServiceBus\EventBusServiceBus.csproj" />
-    <ProjectReference Include="..\Warehouse.API.Models.Extensions\Warehouse.API.Models.Extensions.csproj" />
     <ProjectReference Include="..\Warehouse.API.Models\Warehouse.API.Models.csproj" />
   </ItemGroup>
 

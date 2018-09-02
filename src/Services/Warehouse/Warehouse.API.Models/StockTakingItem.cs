@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Warehouse.API.Models.StockTaking
+namespace Warehouse.API.Models
 {
     public class StockTakingItem
     {

@@ -2,7 +2,7 @@
 
 namespace Restmium.ERP.BuildingBlocks.EventBus.Events
 {
-    public class IntegrationEvent
+    public abstract class IntegrationEvent
     {
         public IntegrationEvent()
         {

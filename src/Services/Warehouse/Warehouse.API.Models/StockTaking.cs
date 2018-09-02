@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
 
-namespace Warehouse.API.Models.StockTaking
+namespace Warehouse.API.Models
 {
     public class StockTaking
     {

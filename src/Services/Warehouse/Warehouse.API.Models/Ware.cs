@@ -12,6 +12,9 @@ namespace Warehouse.API.Models
         [Required]
         public int ProductId { get; set; }
 
+        [Required]
+        public string ProductName { get; set; }
+
         public virtual ICollection<Position> Positions { get; set; }
         public virtual ICollection<Movement> Movements { get; set; }
         public virtual ICollection<StockTakingItem> StockTakingItems { get; set; }

@@ -45,6 +45,23 @@ namespace Warehouse.API.Controllers
 
             return Ok(address);
         }
+        [HttpGet]
+        public async Task<IActionResult> GetAddressByWarehouseId([FromRoute] int id)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var address = await _context.Addresses.Where(a => a.Warehouse.Id == id).FirstOrDefaultAsync();
+
+            if (address == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(address);
+        }
 
         // PUT: api/Addresses/5
         [HttpPut("{id}")]

@@ -1,4 +1,4 @@
-﻿namespace Warehouse.API.Models.StockTaking
+﻿namespace Warehouse.API.Models
 {
     public enum StockTakingArea
     {
