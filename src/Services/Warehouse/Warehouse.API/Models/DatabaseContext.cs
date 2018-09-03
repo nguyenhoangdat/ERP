@@ -19,8 +19,8 @@ namespace Warehouse.API.Models
         public DbSet<Ware> Wares { get; set; }
         public DbSet<Warehouse> Warehouses { get; set; }
 
-        public DbSet<StockTaking.StockTaking> StockTakings { get; set; }
-        public DbSet<StockTaking.StockTakingItem> StockTakingItems { get; set; }
+        public DbSet<StockTaking> StockTakings { get; set; }
+        public DbSet<StockTakingItem> StockTakingItems { get; set; }
         #endregion
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -106,41 +106,41 @@ namespace Warehouse.API.Models
             #endregion
 
             #region StockTaking
-            modelBuilder.Entity<StockTaking.StockTaking>()
+            modelBuilder.Entity<StockTaking>()
                 .HasKey(x => x.Id);
-            modelBuilder.Entity<StockTaking.StockTaking>()
+            modelBuilder.Entity<StockTaking>()
                 .Property(x => x.Id)
                 .ValueGeneratedOnAdd();
 
-            modelBuilder.Entity<StockTaking.StockTaking>()
+            modelBuilder.Entity<StockTaking>()
                 .Property(x => x.DateTime)
                 .ValueGeneratedOnAdd();
 
-            modelBuilder.Entity<StockTaking.StockTaking>()
+            modelBuilder.Entity<StockTaking>()
                 .HasOne(st => st.Warehouse)
                 .WithMany(w => w.StockTakings)
                 .HasForeignKey(st => st.WarehouseId)
                 .OnDelete(DeleteBehavior.Restrict);
             #endregion
             #region StockTakingItem
-            modelBuilder.Entity<StockTaking.StockTakingItem>()
+            modelBuilder.Entity<StockTakingItem>()
                 .HasKey(x => x.Id);
-            modelBuilder.Entity<StockTaking.StockTakingItem>()
+            modelBuilder.Entity<StockTakingItem>()
                 .Property(x => x.Id)
                 .ValueGeneratedOnAdd();
 
-            modelBuilder.Entity<StockTaking.StockTakingItem>()
+            modelBuilder.Entity<StockTakingItem>()
                 .HasOne(i => i.StockTaking)
                 .WithMany(s => s.StockTakingItems)
                 .HasForeignKey(i => i.StockTakingId);
 
-            modelBuilder.Entity<StockTaking.StockTakingItem>()
+            modelBuilder.Entity<StockTakingItem>()
                 .HasOne(i => i.Ware)
                 .WithMany(s => s.StockTakingItems)
                 .HasForeignKey(i => i.WareId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            modelBuilder.Entity<StockTaking.StockTakingItem>()
+            modelBuilder.Entity<StockTakingItem>()
                 .HasOne(i => i.Position)
                 .WithMany(p => p.StockTakingItems)
                 .HasForeignKey(i => i.PositionId)
