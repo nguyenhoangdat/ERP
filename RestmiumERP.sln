@@ -37,7 +37,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Catalog - Implement", "Cata
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Catalog.API", "src\Services\Catalog\Catalog.API\Catalog.API.csproj", "{605BF5E0-5B6C-42B9-815F-0E71F847883C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catalog.API.Models", "src\Services\Catalog\Catalog.API.Models\Catalog.API.Models.csproj", "{CEC2FED7-9109-4F0A-922D-E2C1CCD24001}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Catalog.API.Models", "src\Services\Catalog\Catalog.API.Models\Catalog.API.Models.csproj", "{CEC2FED7-9109-4F0A-922D-E2C1CCD24001}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

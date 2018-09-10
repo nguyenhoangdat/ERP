@@ -3,6 +3,7 @@ using Restmium.ERP.BuildingBlocks.EventBus.Events;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Restmium.ERP.BuildingBlocks.EventBus
 {
@@ -80,17 +81,7 @@ namespace Restmium.ERP.BuildingBlocks.EventBus
         public string GetEventKey<T>() => typeof(T).Name;
         public Type GetEventTypeByName(string eventName) => _eventTypes.SingleOrDefault(x => x.Name == eventName);
 
-        public IEnumerable<IIntegrationEventHandler<IntegrationEvent>> GetHandlersForEvent(string eventName)
-        {
-            List<IIntegrationEventHandler<IntegrationEvent>> eventHandlers = new List<IIntegrationEventHandler<IntegrationEvent>>();
-
-            foreach (Type item in _typesOfHandlers[eventName])
-            {
-                eventHandlers.Add(_serviceProvider.GetService(item) as IIntegrationEventHandler<IntegrationEvent>);
-            }
-
-            return eventHandlers;
-        }
+        public IEnumerable<Type> GetTypesOfHandlersForEvent(string eventName) => this._typesOfHandlers[eventName];
 
         public bool HasSubscriptionsForEvent(string eventName) => _typesOfHandlers.ContainsKey(eventName);
     }

@@ -8,7 +8,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Warehouse.API.Models;
 using Warehouse.API.Models.Extensions;
-using Warehouse.API.Models.StockTaking;
 
 namespace Warehouse.API.Controllers
 {

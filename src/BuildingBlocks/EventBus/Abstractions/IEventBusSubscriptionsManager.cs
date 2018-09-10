@@ -21,7 +21,7 @@ namespace Restmium.ERP.BuildingBlocks.EventBus.Abstractions
         Type GetEventTypeByName(string eventName);
         void Clear();
 
-        IEnumerable<IIntegrationEventHandler<IntegrationEvent>> GetHandlersForEvent(string eventName);
+        IEnumerable<Type> GetTypesOfHandlersForEvent(string eventName);
 
         string GetEventKey<T>();
     }

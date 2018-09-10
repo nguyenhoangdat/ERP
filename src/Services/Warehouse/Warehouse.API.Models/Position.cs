@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using Warehouse.API.Models.StockTaking;
 
 namespace Warehouse.API.Models
 {

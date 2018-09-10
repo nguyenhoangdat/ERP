@@ -45,7 +45,7 @@ namespace Warehouse.API.Controllers
 
             return Ok(address);
         }
-        [HttpGet]
+        [HttpGet("GetAddressByWarehouseId")]
         public async Task<IActionResult> GetAddressByWarehouseId([FromRoute] int id)
         {
             if (!ModelState.IsValid)

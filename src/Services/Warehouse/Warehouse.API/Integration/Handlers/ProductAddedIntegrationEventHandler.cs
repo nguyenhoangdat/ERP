@@ -1,4 +1,5 @@
-﻿using Restmium.ERP.BuildingBlocks.EventBus.Abstractions;
+﻿using Microsoft.Extensions.Logging;
+using Restmium.ERP.BuildingBlocks.EventBus.Abstractions;
 using System.Linq;
 using System.Threading.Tasks;
 using Warehouse.API.Integration.Events;
@@ -9,10 +10,12 @@ namespace Warehouse.API.Integration.Handlers
     public class ProductAddedIntegrationEventHandler : IIntegrationEventHandler<ProductAddedIntegrationEvent>
     {
         private DatabaseContext _databaseContext { get; }
+        private ILogger<ProductAddedIntegrationEventHandler> _logger { get; }
 
-        public ProductAddedIntegrationEventHandler(DatabaseContext context)
+        public ProductAddedIntegrationEventHandler(DatabaseContext context, ILogger<ProductAddedIntegrationEventHandler> logger)
         {
-            this._databaseContext = context;
+            _databaseContext = context;
+            _logger = logger;
         }
 
         public async Task Handle(ProductAddedIntegrationEvent @event)
@@ -25,8 +28,12 @@ namespace Warehouse.API.Integration.Handlers
                     ProductName = @event.ProductName
                 };
 
-                this._databaseContext.Wares.Add(ware);
-                await this._databaseContext.SaveChangesAsync();
+                _databaseContext.Wares.Add(ware);
+                await _databaseContext.SaveChangesAsync();
+            }
+            else
+            {
+                _logger.LogWarning("Ware with ProductId {0} already exists!", @event.ProductId);
             }
         }
     }

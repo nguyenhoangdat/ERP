@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.ServiceBus;
+using Microsoft.Azure.ServiceBus.Management;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -15,6 +16,8 @@ using Microsoft.Extensions.Options;
 using Restmium.ERP.BuildingBlocks.EventBus;
 using Restmium.ERP.BuildingBlocks.EventBus.Abstractions;
 using Restmium.ERP.BuildingBlocks.EventBusServiceBus;
+using Warehouse.API.Integration.Events;
+using Warehouse.API.Integration.Handlers;
 using Warehouse.API.Models;
 
 namespace Warehouse.API
@@ -36,16 +39,21 @@ namespace Warehouse.API
             services.AddDbContext<DatabaseContext>(options => options.UseLazyLoadingProxies().UseSqlServer(Configuration.GetConnectionString("DefaultMSSQLConnection"), opt => opt.EnableRetryOnFailure()));
 
             #region EventBus
-            services.AddSingleton<IServiceBusPersistentConnection>(sp =>
+            bool isServiceBusEnabled = Configuration.GetValue("ServiceBusEnabled", false);
+
+            if (isServiceBusEnabled)
             {
-                var logger = sp.GetRequiredService<ILogger<DefaultServiceBusPersisterConnection>>();
+                services.AddSingleton<IServiceBusPersistentConnection>(sp =>
+                {
+                    var logger = sp.GetRequiredService<ILogger<DefaultServiceBusPersisterConnection>>();
 
-                var serviceBusConnectionString = Configuration.GetConnectionString("AzureServiceBusConnection");
-                var serviceBusConnection = new ServiceBusConnectionStringBuilder(serviceBusConnectionString);
+                    var serviceBusConnectionString = Configuration.GetConnectionString("AzureServiceBusTopicConnection");
+                    var serviceBusConnection = new ServiceBusConnectionStringBuilder(serviceBusConnectionString);
 
-                return new DefaultServiceBusPersisterConnection(serviceBusConnection, logger);
-            });
-            RegisterEventBus(services);
+                    return new DefaultServiceBusPersisterConnection(serviceBusConnection, logger);
+                });
+                RegisterEventBus(services);
+            }
             #endregion
 
             services.AddSwaggerGen(swagger => {
@@ -73,12 +81,18 @@ namespace Warehouse.API
 
             app.UseHttpsRedirection();
             app.UseMvc();
+
             app.UseSwagger();
             app.UseSwaggerUI(c => {
                 c.SwaggerEndpoint("/swagger/2019.1.1/swagger.json", "Warehouse.API 2019.1.1");
             });
 
-            ConfigureEventBus(app); //EventBus
+            bool isServiceBusEnabled = Configuration.GetValue("ServiceBusEnabled", false);
+
+            if (isServiceBusEnabled)
+            {
+                ConfigureEventBus(app); //EventBus
+            }            
         }
 
         #region EventBus
@@ -92,20 +106,33 @@ namespace Warehouse.API
                 var logger = sp.GetRequiredService<ILogger<EventBusServiceBus>>();
                 var subscriptionManager = sp.GetRequiredService<IEventBusSubscriptionsManager>();
 
-                return new EventBusServiceBus(persistentConnection, logger, subscriptionManager, subscriptionClientName);
+                return new EventBusServiceBus(sp, persistentConnection, logger, subscriptionManager, subscriptionClientName);
             });
 
             services.AddSingleton<IEventBusSubscriptionsManager, InMemoryEventBusSubscriptionsManager>();
 
-            //TODO: Add handlers
-            //services.AddTransient<ProductPriceChangedIntegrationEventHandler>();
+            services.AddTransient(sp => {
+                var context = sp.GetRequiredService<DatabaseContext>();
+                var logger = sp.GetRequiredService<ILogger<ProductAddedIntegrationEventHandler>>();
+                return new ProductAddedIntegrationEventHandler(context, logger);
+            }); // ProductAddedIntegrationEventHandler
+            services.AddTransient(sp => {
+                var context = sp.GetRequiredService<DatabaseContext>();
+                var logger = sp.GetRequiredService<ILogger<ProductRemovedIntegrationEventHandler>>();
+                return new ProductRemovedIntegrationEventHandler(context, logger);
+            }); // ProductRemovedIntegrationEventHandler
+            services.AddTransient(sp => {
+                var context = sp.GetRequiredService<DatabaseContext>();
+                var logger = sp.GetRequiredService<ILogger<ProductRenamedIntegrationEventHandler>>();
+                return new ProductRenamedIntegrationEventHandler(context, logger);
+            }); // ProductRenamedIntegrationEventHandler
         }
         private void ConfigureEventBus(IApplicationBuilder app)
         {
             IEventBus eventBus = app.ApplicationServices.GetRequiredService<IEventBus>();
 
-            //TODO: Subscribe
-            //eventBus.Subscribe<ProductPriceChangedIntegrationEvent, ProductPriceChangedIntegrationEventHandler>();
+            eventBus.Subscribe<ProductAddedIntegrationEvent, ProductAddedIntegrationEventHandler>();
+            eventBus.Subscribe<ProductRemovedIntegrationEvent, ProductRemovedIntegrationEventHandler>();
         }
         #endregion
     }

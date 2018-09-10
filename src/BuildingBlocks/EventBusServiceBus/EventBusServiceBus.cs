@@ -1,4 +1,5 @@
 ﻿using Microsoft.Azure.ServiceBus;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Restmium.ERP.BuildingBlocks.EventBus.Abstractions;
@@ -11,6 +12,7 @@ namespace Restmium.ERP.BuildingBlocks.EventBusServiceBus
 {
     public sealed class EventBusServiceBus : IEventBus
     {
+        private readonly IServiceProvider _serviceProvider;
         private readonly IServiceBusPersistentConnection _eventBusPersistentConnection;
         private readonly ILogger<EventBusServiceBus> _logger;
 
@@ -20,11 +22,13 @@ namespace Restmium.ERP.BuildingBlocks.EventBusServiceBus
         private const string INTEGRATION_EVENT_SUFIX = "IntegrationEvent";
 
         public EventBusServiceBus(
+            IServiceProvider serviceProvider,
             IServiceBusPersistentConnection persistentConnection,
             ILogger<EventBusServiceBus> logger,
             IEventBusSubscriptionsManager subscriptionsManager,
             string subscriptionClientName)
         {
+            _serviceProvider = serviceProvider;
             _eventBusPersistentConnection = persistentConnection;
             _logger = logger;
             _subscriptionsManager = subscriptionsManager;
@@ -53,6 +57,8 @@ namespace Restmium.ERP.BuildingBlocks.EventBusServiceBus
             client.SendAsync(message)
                 .GetAwaiter()
                 .GetResult();
+
+            _logger.LogCritical("Event {0} has been published", message.Label);
         }
 
         public void Subscribe<T, TH>()
@@ -109,9 +115,10 @@ namespace Restmium.ERP.BuildingBlocks.EventBusServiceBus
         {
             _subscriptionClient.RegisterMessageHandler(
                 async (message, token) =>
-                {
+                {                    
                     string eventName = $"{message.Label}{INTEGRATION_EVENT_SUFIX}";
                     string messageData = Encoding.UTF8.GetString(message.Body);
+
                     await ProcessEvent(eventName, messageData);
 
                     // Complete the message so that it is not received again.
@@ -123,17 +130,23 @@ namespace Restmium.ERP.BuildingBlocks.EventBusServiceBus
         {
             if (_subscriptionsManager.HasSubscriptionsForEvent(eventName))
             {
-                foreach (IIntegrationEventHandler<IntegrationEvent> handler in _subscriptionsManager.GetHandlersForEvent(eventName))
+                using (var scope = this._serviceProvider.CreateScope())
                 {
-                    Type eventType = _subscriptionsManager.GetEventTypeByName(eventName);
-                    object integrationEvent = JsonConvert.DeserializeObject(message, eventType);
+                    foreach (Type handlerType in _subscriptionsManager.GetTypesOfHandlersForEvent(eventName))
+                    {
+                        Type eventType = _subscriptionsManager.GetEventTypeByName(eventName);
+                        IntegrationEvent integrationEvent = JsonConvert.DeserializeObject(message, eventType) as IntegrationEvent; //TODO: Fix error
 
-                    await handler.Handle(integrationEvent as IntegrationEvent);
+                        object handler = scope.ServiceProvider.GetRequiredService(handlerType);
+                        var concreteHandlerType = typeof(IIntegrationEventHandler<>).MakeGenericType(eventType);
+                        await (Task)concreteHandlerType.GetMethod("Handle").Invoke(handler, new object[] { integrationEvent });
+                    }
                 }
             }
 
-            throw new NotImplementedException();
-        } //TODO: Debug
+            await Task.CompletedTask;
+        }
+
         private Task ExceptionReceivedHandler(ExceptionReceivedEventArgs arg)
         {
             Console.WriteLine($"Message handler encountered an exception {arg.Exception}.");

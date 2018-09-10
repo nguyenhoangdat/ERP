@@ -2,8 +2,9 @@
 
 namespace Warehouse.API.Integration.Events
 {
-    public class ProductRemovedIntegrationEvent : IntegrationEvent
+    public class ProductRenamedIntegrationEvent : IntegrationEvent
     {
         public int ProductId { get; set; }
+        public string ProductName { get; set; }
     }
 }

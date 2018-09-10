@@ -4,7 +4,7 @@ namespace Warehouse.API.Integration.Events
 {
     public class ProductAddedIntegrationEvent : IntegrationEvent
     {
-        public int ProductId { get; }
-        public string ProductName { get; }
+        public int ProductId { get; set; }
+        public string ProductName { get; set; }
     }
 }
