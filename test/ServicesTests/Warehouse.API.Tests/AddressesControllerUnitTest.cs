@@ -29,15 +29,15 @@ namespace Warehouse.API.Tests
         {
             Address expected = new Address()
             {
-                Address1 = "Jiřího nám. 20/I",
-                Zip = "290 31",
+                Street = "Jiřího nám. 20/I",
+                ZipCode = "290 31",
                 City = "Poděbrady",
                 Country = "Czech Republic"
             };
             Address actual = new Address()
             {
-                Address1 = "Jiřího nám. 20/I",
-                Zip = "290 31",
+                Street = "Jiřího nám. 20/I",
+                ZipCode = "290 31",
                 City = "Poděbrady",
                 Country = "Czech Republic"
             };
@@ -48,9 +48,9 @@ namespace Warehouse.API.Tests
             postAddress.Wait();
 
             Assert.IsTrue(
-                expected.Address1 == actual.Address1 &&
+                expected.Street == actual.Street &&
                 expected.Address2 == actual.Address2 &&
-                expected.Zip == actual.Zip &&
+                expected.ZipCode == actual.ZipCode &&
                 expected.City == actual.City &&
                 expected.POBox == actual.POBox &&
                 expected.Country == actual.Country);
@@ -62,16 +62,16 @@ namespace Warehouse.API.Tests
             Address expected = new Address()
             {
                 Id = 1,
-                Address1 = "Plzeňská 150",
-                Zip = "290 31",
+                Street = "Plzeňská 150",
+                ZipCode = "290 31",
                 City = "Praha",
                 Country = "Czech Republic"
             };
             Address actual = new Address()
             {
                 Id = 1,
-                Address1 = "Plzeňská 150",
-                Zip = "290 31",
+                Street = "Plzeňská 150",
+                ZipCode = "290 31",
                 City = "Praha",
                 Country = "Czech Republic"
             };
@@ -82,9 +82,9 @@ namespace Warehouse.API.Tests
             putAddress.Wait();
 
             Assert.IsTrue(
-                expected.Address1 == actual.Address1 &&
+                expected.Street == actual.Street &&
                 expected.Address2 == actual.Address2 &&
-                expected.Zip == actual.Zip &&
+                expected.ZipCode == actual.ZipCode &&
                 expected.City == actual.City &&
                 expected.POBox == actual.POBox &&
                 expected.Country == actual.Country);
@@ -96,8 +96,8 @@ namespace Warehouse.API.Tests
             Address expected = new Address()
             {
                 Id = 1,
-                Address1 = "Plzeňská 150",
-                Zip = "290 31",
+                Street = "Plzeňská 150",
+                ZipCode = "290 31",
                 City = "Praha",
                 Country = "Czech Republic"
             };
@@ -110,9 +110,9 @@ namespace Warehouse.API.Tests
             Address actual = ((getAddress.Result as OkObjectResult).Value as Address);
 
             Assert.IsTrue(
-                expected.Address1 == actual.Address1 &&
+                expected.Street == actual.Street &&
                 expected.Address2 == actual.Address2 &&
-                expected.Zip == actual.Zip &&
+                expected.ZipCode == actual.ZipCode &&
                 expected.City == actual.City &&
                 expected.POBox == actual.POBox &&
                 expected.Country == actual.Country);

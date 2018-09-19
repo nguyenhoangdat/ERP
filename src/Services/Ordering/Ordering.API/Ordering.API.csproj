@@ -6,7 +6,6 @@
 
   <ItemGroup>
     <Folder Include="Controllers\" />
-    <Folder Include="Integration\Events\" />
     <Folder Include="Integration\Handlers\" />
     <Folder Include="wwwroot\" />
   </ItemGroup>
@@ -19,6 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\BuildingBlocks\EventBus\EventBus.csproj" />
     <ProjectReference Include="..\Ordering.API.Models\Ordering.API.Models.csproj" />
   </ItemGroup>
 

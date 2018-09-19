@@ -4,18 +4,34 @@ namespace Restmium.Models.Geo
 {
     public class Address
     {
-        [Required]
-        public string Address1 { get; set; }
-        public string Address2 { get; set; }
+        public Address()
+        {
+
+        }
+        public Address(string street, string city, string country, string zipcode) : this(street, city, null, country, zipcode, null)
+        {
+
+        }
+        public Address(string street, string city, string state, string country, string zipcode, string pobox)
+        {
+            this.Street = street;
+            this.City = city;
+            this.State = state;
+            this.Country = country;
+            this.ZipCode = zipcode;
+            this.POBox = pobox;
+        }
 
         [Required]
-        public string Zip { get; set; }
-
+        public string Street { get; set; }
         [Required]
         public string City { get; set; }
-        public string POBox { get; set; } //Schránka na poště
-
+        public string State { get; set; }
         [Required]
         public string Country { get; set; }
+        [Required]
+        public string ZipCode { get; set; }       
+
+        public string POBox { get; set; } //Schránka na poště
     }
 }
