@@ -9,13 +9,13 @@ namespace Warehouse.API.Integration.Handlers
 {
     public class ProductAddedIntegrationEventHandler : IIntegrationEventHandler<ProductAddedIntegrationEvent>
     {
-        private DatabaseContext _databaseContext { get; }
-        private ILogger<ProductAddedIntegrationEventHandler> _logger { get; }
+        protected DatabaseContext _databaseContext { get; }
+        protected ILogger<ProductAddedIntegrationEventHandler> _logger { get; }
 
         public ProductAddedIntegrationEventHandler(DatabaseContext context, ILogger<ProductAddedIntegrationEventHandler> logger)
         {
-            _databaseContext = context;
-            _logger = logger;
+            this._databaseContext = context;
+            this._logger = logger;
         }
 
         public async Task Handle(ProductAddedIntegrationEvent @event)
@@ -28,12 +28,12 @@ namespace Warehouse.API.Integration.Handlers
                     ProductName = @event.ProductName
                 };
 
-                _databaseContext.Wares.Add(ware);
-                await _databaseContext.SaveChangesAsync();
+                this._databaseContext.Wares.Add(ware);
+                await this._databaseContext.SaveChangesAsync();
             }
             else
             {
-                _logger.LogWarning("Ware with ProductId {0} already exists!", @event.ProductId);
+                this._logger.LogWarning("Ware with ProductId {0} already exists!", @event.ProductId);
             }
         }
     }

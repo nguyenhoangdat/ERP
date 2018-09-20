@@ -113,6 +113,13 @@ namespace Warehouse.API
 
             services.AddTransient(sp => {
                 var context = sp.GetRequiredService<DatabaseContext>();
+                var logger = sp.GetRequiredService<ILogger<OrderStatusChangedToAwaitingValidationIntegrationEventHandler>>();
+                var serviceBus = sp.GetRequiredService<IEventBus>();
+
+                return new OrderStatusChangedToAwaitingValidationIntegrationEventHandler(serviceBus, context, logger);
+            }); // OrderStatusChangedToAwaitingValidationIntegrationEventHandler
+            services.AddTransient(sp => {
+                var context = sp.GetRequiredService<DatabaseContext>();
                 var logger = sp.GetRequiredService<ILogger<ProductAddedIntegrationEventHandler>>();
                 return new ProductAddedIntegrationEventHandler(context, logger);
             }); // ProductAddedIntegrationEventHandler

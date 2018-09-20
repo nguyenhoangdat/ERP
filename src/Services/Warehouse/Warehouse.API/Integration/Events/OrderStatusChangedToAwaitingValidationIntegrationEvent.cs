@@ -8,7 +8,7 @@ namespace Warehouse.API.Integration.Events
     /// </summary>
     public class OrderStatusChangedToAwaitingValidationIntegrationEvent : IntegrationEvent
     {
-        public bool PartialSend { get; set; }
+        public long OrderId { get; set; }
         public List<OrderItem> OrderItems { get; set; }
 
         public class OrderItem

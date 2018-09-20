@@ -5,13 +5,13 @@ namespace Ordering.API.Integration.Events
 {
     public class OrderStatusChangedToAwaitingValidationIntegrationEvent : IntegrationEvent
     {
-        public OrderStatusChangedToAwaitingValidationIntegrationEvent(bool partialSend, List<OrderItem> items) : base()
+        public OrderStatusChangedToAwaitingValidationIntegrationEvent(long orderId, List<OrderItem> items) : base()
         {
-            this.PartialSend = partialSend;
+            this.OrderId = orderId;
             this.OrderItems = items;
         }
 
-        public bool PartialSend { get; set; }
+        public long OrderId { get; set; }
         public List<OrderItem> OrderItems { get; set; }
 
         public class OrderItem
