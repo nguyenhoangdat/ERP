@@ -19,6 +19,6 @@ namespace Warehouse.API.Models
         public virtual Ware Ware { get; set; }
 
         public virtual ICollection<Movement> Movements { get; set; }
-        public virtual ICollection<StockTakingItem> StockTakingItems { get; set; }
+        public virtual ICollection<StockTaking.Item> Items { get; set; }
     }
 }

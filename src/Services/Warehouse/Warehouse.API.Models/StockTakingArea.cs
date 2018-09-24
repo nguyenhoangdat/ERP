@@ -1,8 +1,11 @@
 ﻿namespace Warehouse.API.Models
 {
-    public enum StockTakingArea
+    public partial class StockTaking
     {
-        Warehouse,
-        Section
-    }
+        public enum StockTakingArea
+        {
+            Warehouse,
+            Section
+        }
+    }    
 }

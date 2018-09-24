@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Warehouse.API.Models
 {
-    public class Movement
+    public partial class Movement
     {
         [Required]
         public long Id { get; set; }
@@ -20,7 +20,7 @@ namespace Warehouse.API.Models
         public Direction Direction { get; set; }
 
         [Required]
-        public EntryContent EntryContent { get; set; }
+        public EntryContent Content { get; set; }
 
         [Required]
         public int CountChange { get; set; }

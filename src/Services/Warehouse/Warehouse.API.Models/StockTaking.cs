@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Text;
 
 namespace Warehouse.API.Models
 {
-    public class StockTaking
+    public partial class StockTaking
     {
         [Required]
         public int Id { get; set; }
@@ -19,6 +18,6 @@ namespace Warehouse.API.Models
         [Required]
         public StockTakingArea Area { get; set; }
 
-        public virtual ICollection<StockTakingItem> StockTakingItems { get; set; }
+        public virtual ICollection<Item> StockTakingItems { get; set; }
     }
 }

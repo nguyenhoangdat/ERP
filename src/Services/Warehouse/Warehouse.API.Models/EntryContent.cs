@@ -1,10 +1,13 @@
 ﻿namespace Warehouse.API.Models
 {
-    public enum EntryContent
+    public partial class Movement
     {
-        Balance, //zůstatek
-        Receipt, //příjem
-        Delivery, //výdej
-        PositionTransfer //převod mezi pozicemi
+        public enum EntryContent
+        {
+            Balance, //zůstatek
+            Receipt, //příjem
+            Delivery, //výdej
+            PositionTransfer //převod mezi pozicemi
+        }
     }
 }

@@ -123,26 +123,26 @@ namespace Warehouse.API.Models
                 .OnDelete(DeleteBehavior.Restrict);
             #endregion
             #region StockTakingItem
-            modelBuilder.Entity<StockTakingItem>()
+            modelBuilder.Entity<StockTaking.Item>()
                 .HasKey(x => x.Id);
-            modelBuilder.Entity<StockTakingItem>()
+            modelBuilder.Entity<StockTaking.Item>()
                 .Property(x => x.Id)
                 .ValueGeneratedOnAdd();
 
-            modelBuilder.Entity<StockTakingItem>()
+            modelBuilder.Entity<StockTaking.Item>()
                 .HasOne(i => i.StockTaking)
                 .WithMany(s => s.StockTakingItems)
                 .HasForeignKey(i => i.StockTakingId);
 
-            modelBuilder.Entity<StockTakingItem>()
+            modelBuilder.Entity<StockTaking.Item>()
                 .HasOne(i => i.Ware)
                 .WithMany(s => s.StockTakingItems)
                 .HasForeignKey(i => i.WareId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            modelBuilder.Entity<StockTakingItem>()
+            modelBuilder.Entity<StockTaking.Item>()
                 .HasOne(i => i.Position)
-                .WithMany(p => p.StockTakingItems)
+                .WithMany(p => p.Items)
                 .HasForeignKey(i => i.PositionId)
                 .OnDelete(DeleteBehavior.Restrict);
             #endregion
