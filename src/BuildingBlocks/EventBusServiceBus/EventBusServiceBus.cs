@@ -135,7 +135,7 @@ namespace Restmium.ERP.BuildingBlocks.EventBusServiceBus
                     foreach (Type handlerType in _subscriptionsManager.GetTypesOfHandlersForEvent(eventName))
                     {
                         Type eventType = _subscriptionsManager.GetEventTypeByName(eventName);
-                        IntegrationEvent integrationEvent = JsonConvert.DeserializeObject(message, eventType) as IntegrationEvent; //TODO: Fix error
+                        IntegrationEvent integrationEvent = JsonConvert.DeserializeObject(message, eventType) as IntegrationEvent;
 
                         object handler = scope.ServiceProvider.GetRequiredService(handlerType);
                         var concreteHandlerType = typeof(IIntegrationEventHandler<>).MakeGenericType(eventType);

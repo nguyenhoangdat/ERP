@@ -92,7 +92,7 @@ namespace Warehouse.API
             if (isServiceBusEnabled)
             {
                 ConfigureEventBus(app); //EventBus
-            }            
+            }
         }
 
         #region EventBus
