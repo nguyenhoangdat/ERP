@@ -1,9 +1,10 @@
-﻿using Restmium.Models.Geo;
+﻿using Restmium.Models.Abstract;
+using Restmium.Models.Geo;
 using System.ComponentModel.DataAnnotations;
 
 namespace Restmium.Models.Info
 {
-    public class ShippingInfo
+    public class ShippingInfo : DatabaseEntity
     {
         [Required]
         public string Name { get; set; }

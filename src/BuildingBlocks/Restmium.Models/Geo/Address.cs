@@ -1,8 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Restmium.Models.Abstract;
+using System.ComponentModel.DataAnnotations;
 
 namespace Restmium.Models.Geo
 {
-    public class Address
+    public class Address : DatabaseEntity
     {
         public Address()
         {

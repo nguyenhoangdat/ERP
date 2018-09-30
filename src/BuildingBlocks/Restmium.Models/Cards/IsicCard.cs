@@ -1,8 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Restmium.Models.Abstract;
+using System.ComponentModel.DataAnnotations;
 
 namespace Restmium.Models.Cards
 {
-    public partial class IsicCard
+    public partial class IsicCard : DatabaseEntity
     {
         [Required]
         public int Id { get; set; }

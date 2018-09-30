@@ -1,8 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Restmium.Models.Abstract;
+using System.ComponentModel.DataAnnotations;
 
 namespace Restmium.Models.Info
 {
-    public class CompanyInfo
+    public class CompanyInfo : DatabaseEntity
     {
         [Required]
         public string CompanyId { get; set; }
