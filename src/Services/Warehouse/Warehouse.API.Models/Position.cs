@@ -1,9 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using Restmium.Models.Abstract;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace Warehouse.API.Models
 {
-    public class Position
+    public class Position : DatabaseEntity
     {
         [Required]
         public long Id { get; set; }
@@ -19,6 +20,7 @@ namespace Warehouse.API.Models
         public virtual Ware Ware { get; set; }
 
         public virtual ICollection<Movement> Movements { get; set; }
+        public virtual ICollection<IssueSlip.Item> IssueSlipItems { get; set; }
         public virtual ICollection<StockTaking.Item> Items { get; set; }
     }
 }

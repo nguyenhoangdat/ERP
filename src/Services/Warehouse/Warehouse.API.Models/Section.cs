@@ -1,9 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using Restmium.Models.Abstract;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace Warehouse.API.Models
 {
-    public class Section
+    public class Section : DatabaseEntity
     {
         [Required]
         public int Id { get; set; }

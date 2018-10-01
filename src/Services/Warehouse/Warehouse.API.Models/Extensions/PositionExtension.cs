@@ -12,7 +12,7 @@ namespace Warehouse.API.Models.Extensions
                 throw new ArgumentNullException(nameof(position));
             }
 
-            int? count = position.Movements.OrderByDescending(x => x.DateCreated).FirstOrDefault()?.CountTotal;
+            int? count = position.Movements.OrderByDescending(x => x.UtcCreatedAt).FirstOrDefault()?.CountTotal;
 
             return count ?? 0;
         }

@@ -1,8 +1,11 @@
 ﻿namespace Warehouse.API.Models
 {
-    public enum Direction
+    public partial class Movement
     {
-        In,
-        Out
-    }
+        public enum Direction
+        {
+            In,
+            Out
+        }
+    }    
 }

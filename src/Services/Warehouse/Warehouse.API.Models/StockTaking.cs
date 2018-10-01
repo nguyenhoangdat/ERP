@@ -1,10 +1,11 @@
-﻿using System;
+﻿using Restmium.Models.Abstract;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace Warehouse.API.Models
 {
-    public partial class StockTaking
+    public partial class StockTaking : DatabaseEntity
     {
         [Required]
         public int Id { get; set; }

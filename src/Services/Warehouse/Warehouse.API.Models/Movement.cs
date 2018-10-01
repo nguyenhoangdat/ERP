@@ -1,9 +1,10 @@
-﻿using System;
+﻿using Restmium.Models.Abstract;
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace Warehouse.API.Models
 {
-    public partial class Movement
+    public partial class Movement : DatabaseEntity
     {
         [Required]
         public long Id { get; set; }
@@ -17,7 +18,7 @@ namespace Warehouse.API.Models
         public virtual Position Position { get; set; }
 
         [Required]
-        public Direction Direction { get; set; }
+        public Direction MovementDirection { get; set; }
 
         [Required]
         public EntryContent Content { get; set; }
@@ -27,8 +28,6 @@ namespace Warehouse.API.Models
 
         [Required, Range(0, int.MaxValue)]
         public int CountTotal { get; set; }
-
-        public DateTime DateCreated { get; set; }
 
         public DateTime? DateMoved { get; set; }
     }
