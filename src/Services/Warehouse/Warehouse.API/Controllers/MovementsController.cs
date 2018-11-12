@@ -50,6 +50,7 @@ namespace Warehouse.API.Controllers
         [HttpGet("TransferPosition")]
         public async Task<IActionResult> TransferPosition([FromQuery] long fromId, [FromQuery] long toId)
         {
+            // If ModelState is not valid or positions don't exist
             if (!ModelState.IsValid || !_context.Positions.Any(x => x.Id == fromId) || !_context.Positions.Any(x => x.Id == toId))
             {
                 return BadRequest(ModelState);
@@ -58,15 +59,16 @@ namespace Warehouse.API.Controllers
             Position positionFrom = await this._context.Positions.FindAsync(fromId);
             Position positionTo = await this._context.Positions.FindAsync(toId);
 
-            if (positionFrom.Count() == 0 || positionFrom.WareId.Value != positionTo.WareId.Value)
+            if (positionFrom.Count() == 0 || (positionTo.WareId.HasValue && positionFrom.WareId.Value != positionTo.WareId.Value))
             {
                 return BadRequest(ModelState);
             }
 
-            if (positionFrom.Movements.Any(x => x.DateMoved == null && x.EntryContent != EntryContent.PositionTransfer))
-            {
-                return BadRequest(ModelState);
-            }
+            ////TODO: Fix? What the hell is this? Useless! Movement represents action in past.
+            //if (positionFrom.Movements.Any(x => x.DateMoved == null && x.EntryContent != EntryContent.PositionTransfer))
+            //{
+            //    return BadRequest(ModelState);
+            //}
 
             int countChange = positionFrom.Count();
 
@@ -75,8 +77,8 @@ namespace Warehouse.API.Controllers
                 Id = 0,
                 WareId = positionFrom.WareId.Value,
                 PositionId = fromId,
-                Direction = Direction.Out,
-                EntryContent = EntryContent.PositionTransfer,
+                MovementDirection = Movement.Direction.Out,
+                Content = Movement.EntryContent.PositionTransfer,
                 CountChange = -countChange,
                 CountTotal = 0,
                 DateMoved = DateTime.UtcNow
@@ -86,8 +88,8 @@ namespace Warehouse.API.Controllers
                 Id = 0,
                 WareId = positionFrom.WareId.Value,
                 PositionId = toId,
-                Direction = Direction.In,
-                EntryContent = EntryContent.PositionTransfer,
+                MovementDirection = Movement.Direction.In,
+                Content = Movement.EntryContent.PositionTransfer,
                 CountChange = countChange,
                 CountTotal = positionTo.Count() + countChange,
                 DateMoved = DateTime.UtcNow

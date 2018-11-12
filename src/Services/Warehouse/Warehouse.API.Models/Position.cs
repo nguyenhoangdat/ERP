@@ -18,6 +18,9 @@ namespace Warehouse.API.Models
 
         public int? WareId { get; set; }
         public virtual Ware Ware { get; set; }
+        
+        [Required]
+        public int Rating { get; set; }
 
         public virtual ICollection<Movement> Movements { get; set; }
         public virtual ICollection<IssueSlip.Item> IssueSlipItems { get; set; }

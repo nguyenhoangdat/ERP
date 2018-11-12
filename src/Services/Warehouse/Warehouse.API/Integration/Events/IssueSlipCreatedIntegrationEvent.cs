@@ -10,8 +10,8 @@ namespace Warehouse.API.Integration.Events
     public class IssueSlipCreatedIntegrationEvent : IntegrationEvent
     {
         public long OrderId { get; set; }
-        public DateTime UtcDispatchDate { get; set; }
-        public DateTime UtcDeliveryDate { get; set; }
+        public DateTime UtcDispatchDate { get; set; } //Odeslat dne
+        public DateTime UtcDeliveryDate { get; set; } //Dodat dne
 
         public List<IssueSlipItem> Items { get; set; }
 

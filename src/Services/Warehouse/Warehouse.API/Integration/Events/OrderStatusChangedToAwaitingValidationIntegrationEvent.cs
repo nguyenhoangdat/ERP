@@ -1,4 +1,5 @@
 ﻿using Restmium.ERP.BuildingBlocks.EventBus.Events;
+using System;
 using System.Collections.Generic;
 
 namespace Warehouse.API.Integration.Events
@@ -10,6 +11,10 @@ namespace Warehouse.API.Integration.Events
     {
         public long OrderId { get; set; }
         public List<OrderItem> OrderItems { get; set; }
+
+        //TODO: Check
+        public DateTime UtcDispatchDate { get; set; } //Odeslat dne
+        public DateTime UtcDeliveryDate { get; set; } //Dodat dne
 
         public class OrderItem
         {

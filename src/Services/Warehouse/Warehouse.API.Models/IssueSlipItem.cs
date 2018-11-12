@@ -25,8 +25,8 @@ namespace Warehouse.API.Models
             public long PositionId { get; set; }
             public Position Position { get; set; }
 
-            [Required]
-            public DateTime Issued { get; set; } //Datum a čas vydání zboží z pozice
+            //[Required]
+            //public DateTime Issued { get; set; } //Datum a čas vydání zboží z pozice
         }
     }    
 }

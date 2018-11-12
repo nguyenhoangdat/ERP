@@ -15,6 +15,15 @@ namespace Warehouse.API.Models
         [Required]
         public string ProductName { get; set; }
 
+        [Required]
+        public double Width { get; set; }
+        [Required]
+        public double Height { get; set; }
+        [Required]
+        public double Depth { get; set; }
+        [Required]
+        public double Weight { get; set; }
+
         public virtual ICollection<Position> Positions { get; set; }
         public virtual ICollection<Movement> Movements { get; set; }
         public virtual ICollection<IssueSlip.Item> IssueSlipItems { get; set; }

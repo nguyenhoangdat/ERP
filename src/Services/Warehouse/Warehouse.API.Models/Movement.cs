@@ -29,6 +29,6 @@ namespace Warehouse.API.Models
         [Required, Range(0, int.MaxValue)]
         public int CountTotal { get; set; }
 
-        public DateTime? DateMoved { get; set; }
+        public DateTime DateMoved { get; set; }
     }
 }
