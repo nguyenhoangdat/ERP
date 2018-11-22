@@ -1,4 +1,5 @@
 ﻿using Restmium.Models.Abstract;
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -28,6 +29,8 @@ namespace Warehouse.API.Models
 
             [Required]
             public int CountedStock { get; set; }
+
+            public DateTime? UtcCountedAt { get; set; }
 
             [NotMapped]
             public int Variance

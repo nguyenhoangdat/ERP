@@ -17,6 +17,5 @@ namespace Warehouse.API.Models
         public virtual Address Address { get; set; }
 
         public virtual ICollection<Section> Sections { get; set; }
-        public virtual ICollection<StockTaking> StockTakings { get; set; }
     }
 }

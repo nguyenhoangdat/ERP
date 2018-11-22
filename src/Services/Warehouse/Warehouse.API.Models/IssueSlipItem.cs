@@ -17,13 +17,13 @@ namespace Warehouse.API.Models
             public virtual Ware Ware { get; set; }
 
             [Required]
+            public long PositionId { get; set; }
+            public Position Position { get; set; }
+
+            [Required]
             public int RequestedUnits { get; set; } //Počet vyžádaných jednotek
             [Required]
             public int IssuedUnits { get; set; } //Počet vydaných jednotek
-
-            [Required]
-            public long PositionId { get; set; }
-            public Position Position { get; set; }
 
             //[Required]
             //public DateTime Issued { get; set; } //Datum a čas vydání zboží z pozice

@@ -24,7 +24,6 @@ namespace Warehouse.API.Models
         [Required]
         public double Weight { get; set; }
 
-        public virtual ICollection<Position> Positions { get; set; }
         public virtual ICollection<Movement> Movements { get; set; }
         public virtual ICollection<IssueSlip.Item> IssueSlipItems { get; set; }
         public virtual ICollection<StockTaking.Item> StockTakingItems { get; set; }

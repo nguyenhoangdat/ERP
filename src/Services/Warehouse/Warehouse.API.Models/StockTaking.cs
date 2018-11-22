@@ -9,16 +9,10 @@ namespace Warehouse.API.Models
     {
         [Required]
         public int Id { get; set; }
-
-        public DateTime DateTime { get; set; }
-
+        
         [Required]
-        public int WarehouseId { get; set; }
-        public virtual Warehouse Warehouse { get; set; }
+        public string Name { get; set; }
 
-        [Required]
-        public StockTakingArea Area { get; set; }
-
-        public virtual ICollection<Item> StockTakingItems { get; set; }
+        public virtual ICollection<Item> Items { get; set; } //TODO: Rename -> Items
     }
 }

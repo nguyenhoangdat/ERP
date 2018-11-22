@@ -49,10 +49,8 @@ namespace Warehouse.API.Tests
 
             Assert.IsTrue(
                 expected.Street == actual.Street &&
-                expected.Address2 == actual.Address2 &&
                 expected.ZipCode == actual.ZipCode &&
                 expected.City == actual.City &&
-                expected.POBox == actual.POBox &&
                 expected.Country == actual.Country);
         }
 
@@ -83,10 +81,8 @@ namespace Warehouse.API.Tests
 
             Assert.IsTrue(
                 expected.Street == actual.Street &&
-                expected.Address2 == actual.Address2 &&
                 expected.ZipCode == actual.ZipCode &&
                 expected.City == actual.City &&
-                expected.POBox == actual.POBox &&
                 expected.Country == actual.Country);
         }
 
@@ -111,10 +107,8 @@ namespace Warehouse.API.Tests
 
             Assert.IsTrue(
                 expected.Street == actual.Street &&
-                expected.Address2 == actual.Address2 &&
                 expected.ZipCode == actual.ZipCode &&
                 expected.City == actual.City &&
-                expected.POBox == actual.POBox &&
                 expected.Country == actual.Country);
         }
     }

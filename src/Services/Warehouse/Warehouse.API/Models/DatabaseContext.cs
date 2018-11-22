@@ -125,12 +125,6 @@ namespace Warehouse.API.Models
                 .HasForeignKey(p => p.SectionId);
 
             modelBuilder.Entity<Position>()
-                .HasOne(p => p.Ware)
-                .WithMany(s => s.Positions)
-                .HasForeignKey(p => p.WareId)
-                .OnDelete(DeleteBehavior.SetNull);
-
-            modelBuilder.Entity<Position>()
                 .Property(x => x.UtcCreatedAt)
                 .HasDefaultValue(DateTime.UtcNow);
             modelBuilder.Entity<Position>()
@@ -164,16 +158,6 @@ namespace Warehouse.API.Models
                 .ValueGeneratedOnAdd();
 
             modelBuilder.Entity<StockTaking>()
-                .Property(x => x.DateTime)
-                .ValueGeneratedOnAdd();
-
-            modelBuilder.Entity<StockTaking>()
-                .HasOne(st => st.Warehouse)
-                .WithMany(w => w.StockTakings)
-                .HasForeignKey(st => st.WarehouseId)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            modelBuilder.Entity<StockTaking>()
                 .Property(x => x.UtcCreatedAt)
                 .HasDefaultValue(DateTime.UtcNow);
             modelBuilder.Entity<StockTaking>()
@@ -189,7 +173,7 @@ namespace Warehouse.API.Models
 
             modelBuilder.Entity<StockTaking.Item>()
                 .HasOne(i => i.StockTaking)
-                .WithMany(s => s.StockTakingItems)
+                .WithMany(s => s.Items)
                 .HasForeignKey(i => i.StockTakingId);
 
             modelBuilder.Entity<StockTaking.Item>()
@@ -200,7 +184,7 @@ namespace Warehouse.API.Models
 
             modelBuilder.Entity<StockTaking.Item>()
                 .HasOne(i => i.Position)
-                .WithMany(p => p.Items)
+                .WithMany(p => p.StockTakingItems)
                 .HasForeignKey(i => i.PositionId)
                 .OnDelete(DeleteBehavior.Restrict);
 

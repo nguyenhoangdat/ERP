@@ -59,7 +59,7 @@ namespace Warehouse.API.Controllers
             StockTaking stockTaking = new StockTaking
             {
                 Id = 0,
-                StockTakingItems = (from warehouse in _context.Warehouses
+                Items = (from warehouse in _context.Warehouses
                                     join section in _context.Sections on warehouse.Id equals section.WarehouseId
                                     join position in _context.Positions on section.Id equals position.SectionId
                                     join movement in _context.Movements on position.Id equals movement.PositionId
@@ -93,7 +93,7 @@ namespace Warehouse.API.Controllers
             StockTaking stockTaking = new StockTaking
             {
                 Id = 0,
-                StockTakingItems = (from warehouse in _context.Warehouses
+                Items = (from warehouse in _context.Warehouses
                                     join section in _context.Sections on warehouse.Id equals section.WarehouseId
                                     join position in _context.Positions on section.Id equals position.SectionId
                                     join movement in _context.Movements on position.Id equals movement.PositionId
