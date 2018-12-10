@@ -1,26 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.ServiceBus;
-using Microsoft.Azure.ServiceBus.Management;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using Restmium.ERP.BuildingBlocks.EventBus;
 using Restmium.ERP.BuildingBlocks.EventBus.Abstractions;
 using Restmium.ERP.BuildingBlocks.EventBusServiceBus;
-using Warehouse.API.Integration.Events;
-using Warehouse.API.Integration.Handlers;
-using Warehouse.API.Models;
+using Restmium.ERP.Services.Warehouse.Infrastructure.Database;
+using Restmium.ERP.Services.Warehouse.Integration.Events;
+using Restmium.ERP.Services.Warehouse.Integration.Handlers;
 
-namespace Warehouse.API
+namespace Restmium.ERP.Services.Warehouse.API
 {
     public class Startup
     {
@@ -34,9 +27,20 @@ namespace Warehouse.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1).AddJsonOptions(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
+                .AddJsonOptions(options =>
+                {
+                    options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+                });
 
-            services.AddDbContext<DatabaseContext>(options => options.UseLazyLoadingProxies().UseSqlServer(Configuration.GetConnectionString("DefaultMSSQLConnection"), opt => opt.EnableRetryOnFailure()));
+            //TODO: Add DbContextCheck
+            services.AddHealthChecks();
+                //.AddDbContextCheck<DatabaseContext>();
+
+            services.AddDbContext<DatabaseContext>(options =>
+            {
+                options.UseLazyLoadingProxies().UseSqlServer(Configuration.GetConnectionString("DefaultMSSQLConnection"), opt => opt.EnableRetryOnFailure());
+            });
 
             #region EventBus
             bool isServiceBusEnabled = Configuration.GetValue("ServiceBusEnabled", false);
@@ -82,14 +86,16 @@ namespace Warehouse.API
             app.UseHttpsRedirection();
             app.UseMvc();
 
+            app.UseHealthChecks("/health");
+
             app.UseSwagger();
             app.UseSwaggerUI(c => {
                 c.SwaggerEndpoint("/swagger/2019.1.1/swagger.json", "Warehouse.API 2019.1.1");
+                c.RoutePrefix = string.Empty; //Make Swagger as default Index
+                c.DocumentTitle = "Warehouse.API Documentation";
             });
 
-            bool isServiceBusEnabled = Configuration.GetValue("ServiceBusEnabled", false);
-
-            if (isServiceBusEnabled)
+            if (Configuration.GetValue("ServiceBusEnabled", false))
             {
                 ConfigureEventBus(app); //EventBus
             }

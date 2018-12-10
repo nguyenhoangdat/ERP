@@ -7,25 +7,24 @@ namespace Restmium.ERP.BuildingBlocks.EventBusServiceBus
     public class DefaultServiceBusPersisterConnection : IServiceBusPersistentConnection
     {
         private readonly ILogger<DefaultServiceBusPersisterConnection> _logger;
-        private readonly ServiceBusConnectionStringBuilder _serviceBusConnectionStringBuilder;
         private ITopicClient _topicClient;
+
+        public ServiceBusConnectionStringBuilder ServiceBusConnectionStringBuilder { get; }
 
         public DefaultServiceBusPersisterConnection(
             ServiceBusConnectionStringBuilder serviceBusConnectionStringBuilder,
             ILogger<DefaultServiceBusPersisterConnection> logger)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-            _serviceBusConnectionStringBuilder = serviceBusConnectionStringBuilder ?? throw new ArgumentNullException(nameof(serviceBusConnectionStringBuilder));
-            _topicClient = new TopicClient(_serviceBusConnectionStringBuilder, RetryPolicy.Default);
+            ServiceBusConnectionStringBuilder = serviceBusConnectionStringBuilder ?? throw new ArgumentNullException(nameof(serviceBusConnectionStringBuilder));
+            _topicClient = new TopicClient(ServiceBusConnectionStringBuilder, RetryPolicy.Default);
         }
-
-        public ServiceBusConnectionStringBuilder ServiceBusConnectionStringBuilder => _serviceBusConnectionStringBuilder;
 
         public ITopicClient GetClient()
         {
             if (_topicClient.IsClosedOrClosing)
             {
-                _topicClient = new TopicClient(_serviceBusConnectionStringBuilder, RetryPolicy.Default);
+                _topicClient = new TopicClient(ServiceBusConnectionStringBuilder, RetryPolicy.Default);
             }
 
             return _topicClient;

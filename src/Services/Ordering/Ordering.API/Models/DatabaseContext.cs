@@ -59,9 +59,9 @@ namespace Ordering.API.Models
                 .WithMany(o => o.OrderActions)
                 .HasForeignKey(x => x.OrderId);
 
-            modelBuilder.Entity<OrderAction>()
-                .Property(x => x.DateTime)
-                .ValueGeneratedOnAdd();
+            //modelBuilder.Entity<OrderAction>()
+            //    .HasDefaultValue(System.DateTime.Now)
+            //    .ValueGeneratedOnAdd();
             #endregion
 
             #region OrderItem
