@@ -9,7 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Restmium.ERP.Services.Warehouse.Integration.Handlers
+namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Integration
 {
     public class OrderStatusChangedToAwaitingValidationIntegrationEventHandler : IIntegrationEventHandler<OrderStatusChangedToAwaitingValidationIntegrationEvent>
     {
@@ -26,19 +26,6 @@ namespace Restmium.ERP.Services.Warehouse.Integration.Handlers
 
         public async Task Handle(OrderStatusChangedToAwaitingValidationIntegrationEvent @event)
         {
-            if (this.IsOrderValid(@event.OrderItems))
-            {
-                OrderStockConfirmedIntegrationEvent confirmedIntegrationEvent = new OrderStockConfirmedIntegrationEvent(@event.OrderId);
-                this._eventBus.Publish(confirmedIntegrationEvent);
-
-                throw new NotImplementedException();
-            }
-            else
-            {
-                OrderStockRejectedIntegrationEvent rejectedIntegrationEvent = new OrderStockRejectedIntegrationEvent(@event.OrderId);
-                this._eventBus.Publish(rejectedIntegrationEvent);
-            }
-
             throw new NotImplementedException();
         }
 
@@ -46,7 +33,7 @@ namespace Restmium.ERP.Services.Warehouse.Integration.Handlers
         {
             bool valid = true;
 
-            foreach (var item in items)
+            foreach (OrderStatusChangedToAwaitingValidationIntegrationEvent.OrderItem item in items)
             {
                 Ware ware = this._databaseContext.Wares.Where(x => x.ProductId == item.ProductId).FirstOrDefault();
 

@@ -12,7 +12,7 @@ namespace Restmium.ERP.Services.Warehouse.Integration.Events
         public long OrderId { get; set; }
         public List<OrderItem> OrderItems { get; set; }
 
-        //TODO: Check
+        //TODO: Check - I can but I don't know what
         public DateTime UtcDispatchDate { get; set; } //Odeslat dne
         public DateTime UtcDeliveryDate { get; set; } //Dodat dne
 

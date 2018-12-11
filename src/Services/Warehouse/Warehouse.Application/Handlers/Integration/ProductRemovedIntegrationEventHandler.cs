@@ -1,11 +1,11 @@
 ﻿using Microsoft.Extensions.Logging;
 using Restmium.ERP.BuildingBlocks.EventBus.Abstractions;
-using Restmium.ERP.Services.Warehouse.Domain.Entities;
 using Restmium.ERP.Services.Warehouse.Infrastructure.Database;
 using Restmium.ERP.Services.Warehouse.Integration.Events;
+using System;
 using System.Threading.Tasks;
 
-namespace Restmium.ERP.Services.Warehouse.Integration.Handlers
+namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Integration
 {
     public class ProductRemovedIntegrationEventHandler : IIntegrationEventHandler<ProductRemovedIntegrationEvent>
     {
@@ -20,17 +20,7 @@ namespace Restmium.ERP.Services.Warehouse.Integration.Handlers
 
         public async Task Handle(ProductRemovedIntegrationEvent @event)
         {
-            Ware ware = await _databaseContext.Wares.FindAsync(@event.ProductId);
-
-            if (ware != null)
-            {
-                _databaseContext.Remove(ware);
-                await _databaseContext.SaveChangesAsync();
-            }
-            else
-            {
-                this._logger.LogError("Ware with ProductId {0} not found!", @event.ProductId);
-            }
+            throw new NotImplementedException();
         }
     }
 }

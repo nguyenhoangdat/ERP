@@ -12,10 +12,13 @@ namespace Restmium.ERP.Services.Warehouse.Domain.Entities
             this.IssueSlipItems = new HashSet<IssueSlip.Item>();
             this.StockTakingItems = new HashSet<StockTaking.Item>();
         }
-        public Ware(int productId, string productName, double width, double height, double depth, double weight) : this()
+        public Ware(int productId, string productName) : this()
         {
             this.ProductId = productId;
             this.ProductName = productName;
+        }
+        public Ware(int productId, string productName, double width, double height, double depth, double weight) : this(productId, productName)
+        {
             this.Width = width;
             this.Height = height;
             this.Depth = depth;

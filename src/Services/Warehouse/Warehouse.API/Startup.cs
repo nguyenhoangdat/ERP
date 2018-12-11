@@ -19,7 +19,7 @@ namespace Restmium.ERP.Services.Warehouse.API
     {
         public Startup(IConfiguration configuration)
         {
-            Configuration = configuration;
+            this.Configuration = configuration;
         }
 
         public IConfiguration Configuration { get; }
@@ -39,24 +39,24 @@ namespace Restmium.ERP.Services.Warehouse.API
 
             services.AddDbContext<DatabaseContext>(options =>
             {
-                options.UseLazyLoadingProxies().UseSqlServer(Configuration.GetConnectionString("DefaultMSSQLConnection"), opt => opt.EnableRetryOnFailure());
+                options.UseLazyLoadingProxies().UseSqlServer(this.Configuration.GetConnectionString("DefaultMSSQLConnection"), opt => opt.EnableRetryOnFailure());
             });
 
             #region EventBus
-            bool isServiceBusEnabled = Configuration.GetValue("ServiceBusEnabled", false);
+            bool isServiceBusEnabled = this.Configuration.GetValue("AzureServiceBusEnabled", false);
 
             if (isServiceBusEnabled)
             {
                 services.AddSingleton<IServiceBusPersistentConnection>(sp =>
                 {
-                    var logger = sp.GetRequiredService<ILogger<DefaultServiceBusPersisterConnection>>();
+                    ILogger<DefaultServiceBusPersisterConnection> logger = sp.GetRequiredService<ILogger<DefaultServiceBusPersisterConnection>>();
 
-                    var serviceBusConnectionString = Configuration.GetConnectionString("AzureServiceBusTopicConnection");
-                    var serviceBusConnection = new ServiceBusConnectionStringBuilder(serviceBusConnectionString);
+                    string serviceBusConnectionString = this.Configuration.GetConnectionString("AzureServiceBusTopicConnection");
+                    ServiceBusConnectionStringBuilder serviceBusConnection = new ServiceBusConnectionStringBuilder(serviceBusConnectionString);
 
                     return new DefaultServiceBusPersisterConnection(serviceBusConnection, logger);
                 });
-                RegisterEventBus(services);
+                this.RegisterEventBus(services);
             }
             #endregion
 
@@ -95,22 +95,22 @@ namespace Restmium.ERP.Services.Warehouse.API
                 c.DocumentTitle = "Warehouse.API Documentation";
             });
 
-            if (Configuration.GetValue("ServiceBusEnabled", false))
+            if (this.Configuration.GetValue("AzureServiceBusEnabled", false))
             {
-                ConfigureEventBus(app); //EventBus
+                this.ConfigureEventBus(app); //EventBus
             }
         }
 
         #region EventBus
         private void RegisterEventBus(IServiceCollection services)
         {
-            var subscriptionClientName = Configuration["SubscriptionClientName"];
+            string subscriptionClientName = this.Configuration["AzureSubscriptionClientName"];
 
             services.AddSingleton<IEventBus, EventBusServiceBus>(sp =>
             {
-                var persistentConnection = sp.GetRequiredService<IServiceBusPersistentConnection>();
-                var logger = sp.GetRequiredService<ILogger<EventBusServiceBus>>();
-                var subscriptionManager = sp.GetRequiredService<IEventBusSubscriptionsManager>();
+                IServiceBusPersistentConnection persistentConnection = sp.GetRequiredService<IServiceBusPersistentConnection>();
+                ILogger<EventBusServiceBus> logger = sp.GetRequiredService<ILogger<EventBusServiceBus>>();
+                IEventBusSubscriptionsManager subscriptionManager = sp.GetRequiredService<IEventBusSubscriptionsManager>();
 
                 return new EventBusServiceBus(sp, persistentConnection, logger, subscriptionManager, subscriptionClientName);
             });
@@ -118,25 +118,25 @@ namespace Restmium.ERP.Services.Warehouse.API
             services.AddSingleton<IEventBusSubscriptionsManager, InMemoryEventBusSubscriptionsManager>();
 
             services.AddTransient(sp => {
-                var context = sp.GetRequiredService<DatabaseContext>();
-                var logger = sp.GetRequiredService<ILogger<OrderStatusChangedToAwaitingValidationIntegrationEventHandler>>();
-                var serviceBus = sp.GetRequiredService<IEventBus>();
+                DatabaseContext context = sp.GetRequiredService<DatabaseContext>();
+                ILogger<OrderStatusChangedToAwaitingValidationIntegrationEventHandler> logger = sp.GetRequiredService<ILogger<OrderStatusChangedToAwaitingValidationIntegrationEventHandler>>();
+                IEventBus serviceBus = sp.GetRequiredService<IEventBus>();
 
                 return new OrderStatusChangedToAwaitingValidationIntegrationEventHandler(serviceBus, context, logger);
             }); // OrderStatusChangedToAwaitingValidationIntegrationEventHandler
             services.AddTransient(sp => {
-                var context = sp.GetRequiredService<DatabaseContext>();
-                var logger = sp.GetRequiredService<ILogger<ProductAddedIntegrationEventHandler>>();
+                DatabaseContext context = sp.GetRequiredService<DatabaseContext>();
+                ILogger<ProductAddedIntegrationEventHandler> logger = sp.GetRequiredService<ILogger<ProductAddedIntegrationEventHandler>>();
                 return new ProductAddedIntegrationEventHandler(context, logger);
             }); // ProductAddedIntegrationEventHandler
             services.AddTransient(sp => {
-                var context = sp.GetRequiredService<DatabaseContext>();
-                var logger = sp.GetRequiredService<ILogger<ProductRemovedIntegrationEventHandler>>();
+                DatabaseContext context = sp.GetRequiredService<DatabaseContext>();
+                ILogger<ProductRemovedIntegrationEventHandler> logger = sp.GetRequiredService<ILogger<ProductRemovedIntegrationEventHandler>>();
                 return new ProductRemovedIntegrationEventHandler(context, logger);
             }); // ProductRemovedIntegrationEventHandler
             services.AddTransient(sp => {
-                var context = sp.GetRequiredService<DatabaseContext>();
-                var logger = sp.GetRequiredService<ILogger<ProductRenamedIntegrationEventHandler>>();
+                DatabaseContext context = sp.GetRequiredService<DatabaseContext>();
+                ILogger<ProductRenamedIntegrationEventHandler> logger = sp.GetRequiredService<ILogger<ProductRenamedIntegrationEventHandler>>();
                 return new ProductRenamedIntegrationEventHandler(context, logger);
             }); // ProductRenamedIntegrationEventHandler
         }
