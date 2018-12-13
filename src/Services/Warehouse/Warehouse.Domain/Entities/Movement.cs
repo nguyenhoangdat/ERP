@@ -16,7 +16,7 @@ namespace Restmium.ERP.Services.Warehouse.Domain.Entities
             this.CountChange = countChange;
             this.CountTotal = countTotal;
         }
-        public Movement(int wareId, int positionId, Direction direction, EntryContent content, int countChange, int countTotal) : this(direction, content, countChange, countTotal)
+        public Movement(int wareId, long positionId, Direction direction, EntryContent content, int countChange, int countTotal) : this(direction, content, countChange, countTotal)
         {
             this.WareId = wareId;
             this.PositionId = positionId;

@@ -12,22 +12,23 @@ namespace Restmium.ERP.Services.Warehouse.Domain.Entities
             this.IssueSlipItems = new HashSet<IssueSlip.Item>();
             this.StockTakingItems = new HashSet<StockTaking.Item>();
         }
-        public Position(string name, double width, double height, double depth) : this()
+        public Position(string name, double width, double height, double depth, double maxWeight) : this()
         {
             this.Name = name;
             this.Width = width;
             this.Height = height;
             this.Depth = depth;
+            this.MaxWeight = maxWeight;
         }
-        public Position(string name, double width, double height, double depth, int rating) : this(name, width, height, depth)
+        public Position(string name, double width, double height, double depth, double maxWeight, int rating) : this(name, width, height, depth, maxWeight)
         {
             this.Rating = rating;
         }
-        public Position(string name, double width, double height, double depth, int sectionId, int rating) : this(name, width, height, depth, rating)
+        public Position(string name, double width, double height, double depth, double maxWeight, int sectionId, int rating) : this(name, width, height, depth, maxWeight, rating)
         {
             this.SectionId = sectionId;
         }
-        public Position(string name, double width, double height, double depth, Section section, int rating) : this(name, width, height, depth, rating)
+        public Position(string name, double width, double height, double depth, double maxWeight, Section section, int rating) : this(name, width, height, depth, maxWeight, rating)
         {
             this.Section = section;
         }
@@ -43,6 +44,8 @@ namespace Restmium.ERP.Services.Warehouse.Domain.Entities
         public double Height { get; set; }
         [Required]
         public double Depth { get; set; }
+        [Required]
+        public double MaxWeight { get; }
 
         [Required]
         public int SectionId { get; set; }

@@ -5,12 +5,12 @@ namespace Restmium.ERP.Services.Warehouse.Application.Commands
 {
     public class UpdateWareCommand : IRequest<Ware>
     {
-        public UpdateWareCommand(UpdateWareCommandModel ware)
+        public UpdateWareCommand(UpdateWareCommandModel model)
         {
-            this.Ware = ware;
+            this.Model = model;
         }
 
-        public UpdateWareCommandModel Ware { get; }
+        public UpdateWareCommandModel Model { get; }
 
         // When modifying, modify the UpdateWareCommandHandler as well
         public class UpdateWareCommandModel
@@ -18,10 +18,10 @@ namespace Restmium.ERP.Services.Warehouse.Application.Commands
             public int Id { get; }
             public string ProductName { get; }
 
-            public double Width { get; set; }
-            public double Height { get; set; }
-            public double Depth { get; set; }
-            public double Weight { get; set; }
+            public double Width { get; }
+            public double Height { get; }
+            public double Depth { get; }
+            public double Weight { get; }
         }
     }
 }

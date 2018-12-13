@@ -23,17 +23,17 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
 
         public async Task<Ware> Handle(UpdateWareCommand request, CancellationToken cancellationToken)
         {
-            if (this.DatabaseContext.Wares.Any(x => x.Id == request.Ware.Id))
+            if (this.DatabaseContext.Wares.Any(x => x.Id == request.Model.Id))
             {
-                throw new EntityNotFoundException(string.Format(UpdateWareCommandHandlerEntityAlreadyExitsException, request.Ware.Id));
+                throw new EntityNotFoundException(string.Format(UpdateWareCommandHandlerEntityAlreadyExitsException, request.Model.Id));
             }
 
-            Ware ware = this.DatabaseContext.Wares.Find(request.Ware.Id);
-            ware.ProductName = request.Ware.ProductName;
-            ware.Width = request.Ware.Width;
-            ware.Height = request.Ware.Height;
-            ware.Depth = request.Ware.Depth;
-            ware.Weight = request.Ware.Weight;
+            Ware ware = this.DatabaseContext.Wares.Find(request.Model.Id);
+            ware.ProductName = request.Model.ProductName;
+            ware.Width = request.Model.Width;
+            ware.Height = request.Model.Height;
+            ware.Depth = request.Model.Depth;
+            ware.Weight = request.Model.Weight;
 
             await this.DatabaseContext.SaveChangesAsync();
 

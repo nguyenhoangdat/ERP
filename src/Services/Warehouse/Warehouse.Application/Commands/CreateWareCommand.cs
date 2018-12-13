@@ -5,12 +5,12 @@ namespace Restmium.ERP.Services.Warehouse.Application.Commands
 {
     public class CreateWareCommand : IRequest<Ware>
     {
-        public CreateWareCommand(CreateWareCommandModel ware)
+        public CreateWareCommand(CreateWareCommandModel model)
         {
-            this.Ware = ware;
+            this.Model = model;
         }
 
-        public CreateWareCommandModel Ware { get; }
+        public CreateWareCommandModel Model { get; }
 
         public class CreateWareCommandModel
         {

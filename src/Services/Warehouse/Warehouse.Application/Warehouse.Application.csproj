@@ -5,4 +5,16 @@
     <RootNamespace>Restmium.ERP.Services.Warehouse.Application</RootNamespace>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="MediatR" Version="6.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Handlers\Domain\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Warehouse.Integration\Warehouse.Integration.csproj" />
+  </ItemGroup>
+
 </Project>
