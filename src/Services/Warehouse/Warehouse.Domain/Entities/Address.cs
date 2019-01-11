@@ -1,10 +1,9 @@
 ﻿using Newtonsoft.Json;
-using Restmium.ERP.BuildingBlocks.Common.Entities;
 using System.ComponentModel.DataAnnotations;
 
 namespace Restmium.ERP.Services.Warehouse.Domain.Entities
 {
-    public class Address : DatabaseEntity
+    public class Address
     {
         public Address()
         {
@@ -23,9 +22,6 @@ namespace Restmium.ERP.Services.Warehouse.Domain.Entities
         }
 
         [Required]
-        public int Id { get; set; }
-
-        [Required]
         public string Street { get; set; }
         [Required]
         public string City { get; set; }
@@ -34,8 +30,5 @@ namespace Restmium.ERP.Services.Warehouse.Domain.Entities
         public string Country { get; set; }
         [Required]
         public string ZipCode { get; set; }
-
-        [JsonIgnore]
-        public virtual Warehouse Warehouse { get; set; }
     }
 }

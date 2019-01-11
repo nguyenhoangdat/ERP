@@ -26,9 +26,6 @@ namespace Restmium.ERP.Services.Warehouse.Domain.Entities
             }
 
             [Required]
-            public long Id { get; set; }
-
-            [Required]
             public int StockTakingId { get; set; }
             public virtual StockTaking StockTaking { get; set; }
 

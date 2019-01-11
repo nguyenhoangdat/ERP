@@ -12,9 +12,7 @@ namespace Restmium.ERP.Services.Warehouse.Infrastructure.Database.Configuration
             builder.Property(x => x.Id)
                 .ValueGeneratedOnAdd();
 
-            builder.HasOne(w => w.Address)
-                .WithOne(a => a.Warehouse)
-                .HasForeignKey<Domain.Entities.Warehouse>(w => w.AddressId);
+            builder.OwnsOne(x => x.Address);
 
             builder.Property(x => x.UtcCreated)
                 .HasDefaultValue(DateTime.UtcNow);

@@ -9,9 +9,9 @@ using Microsoft.Extensions.Logging;
 using Restmium.ERP.BuildingBlocks.EventBus;
 using Restmium.ERP.BuildingBlocks.EventBus.Abstractions;
 using Restmium.ERP.BuildingBlocks.EventBusServiceBus;
+using Restmium.ERP.Services.Warehouse.Application.Handlers.Integration;
 using Restmium.ERP.Services.Warehouse.Infrastructure.Database;
 using Restmium.ERP.Services.Warehouse.Integration.Events;
-using Restmium.ERP.Services.Warehouse.Integration.Handlers;
 
 namespace Restmium.ERP.Services.Warehouse.API
 {
@@ -35,7 +35,6 @@ namespace Restmium.ERP.Services.Warehouse.API
 
             //TODO: Add DbContextCheck
             services.AddHealthChecks();
-                //.AddDbContextCheck<DatabaseContext>();
 
             services.AddDbContext<DatabaseContext>(options =>
             {

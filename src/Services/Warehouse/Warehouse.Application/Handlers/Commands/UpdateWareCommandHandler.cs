@@ -12,7 +12,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
     public class UpdateWareCommandHandler : IRequestHandler<UpdateWareCommand, Ware>
     {
         //TODO: Check grammar
-        protected const string UpdateWareCommandHandlerEntityAlreadyExitsException = "Unable to update ware with id={0}. Ware not found!";
+        protected const string UpdateWareCommandHandlerEntityNotFoundException = "Unable to update Ware with id={0}. Ware not found!";
 
         public UpdateWareCommandHandler(DatabaseContext context)
         {
@@ -23,9 +23,9 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
 
         public async Task<Ware> Handle(UpdateWareCommand request, CancellationToken cancellationToken)
         {
-            if (this.DatabaseContext.Wares.Any(x => x.Id == request.Model.Id))
+            if (!this.DatabaseContext.Wares.Any(x => x.Id == request.Model.Id))
             {
-                throw new EntityNotFoundException(string.Format(UpdateWareCommandHandlerEntityAlreadyExitsException, request.Model.Id));
+                throw new EntityNotFoundException(string.Format(UpdateWareCommandHandlerEntityNotFoundException, request.Model.Id));
             }
 
             Ware ware = this.DatabaseContext.Wares.Find(request.Model.Id);
@@ -35,7 +35,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
             ware.Depth = request.Model.Depth;
             ware.Weight = request.Model.Weight;
 
-            await this.DatabaseContext.SaveChangesAsync();
+            await this.DatabaseContext.SaveChangesAsync(cancellationToken);
 
             return ware;
         }

@@ -23,7 +23,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
 
         public async Task<Ware> Handle(DeleteWareCommand request, CancellationToken cancellationToken)
         {
-            if (this.DatabaseContext.Wares.Any(x => x.Id == request.Model.Id))
+            if (!this.DatabaseContext.Wares.Any(x => x.Id == request.Model.Id))
             {
                 throw new EntityNotFoundException(string.Format(DeleteWareCommandHandlerEntityAlreadyExitsException, request.Model.Id));
             }

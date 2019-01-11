@@ -7,11 +7,11 @@ namespace Restmium.ERP.Services.Warehouse.Domain.Events
 {
     public class IssueSlipStatusChangedToDispatchedDomainEvent
     {
-        public IssueSlipStatusChangedToDispatchedDomainEvent(IssueSlip issueSlip)
+        public IssueSlipStatusChangedToDispatchedDomainEvent(StockTaking issueSlip)
         {
             this.IssueSlip = issueSlip;
         }
 
-        public IssueSlip IssueSlip { get; }
+        public StockTaking IssueSlip { get; }
     }
 }

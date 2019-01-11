@@ -10,11 +10,6 @@ namespace Restmium.ERP.Services.Warehouse.Domain.Entities
         {
             this.Sections = new HashSet<Section>();
         }
-        public Warehouse(string name, int addressId) : this()
-        {
-            this.Name = name;
-            this.AddressId = addressId;
-        }
         public Warehouse(string name, Address address) : this()
         {
             this.Name = name;
@@ -28,8 +23,7 @@ namespace Restmium.ERP.Services.Warehouse.Domain.Entities
         public string Name { get; set; }
 
         [Required]
-        public int AddressId { get; set; }
-        public virtual Address Address { get; set; }
+        public Address Address { get; set; }
 
         public virtual ICollection<Section> Sections { get; protected set; }
     }

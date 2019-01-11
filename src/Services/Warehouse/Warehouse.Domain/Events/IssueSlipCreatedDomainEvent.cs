@@ -9,11 +9,11 @@ namespace Restmium.ERP.Services.Warehouse.Domain.Events
         {
         }
 
-        public IssueSlipCreatedDomainEvent(IssueSlip issueSlip) : this()
+        public IssueSlipCreatedDomainEvent(StockTaking issueSlip) : this()
         {
             this.IssueSlip = issueSlip;
         }
 
-        public IssueSlip IssueSlip { get; }
+        public StockTaking IssueSlip { get; }
     }
 }

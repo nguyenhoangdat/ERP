@@ -34,8 +34,6 @@ namespace Restmium.ERP.Services.Warehouse.Tests.Common
                 Country = "Czech Republic",
                 ZipCode = "298 90"
             };
-            this.DatabaseContext.Addresses.Add(addressPrague);
-            this.DatabaseContext.Addresses.Add(addressBrno);
 
             // Create warehouses
             Domain.Entities.Warehouse warehousePrague = new Domain.Entities.Warehouse("Warehouse in Prague", addressPrague);
@@ -53,6 +51,7 @@ namespace Restmium.ERP.Services.Warehouse.Tests.Common
             const double Width = 10;
             const double Height = 10;
             const double Depth = 10;
+            const double MaxWeight = 10;
 
             // Const for wares generation
             const int NumberOfWares = 10;
@@ -60,11 +59,11 @@ namespace Restmium.ERP.Services.Warehouse.Tests.Common
             // Generate positions
             for (int i = 1; i <= NumberOfWares; i++)
             {
-                this.DatabaseContext.Positions.Add(new Position($"Position Prague {i}", Width, Height, Depth, warehousePragueSection, i));
+                this.DatabaseContext.Positions.Add(new Position($"Position Prague {i}", Width, Height, Depth, MaxWeight, warehousePragueSection, i));
             }
             for (int i = 1; i <= NumberOfWares * 2; i++)
             {
-                this.DatabaseContext.Positions.Add(new Position($"Position Brno {i}", Width, Height, Depth, warehouseBrnoSection, i));
+                this.DatabaseContext.Positions.Add(new Position($"Position Brno {i}", Width, Height, Depth, MaxWeight, warehouseBrnoSection, i));
             }
 
             // Generate wares
@@ -100,8 +99,8 @@ namespace Restmium.ERP.Services.Warehouse.Tests.Common
                     this.DatabaseContext.Movements.Add(new Movement(ware, position, Movement.Direction.In, Movement.EntryContent.Delivery, movedUnits * 2, initialValue + movedUnits));
 
                     // Generate IssueSlip
-                    IssueSlip issueSlip = new IssueSlip($"{ware.ToString()} {position.ToString()}", DateTime.UtcNow.AddDays(-1), DateTime.UtcNow);
-                    issueSlip.Items.Add(new IssueSlip.Item(issueSlip, ware, position, movedUnits, movedUnits));
+                    StockTaking issueSlip = new StockTaking($"{ware.ToString()} {position.ToString()}", DateTime.UtcNow.AddDays(-1), DateTime.UtcNow);
+                    issueSlip.Items.Add(new StockTaking.Item(issueSlip, ware, position, movedUnits, movedUnits));
                     this.DatabaseContext.IssueSlips.Add(issueSlip);
                 }
             }

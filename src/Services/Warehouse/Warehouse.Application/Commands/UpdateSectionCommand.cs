@@ -14,20 +14,14 @@ namespace Restmium.ERP.Services.Warehouse.Application.Commands
 
         public class UpdateSectionCommandModel
         {
-            public UpdateSectionCommandModel(int id, string name, int warehouseId)
+            public UpdateSectionCommandModel(int id, string name)
             {
                 this.Id = id;
                 this.Name = name;
-                this.WarehouseId = warehouseId;
-            }
-            public UpdateSectionCommandModel(int id, string name, Domain.Entities.Warehouse warehouse) : this(id, name, warehouse.Id)
-            {
-
             }
 
             public int Id { get; }
             public string Name { get; }
-            public int WarehouseId { get; }
         }
     }
 }

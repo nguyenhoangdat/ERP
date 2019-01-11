@@ -14,7 +14,6 @@ namespace Restmium.ERP.Services.Warehouse.Infrastructure.Database
         }
 
         #region DbSets
-        public DbSet<Address> Addresses { get; set; }
         public DbSet<IssueSlip> IssueSlips { get; set; }
         public DbSet<IssueSlip.Item> IssueSlipItems { get; set; }
         public DbSet<Movement> Movements { get; set; }
@@ -31,7 +30,6 @@ namespace Restmium.ERP.Services.Warehouse.Infrastructure.Database
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.ApplyConfiguration(new AddressConfiguration());
             modelBuilder.ApplyConfiguration(new IssueSlipConfiguration());
             modelBuilder.ApplyConfiguration(new IssueSlipItemConfiguration());
             modelBuilder.ApplyConfiguration(new MovementConfiguration());

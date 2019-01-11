@@ -10,9 +10,10 @@ namespace Restmium.ERP.Services.Warehouse.Domain.Entities
         {
             this.Items = new HashSet<Item>();
         }
-        public StockTaking(string name) : this()
+        public StockTaking(string name, ICollection<Item> items) : this()
         {
             this.Name = name;
+            this.Items = items;
         }
 
         [Required]

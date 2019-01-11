@@ -9,8 +9,8 @@ namespace Restmium.ERP.Services.Warehouse.Infrastructure.Database.Configuration
     {
         public void Configure(EntityTypeBuilder<StockTaking.Item> builder)
         {
-            builder.HasKey(x => x.Id);
-            builder.Property(x => x.Id)
+            builder.HasKey(x => new { x.StockTakingId, x.PositionId });
+            builder.Property(x => x.StockTakingId)
                 .ValueGeneratedOnAdd();
 
             builder.HasOne(i => i.StockTaking)

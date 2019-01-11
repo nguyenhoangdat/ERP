@@ -24,7 +24,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Commands
                 this.SectionId = sectionId;
                 this.Rating = rating;
             }
-            public CreatePositionCommandModel(string name, double width, double height, double depth, double maxWeight, Section section, int rating) : this(name, width, height, depth, section.Id, rating)
+            public CreatePositionCommandModel(string name, double width, double height, double depth, double maxWeight, Section section, int rating) : this(name, width, height, depth, maxWeight, section.Id, rating)
             {
 
             }
