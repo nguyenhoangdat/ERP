@@ -14,8 +14,8 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Integration
 
         public ProductRenamedIntegrationEventHandler(DatabaseContext context, ILogger<ProductRenamedIntegrationEventHandler> logger)
         {
-            _databaseContext = context;
-            _logger = logger;
+            this._databaseContext = context;
+            this._logger = logger;
         }
 
         public async Task Handle(ProductRenamedIntegrationEvent @event)
