@@ -5,22 +5,22 @@ using System;
 
 namespace Restmium.ERP.Services.Warehouse.Infrastructure.Database.Configuration
 {
-    public class IssueSlipItemConfiguration : IEntityTypeConfiguration<IssueSlip.Item>
+    public class ReceiptItemConfiguration : IEntityTypeConfiguration<Receipt.Item>
     {
-        public void Configure(EntityTypeBuilder<IssueSlip.Item> builder)
+        public void Configure(EntityTypeBuilder<Receipt.Item> builder)
         {
-            builder.HasKey(x => new { x.IssueSlipId, x.WareId });
+            builder.HasKey(x => new { x.ReceiptId, x.WareId });
 
-            builder.HasOne(x => x.IssueSlip)
+            builder.HasOne(x => x.Receipt)
                 .WithMany(x => x.Items)
-                .HasForeignKey(x => x.IssueSlipId);
+                .HasForeignKey(x => x.ReceiptId);
 
             builder.HasOne(x => x.Ware)
-                .WithMany(x => x.IssueSlipItems)
+                .WithMany(x => x.ReceiptItems)
                 .HasForeignKey(x => x.WareId);
 
             builder.HasOne(x => x.Position)
-                .WithMany(x => x.IssueSlipItems)
+                .WithMany(x => x.ReceiptItems)
                 .HasForeignKey(x => x.PositionId);
 
             builder.Property(x => x.UtcCreated)

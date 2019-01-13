@@ -11,6 +11,7 @@ namespace Restmium.ERP.Services.Warehouse.Domain.Entities
             this.Movements = new HashSet<Movement>();
             this.IssueSlipItems = new HashSet<IssueSlip.Item>();
             this.StockTakingItems = new HashSet<StockTaking.Item>();
+            this.ReceiptItems = new HashSet<Receipt.Item>();
         }
         public Position(string name, double width, double height, double depth, double maxWeight) : this()
         {
@@ -57,5 +58,6 @@ namespace Restmium.ERP.Services.Warehouse.Domain.Entities
         public virtual ICollection<Movement> Movements { get; protected set; }
         public virtual ICollection<IssueSlip.Item> IssueSlipItems { get; protected set; }
         public virtual ICollection<StockTaking.Item> StockTakingItems { get; protected set; }
+        public virtual ICollection<Receipt.Item> ReceiptItems { get; protected set; }
     }
 }

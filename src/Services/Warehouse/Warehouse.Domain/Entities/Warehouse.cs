@@ -23,7 +23,7 @@ namespace Restmium.ERP.Services.Warehouse.Domain.Entities
         public string Name { get; set; }
 
         [Required]
-        public Address Address { get; set; }
+        public virtual Address Address { get; set; }
 
         public virtual ICollection<Section> Sections { get; protected set; }
     }

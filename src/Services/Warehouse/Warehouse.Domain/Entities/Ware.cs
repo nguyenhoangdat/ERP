@@ -11,6 +11,7 @@ namespace Restmium.ERP.Services.Warehouse.Domain.Entities
             this.Movements = new HashSet<Movement>();
             this.IssueSlipItems = new HashSet<IssueSlip.Item>();
             this.StockTakingItems = new HashSet<StockTaking.Item>();
+            this.ReceiptItems = new HashSet<Receipt.Item>();
         }
         public Ware(int productId, string productName) : this()
         {
@@ -24,11 +25,12 @@ namespace Restmium.ERP.Services.Warehouse.Domain.Entities
             this.Depth = depth;
             this.Weight = weight;
         }
-        public Ware(int productId, string productName, double width, double height, double depth, double weight, ICollection<Movement> movements, ICollection<IssueSlip.Item> issueSlipItems, ICollection<StockTaking.Item> stockTakingItems) : this(productId, productName, width, height, depth, weight)
+        public Ware(int productId, string productName, double width, double height, double depth, double weight, ICollection<Movement> movements, ICollection<IssueSlip.Item> issueSlipItems, ICollection<StockTaking.Item> stockTakingItems, ICollection<Receipt.Item> receiptItems) : this(productId, productName, width, height, depth, weight)
         {
             this.Movements = movements;
             this.IssueSlipItems = issueSlipItems;
             this.StockTakingItems = stockTakingItems;
+            this.ReceiptItems = receiptItems;
         }
 
         [Required]
@@ -52,5 +54,6 @@ namespace Restmium.ERP.Services.Warehouse.Domain.Entities
         public virtual ICollection<Movement> Movements { get; protected set; }
         public virtual ICollection<IssueSlip.Item> IssueSlipItems { get; protected set; }
         public virtual ICollection<StockTaking.Item> StockTakingItems { get; protected set; }
+        public virtual ICollection<Receipt.Item> ReceiptItems { get; protected set; }
     }
 }

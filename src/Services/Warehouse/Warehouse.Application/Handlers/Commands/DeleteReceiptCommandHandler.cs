@@ -9,29 +9,29 @@ using System.Threading.Tasks;
 
 namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
 {
-    public class DeleteWareCommandHandler : IRequestHandler<DeleteWareCommand, Ware>
+    public class DeleteReceiptCommandHandler : IRequestHandler<DeleteReceiptCommand, Receipt>
     {
         //TODO: Check grammar
-        protected const string DeleteWareCommandHandlerEntityNotFoundException = "Unable to delete ware with id={0}. Ware not found!";
+        protected const string DeleteWareCommandHandlerEntityNotFoundException = "Unable to delete Receipt with id={0}. Receipt not found!";
 
-        public DeleteWareCommandHandler(DatabaseContext context)
+        public DeleteReceiptCommandHandler(DatabaseContext databaseContext)
         {
-            this.DatabaseContext = context;
+            this.DatabaseContext = databaseContext;
         }
 
         protected DatabaseContext DatabaseContext { get; }
 
-        public async Task<Ware> Handle(DeleteWareCommand request, CancellationToken cancellationToken)
+        public async Task<Receipt> Handle(DeleteReceiptCommand request, CancellationToken cancellationToken)
         {
-            if (!this.DatabaseContext.Wares.Any(x => x.Id == request.Model.Id))
+            if (!this.DatabaseContext.Receipts.Any(x => x.Id == request.Model.Id))
             {
                 throw new EntityNotFoundException(string.Format(DeleteWareCommandHandlerEntityNotFoundException, request.Model.Id));
             }
 
-            Ware ware = this.DatabaseContext.Wares.Remove(this.DatabaseContext.Wares.Find(request.Model.Id)).Entity;
+            Receipt receipt = this.DatabaseContext.Receipts.Remove(this.DatabaseContext.Receipts.Find(request.Model.Id)).Entity;
             await this.DatabaseContext.SaveChangesAsync(cancellationToken);
 
-            return ware;
+            return receipt;
         }
     }
 }

@@ -1,11 +1,11 @@
-﻿using Restmium.ERP.BuildingBlocks.Common.Entities;
+﻿using Restmium.ERP.Services.Warehouse.Domain.Entities.Abstract;
 using System.ComponentModel.DataAnnotations;
 
 namespace Restmium.ERP.Services.Warehouse.Domain.Entities
 {
     public partial class IssueSlip
     {
-        public class Item : DatabaseEntity
+        public class Item : WarePosition
         {
             public Item()
             {
@@ -32,14 +32,6 @@ namespace Restmium.ERP.Services.Warehouse.Domain.Entities
             [Required]
             public long IssueSlipId { get; set; }
             public virtual IssueSlip IssueSlip { get; set; }
-
-            [Required]
-            public int WareId { get; set; }
-            public virtual Ware Ware { get; set; }
-
-            [Required]
-            public long PositionId { get; set; }
-            public Position Position { get; set; }
 
             [Required]
             public int RequestedUnits { get; set; } //Počet vyžádaných jednotek

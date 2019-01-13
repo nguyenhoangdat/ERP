@@ -33,8 +33,8 @@ namespace Restmium.ERP.Services.Warehouse.API
                     options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
                 });
 
-            //TODO: Add DbContextCheck
-            services.AddHealthChecks();
+            services.AddHealthChecks()
+                .AddDbContextCheck<DatabaseContext>();
 
             services.AddDbContext<DatabaseContext>(options =>
             {
@@ -76,6 +76,7 @@ namespace Restmium.ERP.Services.Warehouse.API
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                app.UseDatabaseErrorPage();
             }
             else
             {

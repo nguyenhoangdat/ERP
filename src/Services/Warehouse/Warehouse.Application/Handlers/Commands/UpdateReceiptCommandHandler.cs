@@ -1,0 +1,43 @@
+﻿using MediatR;
+using Restmium.ERP.Services.Warehouse.Application.Commands;
+using Restmium.ERP.Services.Warehouse.Domain.Entities;
+using Restmium.ERP.Services.Warehouse.Domain.Exceptions;
+using Restmium.ERP.Services.Warehouse.Infrastructure.Database;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+
+namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
+{
+    public class UpdateReceiptCommandHandler : IRequestHandler<UpdateReceiptCommand, Receipt>
+    {
+        protected const string UpdateReceiptCommandHandlerEntityNotFoundException = "Unable to update Receipt with id={0}. Receipt not found!";
+
+        public UpdateReceiptCommandHandler(DatabaseContext databaseContext)
+        {
+            this.DatabaseContext = databaseContext;
+        }
+
+        protected DatabaseContext DatabaseContext { get; }
+
+        public async Task<Receipt> Handle(UpdateReceiptCommand request, CancellationToken cancellationToken)
+        {
+            if (!this.DatabaseContext.Receipts.Any(x => x.Id == request.Model.Id))
+            {
+                throw new EntityNotFoundException(string.Format(UpdateReceiptCommandHandlerEntityNotFoundException, request.Model.Id));
+            }
+
+            List<Receipt.Item> items = new List<Receipt.Item>();
+            foreach (UpdateReceiptCommand.UpdateReceiptCommandModel.Item item in request.Model.Items)
+            {
+                items.Add(new Receipt.Item(item.ReceiptId, item.PositionId, item.WareId, item.CountOrdered, item.CountReceived, item.EmployeeId, item.UtcProcessed));
+            }
+
+            Receipt receipt = this.DatabaseContext.Receipts.Update(new Receipt(request.Model.Id, request.Model.Name, request.Model.UtcExpected, request.Model.UtcReceived, items)).Entity;
+            await this.DatabaseContext.SaveChangesAsync(cancellationToken);
+
+            return receipt;
+        }
+    }
+}

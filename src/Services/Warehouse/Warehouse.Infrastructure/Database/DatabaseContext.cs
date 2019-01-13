@@ -19,6 +19,8 @@ namespace Restmium.ERP.Services.Warehouse.Infrastructure.Database
         public DbSet<Movement> Movements { get; set; }
         public DbSet<Position> Positions { get; set; }
         public DbSet<Section> Sections { get; set; }
+        public DbSet<Receipt> Receipts { get; set; }
+        public DbSet<Receipt.Item> Items { get; set; }
         public DbSet<Ware> Wares { get; set; }
         public DbSet<Domain.Entities.Warehouse> Warehouses { get; set; }
 
@@ -34,6 +36,8 @@ namespace Restmium.ERP.Services.Warehouse.Infrastructure.Database
             modelBuilder.ApplyConfiguration(new IssueSlipItemConfiguration());
             modelBuilder.ApplyConfiguration(new MovementConfiguration());
             modelBuilder.ApplyConfiguration(new PositionConfiguration());
+            modelBuilder.ApplyConfiguration(new ReceiptConfiguration());
+            modelBuilder.ApplyConfiguration(new ReceiptItemConfiguration());
             modelBuilder.ApplyConfiguration(new SectionConfiguration());
             modelBuilder.ApplyConfiguration(new StockTakingConfiguration());
             modelBuilder.ApplyConfiguration(new StockTakingItemConfiguration());
