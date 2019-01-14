@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using MediatR;
+using MediatR.Pipeline;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.ServiceBus;
@@ -9,9 +11,11 @@ using Microsoft.Extensions.Logging;
 using Restmium.ERP.BuildingBlocks.EventBus;
 using Restmium.ERP.BuildingBlocks.EventBus.Abstractions;
 using Restmium.ERP.BuildingBlocks.EventBusServiceBus;
+using Restmium.ERP.Services.Warehouse.Application.Commands;
 using Restmium.ERP.Services.Warehouse.Application.Handlers.Integration;
 using Restmium.ERP.Services.Warehouse.Infrastructure.Database;
 using Restmium.ERP.Services.Warehouse.Integration.Events;
+using System.Reflection;
 
 namespace Restmium.ERP.Services.Warehouse.API
 {
@@ -40,6 +44,9 @@ namespace Restmium.ERP.Services.Warehouse.API
             {
                 options.UseLazyLoadingProxies().UseSqlServer(this.Configuration.GetConnectionString("DefaultMSSQLConnection"), opt => opt.EnableRetryOnFailure());
             });
+
+            services.AddTransient(typeof(IPipelineBehavior<,>), typeof(RequestPreProcessorBehavior<,>));
+            services.AddMediatR(typeof(CreateWareCommand).GetTypeInfo().Assembly);
 
             #region EventBus
             bool isServiceBusEnabled = this.Configuration.GetValue("AzureServiceBusEnabled", false);
@@ -80,6 +87,7 @@ namespace Restmium.ERP.Services.Warehouse.API
             }
             else
             {
+                app.UseExceptionHandler("/error");
                 app.UseHsts();
             }
 
