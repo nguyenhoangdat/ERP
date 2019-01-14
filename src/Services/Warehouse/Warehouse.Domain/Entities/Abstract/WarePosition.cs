@@ -12,5 +12,11 @@ namespace Restmium.ERP.Services.Warehouse.Domain.Entities.Abstract
         [Required]
         public long PositionId { get; set; }
         public virtual Position Position { get; set; }
+
+        /// <summary>
+        /// FK to Employees.API
+        /// </summary>
+        [Required]
+        public int EmployeeId { get; set; }
     }
 }

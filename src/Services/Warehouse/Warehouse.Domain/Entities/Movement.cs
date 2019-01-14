@@ -9,19 +9,20 @@ namespace Restmium.ERP.Services.Warehouse.Domain.Entities
         {
 
         }
-        private Movement(Direction direction, EntryContent content, int countChange, int countTotal) : this()
+        protected Movement(Direction direction, EntryContent content, int countChange, int countTotal, int employeeId) : this()
         {
             this.MovementDirection = direction;
             this.Content = content;
             this.CountChange = countChange;
             this.CountTotal = countTotal;
+            this.EmployeeId = employeeId;
         }
-        public Movement(int wareId, long positionId, Direction direction, EntryContent content, int countChange, int countTotal) : this(direction, content, countChange, countTotal)
+        public Movement(int wareId, long positionId, Direction direction, EntryContent content, int countChange, int countTotal, int employeeId) : this(direction, content, countChange, countTotal, employeeId)
         {
             this.WareId = wareId;
             this.PositionId = positionId;
         }
-        public Movement(Ware ware, Position position, Direction direction, EntryContent content, int countChange, int countTotal) : this(direction, content, countChange, countTotal)
+        public Movement(Ware ware, Position position, Direction direction, EntryContent content, int countChange, int countTotal, int employeeId) : this(direction, content, countChange, countTotal, employeeId)
         {
             this.Ware = ware;
             this.Position = position;

@@ -14,13 +14,14 @@ namespace Restmium.ERP.Services.Warehouse.Application.Commands
 
         public class CreateMovementCommandModel
         {
-            public CreateMovementCommandModel(int wareId, long positionId, Movement.Direction direction, Movement.EntryContent content, int countChange)
+            public CreateMovementCommandModel(int wareId, long positionId, Movement.Direction direction, Movement.EntryContent content, int countChange, int employeeId)
             {
                 this.WareId = wareId;
                 this.PositionId = positionId;
                 this.Direction = direction;
                 this.Content = content;
                 this.CountChange = countChange;
+                this.EmployeeId = employeeId;
             }
 
             public int WareId { get; }
@@ -28,6 +29,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Commands
             public Movement.Direction Direction { get; }
             public Movement.EntryContent Content { get; }
             public int CountChange { get; }
+            public int EmployeeId { get; }
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using Restmium.ERP.Services.Warehouse.Domain.Entities;
+using System;
 using System.Collections.Generic;
 
 namespace Restmium.ERP.Services.Warehouse.Application.Commands
@@ -11,7 +12,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Commands
             this.Model = model;
         }
 
-        protected UpdateStockTakingCommandModel Model { get; }
+        public UpdateStockTakingCommandModel Model { get; }
 
         public class UpdateStockTakingCommandModel
         {
@@ -28,13 +29,15 @@ namespace Restmium.ERP.Services.Warehouse.Application.Commands
 
             public class Item
             {
-                public Item(int stockTakingId, int wareId, long positionId, int currentStock, int countedStock)
+                public Item(int stockTakingId, int wareId, long positionId, int currentStock, int countedStock, int employeeId, DateTime? utcCounted)
                 {
                     this.StockTakingId = stockTakingId;
                     this.WareId = wareId;
                     this.PositionId = positionId;
                     this.CurrentStock = currentStock;
                     this.CountedStock = countedStock;
+                    this.UtcCounted = utcCounted;
+                    this.EmployeeId = employeeId;
                 }
 
                 public int StockTakingId { get; }
@@ -42,6 +45,8 @@ namespace Restmium.ERP.Services.Warehouse.Application.Commands
                 public long PositionId { get; }
                 public int CurrentStock { get; }
                 public int CountedStock { get; }
+                public int EmployeeId { get; }
+                public DateTime? UtcCounted { get; }
             }
         }
     }

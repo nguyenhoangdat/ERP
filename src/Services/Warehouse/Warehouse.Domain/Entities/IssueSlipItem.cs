@@ -11,18 +11,19 @@ namespace Restmium.ERP.Services.Warehouse.Domain.Entities
             {
 
             }
-            private Item(int requestedUnits, int issuedUnits) : this()
+            private Item(int requestedUnits, int issuedUnits, int employeeId) : this()
             {
                 this.RequestedUnits = requestedUnits;
                 this.IssuedUnits = issuedUnits;
+                this.EmployeeId = employeeId;
             }
-            public Item(long issueSlipId, int wareId, long positionId, int requestedUnits, int issuedUnits) : this(requestedUnits, issuedUnits)
+            public Item(long issueSlipId, int wareId, long positionId, int requestedUnits, int issuedUnits, int employeeId) : this(requestedUnits, issuedUnits, employeeId)
             {
                 this.IssueSlipId = issueSlipId;
                 this.WareId = wareId;
                 this.PositionId = positionId;
             }
-            public Item(IssueSlip issueSlip, Ware ware, Position position, int requestedUnits, int issuedUnits) : this(requestedUnits, issuedUnits)
+            public Item(IssueSlip issueSlip, Ware ware, Position position, int requestedUnits, int issuedUnits, int employeeId) : this(requestedUnits, issuedUnits, employeeId)
             {
                 this.IssueSlip = issueSlip;
                 this.Ware = ware;

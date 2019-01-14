@@ -13,15 +13,16 @@ namespace Restmium.ERP.Services.Warehouse.Domain.Entities
             {
 
             }
-            public Item(int stockTakingId, int wareId, long positionId, int currentStock, int countedStock) : this()
+            public Item(int stockTakingId, int wareId, long positionId, int currentStock, int countedStock, int employeeId) : this()
             {
                 this.StockTakingId = stockTakingId;
                 this.WareId = wareId;
                 this.PositionId = positionId;
                 this.CurrentStock = currentStock;
                 this.CountedStock = countedStock;
+                this.EmployeeId = employeeId;
             }
-            public Item(int stockTakingId, int wareId, long positionId, int currentStock, int countedStock, DateTime utcCounted) : this(stockTakingId, wareId, positionId, currentStock, countedStock)
+            public Item(int stockTakingId, int wareId, long positionId, int currentStock, int countedStock, int employeeId, DateTime? utcCounted) : this(stockTakingId, wareId, positionId, currentStock, countedStock, employeeId)
             {
                 this.UtcCounted = utcCounted;
             }

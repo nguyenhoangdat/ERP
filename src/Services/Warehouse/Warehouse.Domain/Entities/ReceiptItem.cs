@@ -44,12 +44,6 @@ namespace Restmium.ERP.Services.Warehouse.Domain.Entities
             public int CountReceived { get; set; }
 
             public DateTime? UtcProcessed { get; set; }
-
-            /// <summary>
-            /// FK to Employees.API
-            /// </summary>
-            [Required]
-            public int EmployeeId { get; set; }
         }
     }
 }

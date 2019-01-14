@@ -63,8 +63,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
             }
 
             // Create Movement
-            Movement movement = new Movement(request.Model.WareId, request.Model.PositionId, request.Model.Direction, request.Model.Content, request.Model.CountChange, countTotal + request.Model.CountChange);
-            this.DatabaseContext.Movements.Add(movement);
+            Movement movement = this.DatabaseContext.Movements.Add(new Movement(request.Model.WareId, request.Model.PositionId, request.Model.Direction, request.Model.Content, request.Model.CountChange, countTotal + request.Model.CountChange, request.Model.EmployeeId)).Entity;
             await this.DatabaseContext.SaveChangesAsync(cancellationToken);
 
             return movement;
@@ -72,7 +71,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
 
         protected bool HasSpaceCapacity(Position position, Ware ware, int countTotal)
         {
-            return true; // Challenge task
+            return true; //TODO: Implement (Challenge task)
         }
         protected bool HasLoadCapacity(Position position, Ware ware, int countTotal)
         {

@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace Restmium.ERP.Services.Warehouse.Application.Commands
 {
-    public class UpdateIssueSlipCommand : IRequest<StockTaking>
+    public class UpdateIssueSlipCommand : IRequest<IssueSlip>
     {
         public UpdateIssueSlipCommand(UpdateIssueSlipCommandModel model)
         {
@@ -34,13 +34,18 @@ namespace Restmium.ERP.Services.Warehouse.Application.Commands
 
             public class Item
             {
-                public Item(long issueSlipId, int wareId, long positionId, int requestedUnits, int issuedUnits)
+                public Item(long issueSlipId, int wareId, long positionId, int requestedUnits, int issuedUnits, int employeeId)
                 {
                     this.IssueSlipId = issueSlipId;
                     this.WareId = wareId;
                     this.PositionId = positionId;
                     this.RequstedUnits = requestedUnits;
                     this.IssuedUnits = issuedUnits;
+                    this.EmployeeId = employeeId;
+                }
+                public Item(long issueSlipId, int wareId, long positionId, int requestedUnits, int issuedUnits) : this(issueSlipId, wareId, positionId, requestedUnits, issuedUnits, 0)
+                {
+                    
                 }
 
                 public long IssueSlipId { get; }
@@ -49,6 +54,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Commands
 
                 public int RequstedUnits { get; }
                 public int IssuedUnits { get; }
+                public int EmployeeId { get; }
             }
         }
     }
