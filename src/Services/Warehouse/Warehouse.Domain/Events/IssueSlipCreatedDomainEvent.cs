@@ -5,15 +5,11 @@ namespace Restmium.ERP.Services.Warehouse.Domain.Events
 {
     public class IssueSlipCreatedDomainEvent : INotification
     {
-        public IssueSlipCreatedDomainEvent()
-        {
-        }
-
-        public IssueSlipCreatedDomainEvent(StockTaking issueSlip) : this()
+        public IssueSlipCreatedDomainEvent(IssueSlip issueSlip)
         {
             this.IssueSlip = issueSlip;
         }
 
-        public StockTaking IssueSlip { get; }
+        public IssueSlip IssueSlip { get; }
     }
 }

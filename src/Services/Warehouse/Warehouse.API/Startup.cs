@@ -125,6 +125,7 @@ namespace Restmium.ERP.Services.Warehouse.API
 
             services.AddSingleton<IEventBusSubscriptionsManager, InMemoryEventBusSubscriptionsManager>();
 
+            //TODO: Add Mediators to Handlers
             services.AddTransient(sp => {
                 DatabaseContext context = sp.GetRequiredService<DatabaseContext>();
                 ILogger<OrderStatusChangedToAwaitingValidationIntegrationEventHandler> logger = sp.GetRequiredService<ILogger<OrderStatusChangedToAwaitingValidationIntegrationEventHandler>>();
@@ -147,6 +148,12 @@ namespace Restmium.ERP.Services.Warehouse.API
                 ILogger<ProductRenamedIntegrationEventHandler> logger = sp.GetRequiredService<ILogger<ProductRenamedIntegrationEventHandler>>();
                 return new ProductRenamedIntegrationEventHandler(context, logger);
             }); // ProductRenamedIntegrationEventHandler
+            services.AddTransient(sp => {
+                DatabaseContext context = sp.GetRequiredService<DatabaseContext>();
+                ILogger<SuppliesOrderedIntegrationEventHandler> logger = sp.GetRequiredService<Logger<SuppliesOrderedIntegrationEventHandler>>();
+                IMediator mediator = sp.GetRequiredService<IMediator>();
+                return new SuppliesOrderedIntegrationEventHandler(context, logger, mediator);
+            }); // SuppliesOrderedIntegrationEventHandler
         }
         private void ConfigureEventBus(IApplicationBuilder app)
         {
