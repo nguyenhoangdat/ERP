@@ -125,7 +125,7 @@ namespace Restmium.ERP.Services.Warehouse.API
 
             services.AddSingleton<IEventBusSubscriptionsManager, InMemoryEventBusSubscriptionsManager>();
 
-            //TODO: Add Mediators to Handlers
+            //TODO: Check whether these events are useful or not
             services.AddTransient(sp => {
                 DatabaseContext context = sp.GetRequiredService<DatabaseContext>();
                 ILogger<OrderStatusChangedToAwaitingValidationIntegrationEventHandler> logger = sp.GetRequiredService<ILogger<OrderStatusChangedToAwaitingValidationIntegrationEventHandler>>();
