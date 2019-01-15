@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using MediatR;
+using Microsoft.Extensions.Logging;
 using Restmium.ERP.BuildingBlocks.EventBus.Abstractions;
 using Restmium.ERP.Services.Warehouse.Infrastructure.Database;
 using Restmium.ERP.Services.Warehouse.Integration.Events;
@@ -9,13 +10,18 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Integration
 {
     public class ProductRemovedIntegrationEventHandler : IIntegrationEventHandler<ProductRemovedIntegrationEvent>
     {
-        private DatabaseContext _databaseContext { get; }
-        private ILogger<ProductRemovedIntegrationEventHandler> _logger { get; }
+        protected DatabaseContext DatabaseContext { get; }
+        protected ILogger<ProductRemovedIntegrationEventHandler> Logger { get; }
+        protected IMediator Mediator { get; }
 
-        public ProductRemovedIntegrationEventHandler(DatabaseContext context, ILogger<ProductRemovedIntegrationEventHandler> logger)
+        public ProductRemovedIntegrationEventHandler(
+            DatabaseContext context,
+            ILogger<ProductRemovedIntegrationEventHandler> logger,
+            IMediator mediator)
         {
-            this._databaseContext = context;
-            this._logger = logger;
+            this.DatabaseContext = context;
+            this.Logger = logger;
+            this.Mediator = mediator;
         }
 
         public async Task Handle(ProductRemovedIntegrationEvent @event)

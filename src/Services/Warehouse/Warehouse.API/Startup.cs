@@ -130,28 +130,32 @@ namespace Restmium.ERP.Services.Warehouse.API
                 DatabaseContext context = sp.GetRequiredService<DatabaseContext>();
                 ILogger<OrderStatusChangedToAwaitingValidationIntegrationEventHandler> logger = sp.GetRequiredService<ILogger<OrderStatusChangedToAwaitingValidationIntegrationEventHandler>>();
                 IEventBus serviceBus = sp.GetRequiredService<IEventBus>();
-
-                return new OrderStatusChangedToAwaitingValidationIntegrationEventHandler(serviceBus, context, logger);
+                IMediator mediator = sp.GetRequiredService<IMediator>();
+                return new OrderStatusChangedToAwaitingValidationIntegrationEventHandler(serviceBus, context, logger, mediator);
             }); // OrderStatusChangedToAwaitingValidationIntegrationEventHandler
             services.AddTransient(sp => {
                 DatabaseContext context = sp.GetRequiredService<DatabaseContext>();
                 ILogger<ProductAddedIntegrationEventHandler> logger = sp.GetRequiredService<ILogger<ProductAddedIntegrationEventHandler>>();
-                return new ProductAddedIntegrationEventHandler(context, logger);
+                IMediator mediator = sp.GetRequiredService<IMediator>();
+                return new ProductAddedIntegrationEventHandler(context, logger, mediator);
             }); // ProductAddedIntegrationEventHandler
             services.AddTransient(sp => {
                 DatabaseContext context = sp.GetRequiredService<DatabaseContext>();
                 ILogger<ProductRemovedIntegrationEventHandler> logger = sp.GetRequiredService<ILogger<ProductRemovedIntegrationEventHandler>>();
-                return new ProductRemovedIntegrationEventHandler(context, logger);
+                IMediator mediator = sp.GetRequiredService<IMediator>();
+                return new ProductRemovedIntegrationEventHandler(context, logger, mediator);
             }); // ProductRemovedIntegrationEventHandler
             services.AddTransient(sp => {
                 DatabaseContext context = sp.GetRequiredService<DatabaseContext>();
                 ILogger<ProductRenamedIntegrationEventHandler> logger = sp.GetRequiredService<ILogger<ProductRenamedIntegrationEventHandler>>();
-                return new ProductRenamedIntegrationEventHandler(context, logger);
+                IMediator mediator = sp.GetRequiredService<IMediator>();
+                return new ProductRenamedIntegrationEventHandler(context, logger, mediator);
             }); // ProductRenamedIntegrationEventHandler
             services.AddTransient(sp => {
                 DatabaseContext context = sp.GetRequiredService<DatabaseContext>();
                 ILogger<SuppliesOrderedIntegrationEventHandler> logger = sp.GetRequiredService<Logger<SuppliesOrderedIntegrationEventHandler>>();
                 IMediator mediator = sp.GetRequiredService<IMediator>();
+
                 return new SuppliesOrderedIntegrationEventHandler(context, logger, mediator);
             }); // SuppliesOrderedIntegrationEventHandler
         }
@@ -161,6 +165,7 @@ namespace Restmium.ERP.Services.Warehouse.API
 
             eventBus.Subscribe<ProductAddedIntegrationEvent, ProductAddedIntegrationEventHandler>();
             eventBus.Subscribe<ProductRemovedIntegrationEvent, ProductRemovedIntegrationEventHandler>();
+            eventBus.Subscribe<SuppliesOrderedIntegrationEvent, SuppliesOrderedIntegrationEventHandler>();
         }
         #endregion
     }
