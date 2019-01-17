@@ -2,6 +2,7 @@
 using Restmium.ERP.Services.Warehouse.Domain.Entities.Abstract;
 using System;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Restmium.ERP.Services.Warehouse.Domain.Entities
 {
@@ -38,6 +39,11 @@ namespace Restmium.ERP.Services.Warehouse.Domain.Entities
             public int CountedStock { get; set; }
 
             public DateTime? UtcCounted { get; set; }
+
+            #region NotMapped properties
+            [NotMapped]
+            public int Variance => this.CountedStock - this.CurrentStock;
+            #endregion
         }
     }        
 }

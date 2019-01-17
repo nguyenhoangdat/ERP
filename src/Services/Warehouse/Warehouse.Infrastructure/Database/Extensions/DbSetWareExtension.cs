@@ -16,14 +16,12 @@ namespace Restmium.ERP.Services.Warehouse.Infrastructure.Database.Extensions
         public static int Count(this DbSet<Ware> dbSet, Ware ware)
         {
             // Get ids of latest movements at positions
-            ICollection<long> ids =
-                (
-                    from movement in ware.Movements
-                    orderby movement.PositionId, movement.UtcCreated
-                    group movement by movement.PositionId into list
-                    let id = list.Max(x => x.Id)
-                    select id
-                ).ToList(); //https://www.dotnetcurry.com/ShowArticle.aspx?ID=414
+            IEnumerable<long> ids =
+                from movement in ware.Movements
+                orderby movement.PositionId, movement.UtcCreated
+                group movement by movement.PositionId into list
+                let id = list.Max(x => x.Id)
+                select id; //https://www.dotnetcurry.com/ShowArticle.aspx?ID=414
 
             // Return SUM of CountTotal of movements where id is contained in list ids
             return ware.Movements.Where(x => ids.Contains(x.Id) && x.CountTotal > 0).Sum(x => x.CountTotal);
@@ -38,15 +36,13 @@ namespace Restmium.ERP.Services.Warehouse.Infrastructure.Database.Extensions
         public static int Count(this DbSet<Ware> dbSet, Ware ware, Domain.Entities.Warehouse warehouse)
         {
             // Get ids of latest movements at positions
-            ICollection<long> ids =
-                (
-                    from movement in ware.Movements
-                    orderby movement.PositionId, movement.UtcCreated
-                    where movement.Position.Section.Warehouse.Id == warehouse.Id
-                    group movement by movement.PositionId into list
-                    let id = list.Max(x => x.Id)
-                    select id
-                ).ToList(); //https://www.dotnetcurry.com/ShowArticle.aspx?ID=414
+            IEnumerable<long> ids =
+                from movement in ware.Movements
+                orderby movement.PositionId, movement.UtcCreated
+                where movement.Position.Section.Warehouse.Id == warehouse.Id
+                group movement by movement.PositionId into list
+                let id = list.Max(x => x.Id)
+                select id; //https://www.dotnetcurry.com/ShowArticle.aspx?ID=414
 
             // Return SUM of CountTotal of movements where id is contained in list ids
             return ware.Movements.Where(x => ids.Contains(x.Id) && x.CountTotal > 0).Sum(x => x.CountTotal);

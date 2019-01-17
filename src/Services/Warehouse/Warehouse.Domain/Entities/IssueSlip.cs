@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 
 namespace Restmium.ERP.Services.Warehouse.Domain.Entities
 {
@@ -34,5 +35,16 @@ namespace Restmium.ERP.Services.Warehouse.Domain.Entities
         public DateTime UtcDeliveryDate { get;set; }
 
         public virtual ICollection<Item> Items { get; protected set; }
+
+        #region Methods
+        /// <summary>
+        /// Returns the unissued items within the IssueSlip instance
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<Item> GetUnissuedItems()
+        {
+            return this.Items.Where(x => x.IssuedUnits < x.RequestedUnits);
+        }
+        #endregion
     }
 }
