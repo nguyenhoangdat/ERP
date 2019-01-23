@@ -7,7 +7,7 @@ namespace Restmium.ERP.Services.Warehouse.Integration.Events
     /// <summary>
     /// Event produced by Ordering.API
     /// </summary>
-    public class OrderStatusChangedToAwaitingValidationIntegrationEvent : IntegrationEvent
+    public class OrderCreatedIntegrationEvent : IntegrationEvent
     {
         public long OrderId { get; set; }
         public List<OrderItem> OrderItems { get; set; }
@@ -24,8 +24,8 @@ namespace Restmium.ERP.Services.Warehouse.Integration.Events
                 this.Units = units;
             }
 
-            public int ProductId { get; set; }
-            public int Units { get; set; }
+            public int ProductId { get; }
+            public int Units { get; }
         }
     }
 }

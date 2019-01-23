@@ -128,11 +128,11 @@ namespace Restmium.ERP.Services.Warehouse.API
             //TODO: Check whether these events are useful or not
             services.AddTransient(sp => {
                 DatabaseContext context = sp.GetRequiredService<DatabaseContext>();
-                ILogger<OrderStatusChangedToAwaitingValidationIntegrationEventHandler> logger = sp.GetRequiredService<ILogger<OrderStatusChangedToAwaitingValidationIntegrationEventHandler>>();
+                ILogger<OrderCreatedIntegrationEventHandler> logger = sp.GetRequiredService<ILogger<OrderCreatedIntegrationEventHandler>>();
                 IEventBus serviceBus = sp.GetRequiredService<IEventBus>();
                 IMediator mediator = sp.GetRequiredService<IMediator>();
-                return new OrderStatusChangedToAwaitingValidationIntegrationEventHandler(serviceBus, context, logger, mediator);
-            }); // OrderStatusChangedToAwaitingValidationIntegrationEventHandler
+                return new OrderCreatedIntegrationEventHandler(serviceBus, context, logger, mediator);
+            }); // OrderReceivedIntegrationEventHandler
             services.AddTransient(sp => {
                 DatabaseContext context = sp.GetRequiredService<DatabaseContext>();
                 ILogger<ProductAddedIntegrationEventHandler> logger = sp.GetRequiredService<ILogger<ProductAddedIntegrationEventHandler>>();

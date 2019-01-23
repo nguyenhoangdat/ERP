@@ -10,10 +10,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Handlers\Domain\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\Warehouse.Integration\Warehouse.Integration.csproj" />
   </ItemGroup>
 
