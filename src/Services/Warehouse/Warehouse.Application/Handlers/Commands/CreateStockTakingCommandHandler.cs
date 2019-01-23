@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Restmium.ERP.Services.Warehouse.Application.Commands;
 using Restmium.ERP.Services.Warehouse.Domain.Entities;
+using Restmium.ERP.Services.Warehouse.Domain.Events;
 using Restmium.ERP.Services.Warehouse.Infrastructure.Database;
 using System.Collections.Generic;
 using System.Threading;
@@ -15,12 +16,14 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
          * Should be create for each section separately
          */
 
-        public CreateStockTakingCommandHandler(DatabaseContext context)
+        public CreateStockTakingCommandHandler(DatabaseContext context, IMediator mediator)
         {
             this.DatabaseContext = context;
+            this.Mediator = mediator;
         }
 
         protected DatabaseContext DatabaseContext { get; }
+        protected IMediator Mediator { get; }
 
         public async Task<StockTaking> Handle(CreateStockTakingCommand request, CancellationToken cancellationToken)
         {
@@ -32,6 +35,8 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
 
             StockTaking stockTaking = this.DatabaseContext.StockTakings.Add(new StockTaking(request.Model.Name, items)).Entity;
             await this.DatabaseContext.SaveChangesAsync(cancellationToken);
+
+            await this.Mediator.Publish(new StockTakingCreatedDomainEvent(stockTaking));
 
             return stockTaking;
         }

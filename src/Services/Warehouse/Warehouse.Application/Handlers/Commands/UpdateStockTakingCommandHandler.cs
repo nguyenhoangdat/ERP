@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Restmium.ERP.Services.Warehouse.Application.Commands;
 using Restmium.ERP.Services.Warehouse.Domain.Entities;
+using Restmium.ERP.Services.Warehouse.Domain.Events;
 using Restmium.ERP.Services.Warehouse.Infrastructure.Database;
 using System.Collections.Generic;
 using System.Threading;
@@ -10,12 +11,14 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
 {
     public class UpdateStockTakingCommandHandler : IRequestHandler<UpdateStockTakingCommand, StockTaking>
     {
-        public UpdateStockTakingCommandHandler(DatabaseContext databaseContext)
+        public UpdateStockTakingCommandHandler(DatabaseContext databaseContext, IMediator mediator)
         {
             this.DatabaseContext = databaseContext;
+            this.Mediator = mediator;
         }
 
         protected DatabaseContext DatabaseContext { get; }
+        protected IMediator Mediator { get; }
 
         public async Task<StockTaking> Handle(UpdateStockTakingCommand request, CancellationToken cancellationToken)
         {
@@ -27,6 +30,8 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
 
             StockTaking stockTaking = this.DatabaseContext.StockTakings.Update(new StockTaking(request.Model.Name, items)).Entity;
             await this.DatabaseContext.SaveChangesAsync(cancellationToken);
+
+            await this.Mediator.Publish(new StockTakingUpdatedDomainEvent(stockTaking));
 
             return stockTaking;
         }

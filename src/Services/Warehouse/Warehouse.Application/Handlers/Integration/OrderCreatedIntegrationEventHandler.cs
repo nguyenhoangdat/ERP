@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.Extensions.Logging;
 using Restmium.ERP.BuildingBlocks.EventBus.Abstractions;
+using Restmium.ERP.Services.Warehouse.Application.Commands;
 using Restmium.ERP.Services.Warehouse.Domain.Entities;
 using Restmium.ERP.Services.Warehouse.Domain.Entities.Extensions;
 using Restmium.ERP.Services.Warehouse.Domain.Exceptions;
@@ -19,18 +20,15 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Integration
         private const string OrderCreatedIntegrationEventHandler_InvalidOrderException = "Unable to create Issue Slip from Order (id={0}). Products were not found!";
 
         protected DatabaseContext DatabaseContext { get; }
-        protected IEventBus EventBus { get; }
         protected ILogger<OrderCreatedIntegrationEventHandler> Logger { get; }     
         protected IMediator Mediator { get; }
 
         public OrderCreatedIntegrationEventHandler(
             DatabaseContext context,
-            IEventBus eventBus,
             ILogger<OrderCreatedIntegrationEventHandler> logger,
             IMediator mediator)
         {
             this.DatabaseContext = context;
-            this.EventBus = eventBus;
             this.Logger = logger;            
             this.Mediator = mediator;
         }
@@ -48,41 +46,20 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Integration
                 throw new InvalidOrderException(string.Format(OrderCreatedIntegrationEventHandler_InvalidOrderException, @event.OrderId));
             }
 
-            List<IssueSlip.Item> issueSlipItems = new List<IssueSlip.Item>(@event.OrderItems.Count);
-
-            // Foreach OrderItems
+            // Create Model.Items
+            List<CreateIssueSlipCommand.CreateIssueSlipCommandModel.Item> modelItems = new List<CreateIssueSlipCommand.CreateIssueSlipCommandModel.Item>(@event.OrderItems.Count);
             foreach (OrderCreatedIntegrationEvent.OrderItem item in @event.OrderItems)
             {
-                // Get Ware by ProductId
                 Ware ware = this.DatabaseContext.Wares.Where(x => x.ProductId == item.ProductId).FirstOrDefault();
+                modelItems.Add(new CreateIssueSlipCommand.CreateIssueSlipCommandModel.Item(ware, item.Units));
+            }
 
-                // Get all positions where Ware is stored
-                IEnumerable<Position> positions = this.DatabaseContext.Positions
-                    .Where(x => x.GetWare() == ware && x.CountWare() > 0)
-                    .OrderBy(x => x.Rating)
-                    .ThenBy(x => x.Movements.OrderByDescending(m => m.UtcCreated).FirstOrDefault().CountTotal) // Order by TotalCount of Units at Position
-                    .ToList();
+            // Create CommandModel
+            string name = ""; //TODO: Add IssueSlip name
+            CreateIssueSlipCommand.CreateIssueSlipCommandModel commandModel = new CreateIssueSlipCommand.CreateIssueSlipCommandModel(name, @event.OrderId, @event.UtcDispatchDate, @event.UtcDeliveryDate, modelItems);
 
-                int remainingUnits = item.Units;
-
-                foreach (Position position in positions)
-                {
-                    int units = position.CountWare();
-
-                    if (units < remainingUnits)
-                    {
-                        remainingUnits -= units;
-                        //TODO: Add to RESERVED units
-                        issueSlipItems.Add(new IssueSlip.Item(0, ware.Id, position.Id, units, 0, 0));
-                    }
-                    else
-                    {
-                        
-                    }
-                }
-            }            
-
-            throw new NotImplementedException();
+            // Create IssueSlip
+            IssueSlip issueSlip = await this.Mediator.Send(new CreateIssueSlipCommand(commandModel));
         }
 
         protected bool IsOrderValid(List<OrderCreatedIntegrationEvent.OrderItem> items)

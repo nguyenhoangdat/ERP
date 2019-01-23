@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using Restmium.ERP.Services.Warehouse.Application.Commands;
+using Restmium.ERP.Services.Warehouse.Domain.Events;
 using Restmium.ERP.Services.Warehouse.Domain.Exceptions;
 using Restmium.ERP.Services.Warehouse.Infrastructure.Database;
 using System.Linq;
@@ -12,12 +13,14 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
     {
         protected const string UpdateWarehouseCommandHandlerEntityNotFoundException = "Unable to delete Warehouse with id={0}. Warehouse not found!";
 
-        public DeleteWarehouseCommandHandler(DatabaseContext databaseContext)
+        public DeleteWarehouseCommandHandler(DatabaseContext databaseContext, IMediator mediator)
         {
             this.DatabaseContext = databaseContext;
+            this.Mediator = mediator;
         }
 
         protected DatabaseContext DatabaseContext { get; }
+        protected IMediator Mediator { get; }
 
         public async Task<Warehouse.Domain.Entities.Warehouse> Handle(DeleteWarehouseCommand request, CancellationToken cancellationToken)
         {
@@ -29,6 +32,8 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
             Warehouse.Domain.Entities.Warehouse warehouse = this.DatabaseContext.Warehouses.Find(request.Model.Id);
             warehouse = this.DatabaseContext.Warehouses.Remove(warehouse).Entity;
             await this.DatabaseContext.SaveChangesAsync(cancellationToken);
+
+            await this.Mediator.Publish(new WarehouseDeletedDomainEvent(warehouse));
 
             return warehouse;
         }

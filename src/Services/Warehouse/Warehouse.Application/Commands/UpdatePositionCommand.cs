@@ -14,7 +14,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Commands
 
         public class UpdatePositionCommandModel
         {
-            public UpdatePositionCommandModel(long id, string name, double width, double height, double depth, double maxWeight, int rating)
+            public UpdatePositionCommandModel(long id, string name, double width, double height, double depth, double maxWeight, int rating, int reservedUnits)
             {
                 this.Id = id;
                 this.Name = name;
@@ -23,6 +23,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Commands
                 this.Depth = depth;
                 this.MaxWeight = maxWeight;
                 this.Rating = rating;
+                this.ReservedUnits = reservedUnits;
             }
 
             public long Id { get; }
@@ -33,6 +34,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Commands
             public double MaxWeight { get; }
 
             public int Rating { get; }
+            public int ReservedUnits { get; set; }
         }
     }
 }

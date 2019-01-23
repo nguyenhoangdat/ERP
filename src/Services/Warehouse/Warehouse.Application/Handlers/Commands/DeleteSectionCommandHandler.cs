@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Restmium.ERP.Services.Warehouse.Application.Commands;
 using Restmium.ERP.Services.Warehouse.Domain.Entities;
+using Restmium.ERP.Services.Warehouse.Domain.Events;
 using Restmium.ERP.Services.Warehouse.Domain.Exceptions;
 using Restmium.ERP.Services.Warehouse.Infrastructure.Database;
 using System.Linq;
@@ -13,12 +14,14 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
     {
         protected const string DeleteSectionCommandHandlerEntityNotFoundException = "Unable to delete Section with id={0}. Section not found!";
 
-        public DeleteSectionCommandHandler(DatabaseContext databaseContext)
+        public DeleteSectionCommandHandler(DatabaseContext databaseContext, IMediator mediator)
         {
             this.DatabaseContext = databaseContext;
+            this.Mediator = mediator;
         }
 
         protected DatabaseContext DatabaseContext { get; }
+        protected IMediator Mediator { get; }
 
         public async Task<Section> Handle(DeleteSectionCommand request, CancellationToken cancellationToken)
         {
@@ -29,6 +32,9 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
 
             Section section = this.DatabaseContext.Sections.Remove(this.DatabaseContext.Sections.Find(request.Model.Id)).Entity;
             await this.DatabaseContext.SaveChangesAsync(cancellationToken);
+
+            await this.Mediator.Publish(new SectionDeletedDomainEvent(section));
+
             return section;
         }
     }

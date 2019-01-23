@@ -47,6 +47,7 @@ namespace Restmium.ERP.Services.Warehouse.Domain.Entities
         public double Depth { get; set; }
         [Required]
         public double MaxWeight { get; set; }
+        public int ReservedUnits { get; set; }
 
         [Required]
         public int SectionId { get; set; }

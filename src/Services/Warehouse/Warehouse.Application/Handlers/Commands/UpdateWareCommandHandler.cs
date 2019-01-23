@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Restmium.ERP.Services.Warehouse.Application.Commands;
 using Restmium.ERP.Services.Warehouse.Domain.Entities;
+using Restmium.ERP.Services.Warehouse.Domain.Events;
 using Restmium.ERP.Services.Warehouse.Domain.Exceptions;
 using Restmium.ERP.Services.Warehouse.Infrastructure.Database;
 using System.Linq;
@@ -14,12 +15,14 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
         //TODO: Check grammar
         protected const string UpdateWareCommandHandlerEntityNotFoundException = "Unable to update Ware with id={0}. Ware not found!";
 
-        public UpdateWareCommandHandler(DatabaseContext context)
+        public UpdateWareCommandHandler(DatabaseContext context, IMediator mediator)
         {
             this.DatabaseContext = context;
+            this.Mediator = mediator;
         }
 
         protected DatabaseContext DatabaseContext { get; }
+        protected IMediator Mediator { get; }
 
         public async Task<Ware> Handle(UpdateWareCommand request, CancellationToken cancellationToken)
         {
@@ -36,6 +39,8 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
             ware.Weight = request.Model.Weight;
 
             await this.DatabaseContext.SaveChangesAsync(cancellationToken);
+
+            await this.Mediator.Publish(new WareUpdatedDomainEvent(ware));
 
             return ware;
         }
