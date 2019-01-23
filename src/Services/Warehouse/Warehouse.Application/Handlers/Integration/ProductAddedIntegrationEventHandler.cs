@@ -1,9 +1,10 @@
 ﻿using MediatR;
 using Microsoft.Extensions.Logging;
 using Restmium.ERP.BuildingBlocks.EventBus.Abstractions;
+using Restmium.ERP.Services.Warehouse.Application.Commands;
+using Restmium.ERP.Services.Warehouse.Domain.Entities;
 using Restmium.ERP.Services.Warehouse.Infrastructure.Database;
 using Restmium.ERP.Services.Warehouse.Integration.Events;
-using System;
 using System.Threading.Tasks;
 
 namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Integration
@@ -14,19 +15,16 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Integration
         protected ILogger<ProductAddedIntegrationEventHandler> Logger { get; }
         protected IMediator Mediator { get; }
 
-        public ProductAddedIntegrationEventHandler(
-            DatabaseContext context,
-            ILogger<ProductAddedIntegrationEventHandler> logger,
-            IMediator mediator)
+        public ProductAddedIntegrationEventHandler(DatabaseContext context, IMediator mediator)
         {
             this.DatabaseContext = context;
-            this.Logger = logger;
             this.Mediator = mediator;
         }
 
         public async Task Handle(ProductAddedIntegrationEvent @event)
         {
-            throw new NotImplementedException();
+            // Create Ware
+            Ware ware = await this.Mediator.Send(new CreateWareCommand(@event.ProductId, @event.ProductName));
         }
     }
 }

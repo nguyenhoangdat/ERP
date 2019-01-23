@@ -18,13 +18,9 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Integration
         protected const string SuppliesOrderedIntegrationEventHandlerWareNullReference = "Unable to find Ware with Product Id={0}";
         protected const string SuppliesOrderedIntegrationEventHandlerWarehouseIsFull = "Unable to allocate position for Ware with Id={0} and ammount={1}";
 
-        public SuppliesOrderedIntegrationEventHandler(
-            DatabaseContext databaseContext,
-            ILogger<SuppliesOrderedIntegrationEventHandler> logger,
-            IMediator mediator)
+        public SuppliesOrderedIntegrationEventHandler(DatabaseContext databaseContext, IMediator mediator)
         {
             this.DatabaseContext = databaseContext;
-            this.Logger = logger;
             this.Mediator = mediator;
         }
 
@@ -34,6 +30,9 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Integration
 
         public async Task Handle(SuppliesOrderedIntegrationEvent @event)
         {
+            //TODO: Move to Command
+            throw new System.NotImplementedException();
+
             // Create a list of Receipt Items and assign them to positons
             List<Receipt.Item> items = new List<Receipt.Item>(@event.Items.Count);
             foreach (SuppliesOrderedIntegrationEvent.SupplyItem item in @event.Items)

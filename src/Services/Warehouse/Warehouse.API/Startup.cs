@@ -125,43 +125,17 @@ namespace Restmium.ERP.Services.Warehouse.API
 
             services.AddSingleton<IEventBusSubscriptionsManager, InMemoryEventBusSubscriptionsManager>();
 
-            //TODO: Check whether these events are useful or not
-            services.AddTransient(sp => {
-                DatabaseContext context = sp.GetRequiredService<DatabaseContext>();
-                ILogger<OrderCreatedIntegrationEventHandler> logger = sp.GetRequiredService<ILogger<OrderCreatedIntegrationEventHandler>>();
-                IMediator mediator = sp.GetRequiredService<IMediator>();
-                return new OrderCreatedIntegrationEventHandler(context, logger, mediator);
-            }); // OrderReceivedIntegrationEventHandler
-            services.AddTransient(sp => {
-                DatabaseContext context = sp.GetRequiredService<DatabaseContext>();
-                ILogger<ProductAddedIntegrationEventHandler> logger = sp.GetRequiredService<ILogger<ProductAddedIntegrationEventHandler>>();
-                IMediator mediator = sp.GetRequiredService<IMediator>();
-                return new ProductAddedIntegrationEventHandler(context, logger, mediator);
-            }); // ProductAddedIntegrationEventHandler
-            services.AddTransient(sp => {
-                DatabaseContext context = sp.GetRequiredService<DatabaseContext>();
-                ILogger<ProductRemovedIntegrationEventHandler> logger = sp.GetRequiredService<ILogger<ProductRemovedIntegrationEventHandler>>();
-                IMediator mediator = sp.GetRequiredService<IMediator>();
-                return new ProductRemovedIntegrationEventHandler(context, logger, mediator);
-            }); // ProductRemovedIntegrationEventHandler
-            services.AddTransient(sp => {
-                DatabaseContext context = sp.GetRequiredService<DatabaseContext>();
-                ILogger<ProductRenamedIntegrationEventHandler> logger = sp.GetRequiredService<ILogger<ProductRenamedIntegrationEventHandler>>();
-                IMediator mediator = sp.GetRequiredService<IMediator>();
-                return new ProductRenamedIntegrationEventHandler(context, logger, mediator);
-            }); // ProductRenamedIntegrationEventHandler
-            services.AddTransient(sp => {
-                DatabaseContext context = sp.GetRequiredService<DatabaseContext>();
-                ILogger<SuppliesOrderedIntegrationEventHandler> logger = sp.GetRequiredService<Logger<SuppliesOrderedIntegrationEventHandler>>();
-                IMediator mediator = sp.GetRequiredService<IMediator>();
-
-                return new SuppliesOrderedIntegrationEventHandler(context, logger, mediator);
-            }); // SuppliesOrderedIntegrationEventHandler
+            services.AddTransient<OrderCreatedIntegrationEventHandler>();
+            services.AddTransient<ProductAddedIntegrationEventHandler>();
+            services.AddTransient<ProductRemovedIntegrationEventHandler>();
+            services.AddTransient<ProductRenamedIntegrationEventHandler>();
+            services.AddTransient<SuppliesOrderedIntegrationEventHandler>();
         }
         private void ConfigureEventBus(IApplicationBuilder app)
         {
             IEventBus eventBus = app.ApplicationServices.GetRequiredService<IEventBus>();
 
+            //TODO: Add missing subscriptions
             eventBus.Subscribe<ProductAddedIntegrationEvent, ProductAddedIntegrationEventHandler>();
             eventBus.Subscribe<ProductRemovedIntegrationEvent, ProductRemovedIntegrationEventHandler>();
             eventBus.Subscribe<SuppliesOrderedIntegrationEvent, SuppliesOrderedIntegrationEventHandler>();

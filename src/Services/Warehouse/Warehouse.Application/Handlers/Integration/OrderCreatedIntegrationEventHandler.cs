@@ -1,14 +1,11 @@
 ﻿using MediatR;
-using Microsoft.Extensions.Logging;
 using Restmium.ERP.BuildingBlocks.EventBus.Abstractions;
 using Restmium.ERP.Services.Warehouse.Application.Commands;
 using Restmium.ERP.Services.Warehouse.Domain.Entities;
-using Restmium.ERP.Services.Warehouse.Domain.Entities.Extensions;
 using Restmium.ERP.Services.Warehouse.Domain.Exceptions;
 using Restmium.ERP.Services.Warehouse.Infrastructure.Database;
 using Restmium.ERP.Services.Warehouse.Infrastructure.Database.Extensions;
 using Restmium.ERP.Services.Warehouse.Integration.Events;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -20,16 +17,11 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Integration
         private const string OrderCreatedIntegrationEventHandler_InvalidOrderException = "Unable to create Issue Slip from Order (id={0}). Products were not found!";
 
         protected DatabaseContext DatabaseContext { get; }
-        protected ILogger<OrderCreatedIntegrationEventHandler> Logger { get; }     
         protected IMediator Mediator { get; }
 
-        public OrderCreatedIntegrationEventHandler(
-            DatabaseContext context,
-            ILogger<OrderCreatedIntegrationEventHandler> logger,
-            IMediator mediator)
+        public OrderCreatedIntegrationEventHandler(DatabaseContext context, IMediator mediator)
         {
-            this.DatabaseContext = context;
-            this.Logger = logger;            
+            this.DatabaseContext = context;   
             this.Mediator = mediator;
         }
 
