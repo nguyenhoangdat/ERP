@@ -16,10 +16,11 @@ namespace Restmium.ERP.Services.Warehouse.Application.Commands
 
         public class UpdateIssueSlipCommandModel
         {
-            public UpdateIssueSlipCommandModel(long id, string name, DateTime utcDispatchDate, DateTime utcDeliveryDate, List<Item> items)
+            public UpdateIssueSlipCommandModel(long id, long orderId, string name, DateTime utcDispatchDate, DateTime utcDeliveryDate, List<Item> items)
             {
                 this.Id = id;
                 this.Name = name;
+                this.OrderId = orderId;
                 this.UtcDispatchDate = utcDispatchDate;
                 this.UtcDeliveryDate = utcDeliveryDate;
                 this.Items = items;
@@ -27,6 +28,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Commands
 
             public long Id { get; }
             public string Name { get; }
+            public long OrderId { get; }
             public DateTime UtcDispatchDate { get; }
             public DateTime UtcDeliveryDate { get; }
 

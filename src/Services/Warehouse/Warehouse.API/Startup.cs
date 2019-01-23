@@ -129,9 +129,8 @@ namespace Restmium.ERP.Services.Warehouse.API
             services.AddTransient(sp => {
                 DatabaseContext context = sp.GetRequiredService<DatabaseContext>();
                 ILogger<OrderCreatedIntegrationEventHandler> logger = sp.GetRequiredService<ILogger<OrderCreatedIntegrationEventHandler>>();
-                IEventBus serviceBus = sp.GetRequiredService<IEventBus>();
                 IMediator mediator = sp.GetRequiredService<IMediator>();
-                return new OrderCreatedIntegrationEventHandler(context, serviceBus, logger, mediator);
+                return new OrderCreatedIntegrationEventHandler(context, logger, mediator);
             }); // OrderReceivedIntegrationEventHandler
             services.AddTransient(sp => {
                 DatabaseContext context = sp.GetRequiredService<DatabaseContext>();

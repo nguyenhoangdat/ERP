@@ -9,22 +9,39 @@ namespace Restmium.ERP.Services.Warehouse.Integration.Events
     /// </summary>
     public class IssueSlipCreatedIntegrationEvent : IntegrationEvent
     {
-        public long OrderId { get; set; }
-        public DateTime UtcDispatchDate { get; set; } //Odeslat dne
-        public DateTime UtcDeliveryDate { get; set; } //Dodat dne
+        public IssueSlipCreatedIntegrationEvent(long orderId, DateTime utcDispatchDate, DateTime utcDeliveryDate)
+        {
+            this.OrderId = orderId;
+            this.UtcDispatchDate = utcDispatchDate;
+            this.UtcDeliveryDate = utcDeliveryDate;
+        }
 
-        public List<IssueSlipItem> Items { get; set; }
+        public long OrderId { get; }
+        public DateTime UtcDispatchDate { get; } //Odeslat dne
+        public DateTime UtcDeliveryDate { get; } //Dodat dne
+
+        public List<IssueSlipItem> Items { get; }
 
         public class IssueSlipItem
         {
-            public int ProductId { get; set; }
-            public int Units { get; set; }
+            public IssueSlipItem(int productId, int units, double width, double height, double depth, double weight)
+            {
+                this.ProductId = productId;
+                this.Units = units;
+                this.Width = width;
+                this.Height = height;
+                this.Depth = depth;
+                this.Weight = weight;
+            }
 
-            public double Width { get; set; }
-            public double Height { get; set; }
-            public double Depth { get; set; }
+            public int ProductId { get; }
+            public int Units { get; }
 
-            public double Weight { get; set; }
+            public double Width { get; }
+            public double Height { get; }
+            public double Depth { get; }
+
+            public double Weight { get; }
         }
     }
 }

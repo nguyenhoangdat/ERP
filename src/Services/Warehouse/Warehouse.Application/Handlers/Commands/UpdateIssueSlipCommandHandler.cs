@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Restmium.ERP.Services.Warehouse.Application.Commands;
 using Restmium.ERP.Services.Warehouse.Domain.Entities;
+using Restmium.ERP.Services.Warehouse.Domain.Events;
 using Restmium.ERP.Services.Warehouse.Domain.Exceptions;
 using Restmium.ERP.Services.Warehouse.Infrastructure.Database;
 using System.Collections.Generic;
@@ -14,12 +15,14 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
     {
         protected const string UpdateIssueSlipCommandHandlerEntityNotFoundException = "Unable to update Issue slip with id={0}. Issue slip not found!";
 
-        public UpdateIssueSlipCommandHandler(DatabaseContext databaseContext)
+        public UpdateIssueSlipCommandHandler(DatabaseContext databaseContext, IMediator mediator)
         {
             this.DatabaseContext = databaseContext;
+            this.Mediator = mediator;
         }
 
         protected DatabaseContext DatabaseContext { get; }
+        protected IMediator Mediator { get; }
 
         public async Task<IssueSlip> Handle(UpdateIssueSlipCommand request, CancellationToken cancellationToken)
         {
@@ -34,8 +37,10 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
                 items.Add(new IssueSlip.Item(item.IssueSlipId, item.WareId, item.PositionId, item.RequstedUnits, item.IssuedUnits, item.EmployeeId));
             }
 
-            IssueSlip issueSlip = this.DatabaseContext.IssueSlips.Update(new IssueSlip(request.Model.Name, request.Model.UtcDispatchDate, request.Model.UtcDeliveryDate, items)).Entity;
+            IssueSlip issueSlip = this.DatabaseContext.IssueSlips.Update(new IssueSlip(request.Model.Name, request.Model.OrderId, request.Model.UtcDispatchDate, request.Model.UtcDeliveryDate, items)).Entity;
             await this.DatabaseContext.SaveChangesAsync(cancellationToken);
+
+            await this.Mediator.Publish(new IssueSlipUpdatedDomainEvent(issueSlip));
 
             return issueSlip;
         }
