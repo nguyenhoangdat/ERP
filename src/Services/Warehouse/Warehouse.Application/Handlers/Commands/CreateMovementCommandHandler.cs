@@ -64,7 +64,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
             }
 
             // Create Movement
-            Movement movement = this.DatabaseContext.Movements.Add(new Movement(request.Model.WareId, request.Model.PositionId, request.Model.Direction, request.Model.Content, request.Model.CountChange, countTotal + request.Model.CountChange, request.Model.EmployeeId)).Entity;
+            Movement movement = this.DatabaseContext.Movements.Add(new Movement(request.Model.WareId, request.Model.PositionId, request.Model.Direction, request.Model.Content, request.Model.CountChange, newCount, request.Model.EmployeeId)).Entity;
             await this.DatabaseContext.SaveChangesAsync(cancellationToken);
 
             // Publish Notification (Domain Event)

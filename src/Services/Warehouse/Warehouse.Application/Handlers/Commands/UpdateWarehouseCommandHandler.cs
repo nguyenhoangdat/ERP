@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
 {
-    public class UpdateWarehouseCommandHandler : IRequestHandler<UpdateWarehouseCommand, Domain.Entities.Warehouse>
+    public class UpdateWarehouseCommandHandler : IRequestHandler<UpdateWarehouseCommand, Warehouse.Domain.Entities.Warehouse>
     {
         protected const string UpdateWarehouseCommandHandlerEntityNotFoundException = "Unable to update Warehouse with id={0}. Warehouse not found!";
 
@@ -19,14 +19,14 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
 
         protected DatabaseContext DatabaseContext { get; }
 
-        public async Task<Domain.Entities.Warehouse> Handle(UpdateWarehouseCommand request, CancellationToken cancellationToken)
+        public async Task<Warehouse.Domain.Entities.Warehouse> Handle(UpdateWarehouseCommand request, CancellationToken cancellationToken)
         {
             if (!this.DatabaseContext.Warehouses.Any(x => x.Id == request.Model.Id))
             {
                 throw new EntityNotFoundException(string.Format(UpdateWarehouseCommandHandlerEntityNotFoundException, request.Model.Id));
             }
 
-            Domain.Entities.Warehouse warehouse = this.DatabaseContext.Warehouses.Find(request.Model.Id);
+            Warehouse.Domain.Entities.Warehouse warehouse = this.DatabaseContext.Warehouses.Find(request.Model.Id);
             warehouse.Name = request.Model.Name;
             warehouse.Address = request.Model.Address;
 

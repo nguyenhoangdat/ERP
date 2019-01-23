@@ -77,7 +77,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Integration
                     }
                     else
                     {
-                        remainingUnits =
+                        
                     }
                 }
             }            
