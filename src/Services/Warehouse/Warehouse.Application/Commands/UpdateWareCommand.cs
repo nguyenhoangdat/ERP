@@ -9,13 +9,27 @@ namespace Restmium.ERP.Services.Warehouse.Application.Commands
         {
             this.Model = model;
         }
+        public UpdateWareCommand(int wareId, string productName, double width, double height, double depth, double weight) : this(new UpdateWareCommandModel(wareId, productName, width, height, depth, weight))
+        {
+
+        }
 
         public UpdateWareCommandModel Model { get; }
 
         // When modifying, modify the UpdateWareCommandHandler as well
         public class UpdateWareCommandModel
         {
-            public int Id { get; }
+            public UpdateWareCommandModel(int wareId, string productName, double width, double height, double depth, double weight)
+            {
+                this.WareId = wareId;
+                this.ProductName = productName;
+                this.Width = width;
+                this.Height = height;
+                this.Depth = depth;
+                this.Weight = weight;
+            }
+
+            public int WareId { get; }
             public string ProductName { get; }
 
             public double Width { get; }

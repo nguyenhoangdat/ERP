@@ -1,8 +1,10 @@
 ﻿using MediatR;
 using Restmium.ERP.BuildingBlocks.EventBus.Abstractions;
+using Restmium.ERP.Services.Warehouse.Application.Commands;
+using Restmium.ERP.Services.Warehouse.Domain.Entities;
 using Restmium.ERP.Services.Warehouse.Infrastructure.Database;
 using Restmium.ERP.Services.Warehouse.Integration.Events;
-using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Integration
@@ -20,7 +22,8 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Integration
 
         public async Task Handle(ProductRemovedIntegrationEvent @event)
         {
-            throw new NotImplementedException();
+            Ware ware = this.DatabaseContext.Wares.Where(x => x.ProductId == @event.ProductId).FirstOrDefault();
+            ware = await this.Mediator.Send(new DeleteWareCommand(ware.Id));
         }
     }
 }

@@ -125,6 +125,8 @@ namespace Restmium.ERP.Services.Warehouse.API
 
             services.AddSingleton<IEventBusSubscriptionsManager, InMemoryEventBusSubscriptionsManager>();
 
+            //TODO: Check
+            // Do I need Loggers? - Ex. when Entity is not found
             services.AddTransient<OrderCreatedIntegrationEventHandler>();
             services.AddTransient<ProductAddedIntegrationEventHandler>();
             services.AddTransient<ProductRemovedIntegrationEventHandler>();
