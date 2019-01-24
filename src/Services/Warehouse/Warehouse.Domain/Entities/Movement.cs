@@ -9,20 +9,19 @@ namespace Restmium.ERP.Services.Warehouse.Domain.Entities
         {
 
         }
-        protected Movement(Direction direction, EntryContent content, int countChange, int countTotal, int employeeId) : this()
+        protected Movement(Direction direction, int countChange, int countTotal, int employeeId) : this()
         {
             this.MovementDirection = direction;
-            this.Content = content;
             this.CountChange = countChange;
             this.CountTotal = countTotal;
             this.EmployeeId = employeeId;
         }
-        public Movement(int wareId, long positionId, Direction direction, EntryContent content, int countChange, int countTotal, int employeeId) : this(direction, content, countChange, countTotal, employeeId)
+        public Movement(int wareId, long positionId, Direction direction, int countChange, int countTotal, int employeeId) : this(direction, countChange, countTotal, employeeId)
         {
             this.WareId = wareId;
             this.PositionId = positionId;
         }
-        public Movement(Ware ware, Position position, Direction direction, EntryContent content, int countChange, int countTotal, int employeeId) : this(direction, content, countChange, countTotal, employeeId)
+        public Movement(Ware ware, Position position, Direction direction, int countChange, int countTotal, int employeeId) : this(direction, countChange, countTotal, employeeId)
         {
             this.Ware = ware;
             this.Position = position;
@@ -33,9 +32,6 @@ namespace Restmium.ERP.Services.Warehouse.Domain.Entities
 
         [Required]
         public Direction MovementDirection { get; set; }
-
-        [Required]
-        public EntryContent Content { get; set; }
 
         [Required]
         public int CountChange { get; set; }
@@ -50,14 +46,6 @@ namespace Restmium.ERP.Services.Warehouse.Domain.Entities
         {
             In,
             Out
-        }
-
-        // TODO: Consider whether this enum is useful
-        public enum EntryContent
-        {
-            Receipt, //příjem
-            Delivery, //výdej
-            PositionTransfer //převod mezi pozicemi
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Restmium.ERP.Services.Warehouse.Application.Commands;
 using Restmium.ERP.Services.Warehouse.Domain.Entities;
+using Restmium.ERP.Services.Warehouse.Domain.Entities.Extensions;
 using Restmium.ERP.Services.Warehouse.Domain.Events;
 using Restmium.ERP.Services.Warehouse.Domain.Exceptions;
 using Restmium.ERP.Services.Warehouse.Infrastructure.Database;
@@ -53,33 +54,24 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
 
             Ware ware = this.DatabaseContext.Wares.Find(request.Model.WareId);
             // Check capacity (space)
-            if (!this.HasSpaceCapacity(position, ware, newCount))
+            if (!position.HasSpaceCapacity(ware, newCount))
             {
                 throw new NotImplementedException();
             }
             // Check load capacity (weight)
-            if (!this.HasLoadCapacity(position, ware, newCount))
+            if (!position.HasLoadCapacity(newCount))
             {
                 throw new PositionLoadCapacityException(string.Format(CreateMovementCommandHandlerPositionLoadCapacityException, ware.Id, position.Id, request.Model.CountChange));
             }
 
             // Create Movement
-            Movement movement = this.DatabaseContext.Movements.Add(new Movement(request.Model.WareId, request.Model.PositionId, request.Model.Direction, request.Model.Content, request.Model.CountChange, newCount, request.Model.EmployeeId)).Entity;
+            Movement movement = this.DatabaseContext.Movements.Add(new Movement(request.Model.WareId, request.Model.PositionId, request.Model.Direction, request.Model.CountChange, newCount, request.Model.EmployeeId)).Entity;
             await this.DatabaseContext.SaveChangesAsync(cancellationToken);
 
             // Publish Notification (Domain Event)
             await this.Mediator.Publish(new MovementCreatedDomainEvent(movement));
 
             return movement;
-        }
-
-        protected bool HasSpaceCapacity(Position position, Ware ware, int countTotal)
-        {
-            return true; //TODO: Implement (Challenge task)
-        }
-        protected bool HasLoadCapacity(Position position, Ware ware, int countTotal)
-        {
-            return position.MaxWeight < ware.Weight * countTotal;
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 
 namespace Restmium.ERP.Services.Warehouse.Domain.Entities.Extensions
 {
@@ -20,6 +21,37 @@ namespace Restmium.ERP.Services.Warehouse.Domain.Entities.Extensions
             Movement movement = GetLastMovement(position);
 
             return movement == null ? 0 : movement.CountTotal;
+        }
+
+        public static bool HasLoadCapacity(this Position position, int unitsTotal) => HasLoadCapacity(position, position.GetWare(), unitsTotal);
+        public static bool HasLoadCapacity(this Position position, Ware ware, int unitsTotal)
+        {
+            if (ware == null)
+            {
+                throw new ArgumentNullException(nameof(ware));
+            }
+            if (unitsTotal <= 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(unitsTotal));
+            }
+
+            return position.MaxWeight < ware.Weight * unitsTotal;
+        }
+
+        public static bool HasSpaceCapacity(this Position position, int unitsTotal) => HasSpaceCapacity(position, position.GetWare(), unitsTotal);
+
+        public static bool HasSpaceCapacity(this Position position, Ware ware, int unitsTotal)
+        {
+            if (ware == null)
+            {
+                throw new ArgumentNullException(nameof(ware));
+            }
+            if (unitsTotal <= 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(unitsTotal));
+            }
+
+            return true; //TODO: Implement
         }
     }
 }

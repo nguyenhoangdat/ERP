@@ -47,7 +47,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Commands
                 }
                 public Item(long issueSlipId, int wareId, long positionId, int requestedUnits, int issuedUnits) : this(issueSlipId, wareId, positionId, requestedUnits, issuedUnits, 0)
                 {
-                    
+
                 }
 
                 public long IssueSlipId { get; }
