@@ -9,6 +9,10 @@ namespace Restmium.ERP.Services.Warehouse.Application.Commands
         {
             this.Model = model;
         }
+        public CreatePositionCommand(string name, double width, double height, double depth, double maxWeight, int sectionId, int rating)
+            : this(new CreatePositionCommandModel(name, width, height, depth, maxWeight, sectionId, rating))
+        {
+        }
 
         public CreatePositionCommandModel Model { get; }
 
@@ -26,7 +30,6 @@ namespace Restmium.ERP.Services.Warehouse.Application.Commands
             }
             public CreatePositionCommandModel(string name, double width, double height, double depth, double maxWeight, Section section, int rating) : this(name, width, height, depth, maxWeight, section.Id, rating)
             {
-
             }
 
             public string Name { get; }

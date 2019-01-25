@@ -74,6 +74,7 @@ namespace Restmium.ERP.Services.Warehouse.API
                         Title = "Warehouse.API",
                         Version = "2019.1.1"
                     });
+                swagger.CustomSchemaIds(x => x.FullName);
             });
         }
 

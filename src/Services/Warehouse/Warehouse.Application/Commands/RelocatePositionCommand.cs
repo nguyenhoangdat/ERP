@@ -9,6 +9,10 @@ namespace Restmium.ERP.Services.Warehouse.Application.Commands
         {
             this.Model = model;
         }
+        public RelocatePositionCommand(long fromPositionWithId, long toPositionWithId)
+            : this(new RelocatePositionCommandModel(fromPositionWithId, toPositionWithId))
+        {
+        }
 
         public RelocatePositionCommandModel Model { get; }
 

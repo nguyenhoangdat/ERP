@@ -9,6 +9,10 @@ namespace Restmium.ERP.Services.Warehouse.Application.Commands
         {
             this.Model = model;
         }
+        public UpdatePositionCommand(long id, string name, double width, double height, double depth, double maxWeight, int rating, int reservedUnits)
+            : this(new UpdatePositionCommandModel(id, name, width, height, depth, maxWeight, rating, reservedUnits))
+        {
+        }
 
         public UpdatePositionCommandModel Model { get; }
 
