@@ -4,10 +4,11 @@ using Restmium.ERP.Services.Warehouse.Domain.Events;
 using Restmium.ERP.Services.Warehouse.Infrastructure.Database;
 using System.Threading;
 using System.Threading.Tasks;
+using Entities = Restmium.ERP.Services.Warehouse.Domain.Entities;
 
 namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
 {
-    public class CreateWarehouseCommandHandler : IRequestHandler<CreateWarehouseCommand, Warehouse.Domain.Entities.Warehouse>
+    public class CreateWarehouseCommandHandler : IRequestHandler<CreateWarehouseCommand, Entities.Warehouse>
     {
         public CreateWarehouseCommandHandler(DatabaseContext databaseContext, IMediator mediator)
         {
@@ -18,12 +19,13 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
         protected DatabaseContext DatabaseContext { get; }
         protected IMediator Mediator { get; }
 
-        public async Task<Warehouse.Domain.Entities.Warehouse> Handle(CreateWarehouseCommand request, CancellationToken cancellationToken)
+        public async Task<Entities.Warehouse> Handle(CreateWarehouseCommand request, CancellationToken cancellationToken)
         {
-            Warehouse.Domain.Entities.Warehouse warehouse = this.DatabaseContext.Warehouses.Add(new Warehouse.Domain.Entities.Warehouse(request.Model.Name, request.Model.Address)).Entity;
-
+            // Create Warehouse and Save it in the Database
+            Entities.Warehouse warehouse = this.DatabaseContext.Warehouses.Add(new Entities.Warehouse(request.Model.Name, request.Model.Address, request.Model.Sections)).Entity;
             await this.DatabaseContext.SaveChangesAsync(cancellationToken);
 
+            // Publish DomainEvent that the Warehouse has been created
             await this.Mediator.Publish(new WarehouseCreatedDomainEvent(warehouse));
 
             return warehouse;

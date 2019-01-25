@@ -6,6 +6,7 @@ using Restmium.ERP.Services.Warehouse.Infrastructure.Database;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Entities = Restmium.ERP.Services.Warehouse.Domain.Entities;
 
 namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
 {
@@ -22,19 +23,18 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
         protected DatabaseContext DatabaseContext { get; }
         protected IMediator Mediator { get; }
 
-        public async Task<Warehouse.Domain.Entities.Warehouse> Handle(UpdateWarehouseCommand request, CancellationToken cancellationToken)
+        public async Task<Entities.Warehouse> Handle(UpdateWarehouseCommand request, CancellationToken cancellationToken)
         {
             if (!this.DatabaseContext.Warehouses.Any(x => x.Id == request.Model.Id))
             {
                 throw new EntityNotFoundException(string.Format(UpdateWarehouseCommandHandlerEntityNotFoundException, request.Model.Id));
             }
 
-            Warehouse.Domain.Entities.Warehouse warehouse = this.DatabaseContext.Warehouses.Find(request.Model.Id);
-            warehouse.Name = request.Model.Name;
-            warehouse.Address = request.Model.Address;
-
+            // Update Warehouse and Save it to the Database
+            Entities.Warehouse warehouse = this.DatabaseContext.Warehouses.Update(new Entities.Warehouse(request.Model.Id, request.Model.Name, request.Model.Address, request.Model.Sections)).Entity;
             await this.DatabaseContext.SaveChangesAsync(cancellationToken);
 
+            // Publish DomainEvent that the Warehouse has been updated
             await this.Mediator.Publish(new WarehouseUpdatedDomainEvent(warehouse));
 
             return warehouse;

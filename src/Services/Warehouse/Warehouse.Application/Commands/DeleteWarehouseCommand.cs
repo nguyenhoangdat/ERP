@@ -8,6 +8,9 @@ namespace Restmium.ERP.Services.Warehouse.Application.Commands
         {
             this.Model = model;
         }
+        public DeleteWarehouseCommand(int id) : this(new DeleteWarehouseCommandModel(id))
+        {
+        }
 
         public DeleteWarehouseCommandModel Model { get; }
 

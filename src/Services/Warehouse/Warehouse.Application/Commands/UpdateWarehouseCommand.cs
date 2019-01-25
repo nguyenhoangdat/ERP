@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using Restmium.ERP.Services.Warehouse.Domain.Entities;
+using System.Collections.Generic;
 
 namespace Restmium.ERP.Services.Warehouse.Application.Commands
 {
@@ -9,21 +10,27 @@ namespace Restmium.ERP.Services.Warehouse.Application.Commands
         {
             this.Model = model;
         }
+        public UpdateWarehouseCommand(Domain.Entities.Warehouse warehouse)
+            : this(new UpdateWarehouseCommandModel(warehouse.Id, warehouse.Name, warehouse.Address, warehouse.Sections))
+        {
+        }
 
         public UpdateWarehouseCommandModel Model { get; }
 
         public class UpdateWarehouseCommandModel
         {
-            public UpdateWarehouseCommandModel(int id, string name, Address address)
+            public UpdateWarehouseCommandModel(int id, string name, Address address, ICollection<Section> sections)
             {
                 this.Id = id;
                 this.Name = name;
                 this.Address = address;
+                this.Sections = sections;
             }
 
             public int Id { get; }
             public string Name { get; }
             public Address Address { get; }
+            public ICollection<Section> Sections { get; }
         }
     }
 }

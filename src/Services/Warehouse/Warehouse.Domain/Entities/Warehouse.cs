@@ -15,6 +15,18 @@ namespace Restmium.ERP.Services.Warehouse.Domain.Entities
             this.Name = name;
             this.Address = address;
         }
+        public Warehouse(string name, Address address, ICollection<Section> sections) : this(name, address)
+        {
+            this.Sections = sections;
+        }
+        public Warehouse(int id, string name, Address address) : this(name, address)
+        {
+            this.Id = id;
+        }
+        public Warehouse(int id, string name, Address address, ICollection<Section> sections) : this(name, address, sections)
+        {
+            this.Id = id;
+        }
 
         [Required]
         public int Id { get; set; }
