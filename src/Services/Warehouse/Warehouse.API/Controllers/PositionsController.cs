@@ -100,7 +100,7 @@ namespace Warehouse.API.Controllers
             {
                 return this.NotFound(ex.Message);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 throw;
             }
