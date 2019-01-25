@@ -42,6 +42,27 @@ namespace Warehouse.API.Controllers
             }
         }
 
+        // POST: api/Positions
+        [HttpPost]
+        public async Task<ActionResult<Position>> PostPosition(Position position)
+        {
+            this.ModelState.Remove("Id");
+            if (!this.ModelState.IsValid)
+            {
+                return this.BadRequest();
+            }
+
+            try
+            {
+                position = await this.Mediator.Send(new CreatePositionCommand(position.Name, position.Width, position.Height, position.Depth, position.MaxWeight, position.SectionId, position.Rating));
+                return this.CreatedAtAction("GetPosition", new { id = position.Id }, position);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
         // PUT: api/Positions/5
         [HttpPut("{id}")]
         public async Task<IActionResult> PutPosition(long id, Position position)
@@ -59,27 +80,6 @@ namespace Warehouse.API.Controllers
             catch (EntityNotFoundException ex)
             {
                 return this.NotFound(ex.Message);
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-        }
-
-        // POST: api/Positions
-        [HttpPost]
-        public async Task<ActionResult<Position>> PostPosition(Position position)
-        {
-            this.ModelState.Remove("Id");
-            if (!this.ModelState.IsValid)
-            {
-                return this.BadRequest();
-            }
-
-            try
-            {
-                position = await this.Mediator.Send(new CreatePositionCommand(position.Name, position.Width, position.Height, position.Depth, position.MaxWeight, position.SectionId, position.Rating));
-                return this.CreatedAtAction("GetPosition", new { id = position.Id }, position);
             }
             catch (Exception)
             {
