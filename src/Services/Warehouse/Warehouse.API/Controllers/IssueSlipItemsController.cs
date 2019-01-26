@@ -13,25 +13,22 @@ namespace Warehouse.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class IssueSlipsController : ControllerBase
+    public class IssueSlipItemsController : ControllerBase
     {
         protected IMediator Mediator { get; }
 
-        public IssueSlipsController(IMediator mediator)
+        public IssueSlipItemsController(IMediator mediator)
         {
             this.Mediator = mediator;
         }
 
-        // GET: api/IssueSlips/5
-        [HttpGet("{id}")]
-        [ProducesResponseType(200)]
-        [ProducesResponseType(404)]
-        [ProducesResponseType(500)]
-        public async Task<ActionResult<IssueSlip>> GetIssueSlip(long id)
+        // GET: api/IssueSlipItems/5
+        [HttpGet("{issueSlipId}/{wareId}")]
+        public async Task<ActionResult<IssueSlip.Item>> GetIssueSlipItem(long issueSlipId, int wareId)
         {
             try
             {
-                return this.Ok(await this.Mediator.Send(new FindIssueSlipByIdCommand(id)));
+                return this.Ok(await this.Mediator.Send(new FindIssueSlipItemByIssueSlipIdAndWareIdCommand(issueSlipId, wareId)));
             }
             catch (EntityNotFoundException ex)
             {
@@ -43,16 +40,22 @@ namespace Warehouse.API.Controllers
             }
         }
 
-        // DELETE: api/ApiWithActions/5
-        [HttpDelete("{id}")]
-        [ProducesResponseType(200)]
-        [ProducesResponseType(404)]
+        // PUT: api/IssueSlipItems/5
+        [HttpPut("{issueSlipId}/{wareId}")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
         [ProducesResponseType(500)]
-        public async Task<ActionResult<IssueSlip>> DeleteIssueSlip(long id)
+        public async Task<ActionResult<IssueSlip.Item>> PutIssueSlipItem(long issueSlipId, int wareId, IssueSlip.Item item)
         {
+            if (issueSlipId != item.IssueSlipId || wareId != item.WareId)
+            {
+                return this.BadRequest();
+            }
+
             try
             {
-                return this.Ok(await this.Mediator.Send(new DeleteIssueSlipCommand(id)));
+                item = await this.Mediator.Send(new UpdateIssueSlipItemCommand(item.WareId, item.IssueSlipId, item.PositionId, item.IssuedUnits));
+                return this.NoContent();
             }
             catch (EntityNotFoundException ex)
             {
