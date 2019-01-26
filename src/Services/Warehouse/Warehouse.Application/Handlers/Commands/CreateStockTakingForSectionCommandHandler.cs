@@ -1,0 +1,55 @@
+﻿using MediatR;
+using Restmium.ERP.Services.Warehouse.Application.Commands;
+using Restmium.ERP.Services.Warehouse.Domain.Entities;
+using Restmium.ERP.Services.Warehouse.Domain.Entities.Extensions;
+using Restmium.ERP.Services.Warehouse.Domain.Events;
+using Restmium.ERP.Services.Warehouse.Domain.Exceptions;
+using Restmium.ERP.Services.Warehouse.Infrastructure.Database;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+
+namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
+{
+    public class CreateStockTakingForSectionCommandHandler : IRequestHandler<CreateStockTakingForSectionCommand, StockTaking>
+    {
+        protected const string CreateStockTakingForSectionCommandHandler_EntityNotFoundException = "Section(Id={0}) not found!";
+        protected const string CreateStockTakingForSectionCommandHandler_StockTakingName = "Stock-Taking in Section(Id={0})";
+
+        public CreateStockTakingForSectionCommandHandler(DatabaseContext context, IMediator mediator)
+        {
+            this.DatabaseContext = context;
+            this.Mediator = mediator;
+        }
+
+        protected DatabaseContext DatabaseContext { get; }
+        protected IMediator Mediator { get; }
+
+        public async Task<StockTaking> Handle(CreateStockTakingForSectionCommand request, CancellationToken cancellationToken)
+        {
+            // Ensure that Position with specified Id exists
+            Section section = this.DatabaseContext.Sections.Find(request.Model.SectionId);
+            if (section == null)
+            {
+                throw new EntityNotFoundException(string.Format(CreateStockTakingForSectionCommandHandler_EntityNotFoundException, request.Model.SectionId));
+            }
+
+            // Create Model.Items for Positions
+            IEnumerable<Position> positions = this.DatabaseContext.Positions.Where(x => x.SectionId == request.Model.SectionId).ToList();
+            List<CreateStockTakingCommand.CreateStockTakingCommandModel.Item> items = new List<CreateStockTakingCommand.CreateStockTakingCommandModel.Item>();
+            foreach (Position item in positions)
+            {
+                items.Add(new CreateStockTakingCommand.CreateStockTakingCommandModel.Item(item.GetWare().Id, item.Id, item.CountWare(), 0));
+            }
+
+            // Create StockTaking through command
+            StockTaking stockTaking = await this.Mediator.Send(new CreateStockTakingCommand(string.Format(CreateStockTakingForSectionCommandHandler_StockTakingName, section.Id), items));
+
+            // Publish DomainEvent that the StockTaking has been created
+            await this.Mediator.Publish(new StockTakingCreatedDomainEvent(stockTaking));
+
+            return stockTaking;
+        }
+    }
+}
