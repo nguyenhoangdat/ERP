@@ -11,6 +11,8 @@ namespace Restmium.ERP.Services.Warehouse.Application.Commands
         {
             this.Model = model;
         }
+        public UpdateIssueSlipCommand(long id, long orderId, string name, DateTime utcDispatchDate, DateTime utcDeliveryDate, List<UpdateIssueSlipCommand.UpdateIssueSlipCommandModel.Item> items)
+            : this(new UpdateIssueSlipCommandModel(id, orderId, name, utcDispatchDate, utcDeliveryDate, items)) { }
 
         public UpdateIssueSlipCommandModel Model { get; }
 

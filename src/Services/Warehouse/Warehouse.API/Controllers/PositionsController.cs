@@ -25,12 +25,14 @@ namespace Warehouse.API.Controllers
 
         // GET: api/Positions/5
         [HttpGet("{id}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
         public async Task<ActionResult<Position>> GetPosition(long id)
         {
             try
             {
-                Position position = await this.Mediator.Send(new FindPositionByIdCommand(id));
-                return position;
+                return this.Ok(await this.Mediator.Send(new FindPositionByIdCommand(id)));;
             }
             catch (EntityNotFoundException ex)
             {
@@ -44,6 +46,9 @@ namespace Warehouse.API.Controllers
 
         // POST: api/Positions
         [HttpPost]
+        [ProducesResponseType(201)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(500)]
         public async Task<ActionResult<Position>> PostPosition(Position position)
         {
             this.ModelState.Remove("Id");
@@ -65,6 +70,10 @@ namespace Warehouse.API.Controllers
 
         // PUT: api/Positions/5
         [HttpPut("{id}")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
         public async Task<IActionResult> PutPosition(long id, Position position)
         {
             if (id != position.Id)
@@ -89,12 +98,14 @@ namespace Warehouse.API.Controllers
 
         // DELETE: api/Positions/5
         [HttpDelete("{id}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
         public async Task<ActionResult<Position>> DeletePosition(long id)
         {
             try
             {
-                Position position = await this.Mediator.Send(new DeletePositionCommand(id));
-                return position;
+                return this.Ok(await this.Mediator.Send(new DeletePositionCommand(id)));
             }
             catch (EntityNotFoundException ex)
             {
@@ -108,20 +119,24 @@ namespace Warehouse.API.Controllers
 
         // GET: api/Positions/
         [HttpGet("Relocate/{fromId}/{toId}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(409)]
+        [ProducesResponseType(500)]
         public async Task<ActionResult<Position>> Relocate(long fromId, long toId)
         {
             try
             {
-                Position position = await this.Mediator.Send(new RelocatePositionCommand(fromId, toId));
-                return position;
-            }
-            catch (EntityNotFoundException ex)
-            {
-                return this.NotFound(ex.Message);
+                return this.Ok(await this.Mediator.Send(new RelocatePositionCommand(fromId, toId)));
             }
             catch (PositionEmptyException ex)
             {
                 return this.BadRequest(ex.Message);
+            }
+            catch (EntityNotFoundException ex)
+            {
+                return this.NotFound(ex.Message);
             }
             catch (PositionWareConflictException ex)
             {
