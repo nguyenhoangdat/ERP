@@ -9,6 +9,9 @@ namespace Restmium.ERP.Services.Warehouse.Application.Commands
         {
             this.Model = model;
         }
+        public DeleteStockTakingCommand(int id) : this(new DeleteStockTakingCommandModel(id))
+        {
+        }
 
         public DeleteStockTakingCommandModel Model { get; }
 

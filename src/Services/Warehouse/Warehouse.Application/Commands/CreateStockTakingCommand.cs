@@ -10,6 +10,10 @@ namespace Restmium.ERP.Services.Warehouse.Application.Commands
         {
             this.Model = model;
         }
+        public CreateStockTakingCommand(string name, List<CreateStockTakingCommandModel.Item> items)
+            : this(new CreateStockTakingCommandModel(name, items))
+        {
+        }
 
         public CreateStockTakingCommandModel Model { get; }
 

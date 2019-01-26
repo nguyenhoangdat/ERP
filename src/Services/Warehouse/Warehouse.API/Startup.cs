@@ -42,14 +42,18 @@ namespace Restmium.ERP.Services.Warehouse.API
 
             services.AddDbContext<DatabaseContext>(options =>
             {
-                options.UseLazyLoadingProxies().UseSqlServer(this.Configuration.GetConnectionString("DefaultMSSQLConnection"), opt => opt.EnableRetryOnFailure());
+                options.UseLazyLoadingProxies().UseSqlServer(this.Configuration.GetConnectionString("DatabaseContext"), opt =>
+                {
+                    opt.EnableRetryOnFailure();
+                    opt.MigrationsAssembly("Warehouse.API");
+                });
             });
 
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(RequestPreProcessorBehavior<,>));
             services.AddMediatR(typeof(CreateWareCommand).GetTypeInfo().Assembly);
 
             #region EventBus
-            bool isServiceBusEnabled = this.Configuration.GetValue("AzureServiceBusEnabled", false);
+            bool isServiceBusEnabled = this.Configuration.GetSection("Azure").GetSection("ServiceBus").GetValue("Enabled", false);
 
             if (isServiceBusEnabled)
             {
@@ -57,7 +61,7 @@ namespace Restmium.ERP.Services.Warehouse.API
                 {
                     ILogger<DefaultServiceBusPersisterConnection> logger = sp.GetRequiredService<ILogger<DefaultServiceBusPersisterConnection>>();
 
-                    string serviceBusConnectionString = this.Configuration.GetConnectionString("AzureServiceBusTopicConnection");
+                    string serviceBusConnectionString = this.Configuration.GetSection("Azure").GetSection("ServiceBus").GetSection("Topic").GetValue<string>("PrimaryConnectionString");
                     ServiceBusConnectionStringBuilder serviceBusConnection = new ServiceBusConnectionStringBuilder(serviceBusConnectionString);
 
                     return new DefaultServiceBusPersisterConnection(serviceBusConnection, logger);
@@ -104,7 +108,7 @@ namespace Restmium.ERP.Services.Warehouse.API
                 c.DocumentTitle = "Warehouse.API Documentation";
             });
 
-            if (this.Configuration.GetValue("AzureServiceBusEnabled", false))
+            if (this.Configuration.GetSection("Azure").GetSection("ServiceBus").GetValue("Enabled", false))
             {
                 this.ConfigureEventBus(app); //EventBus
             }
@@ -113,7 +117,7 @@ namespace Restmium.ERP.Services.Warehouse.API
         #region EventBus
         private void RegisterEventBus(IServiceCollection services)
         {
-            string subscriptionClientName = this.Configuration["AzureSubscriptionClientName"];
+            string subscriptionClientName = this.Configuration.GetSection("Azure").GetSection("ServiceBus").GetSection("Topic").GetValue<string>("SubscriptionName");
 
             services.AddSingleton<IEventBus, EventBusServiceBus>(sp =>
             {
