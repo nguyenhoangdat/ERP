@@ -10,16 +10,19 @@ namespace Restmium.ERP.Services.Warehouse.Application.Commands
         {
             this.Model = model;
         }
+        public UpdateStockTakingItemCommand(int stockTakingId, int wareId, long positionId, int currentStock, int countedStock, int employeeId, DateTime? utcCounted)
+            : this(new UpdateStockTakingItemCommandModel(stockTakingId, wareId, positionId, currentStock, countedStock, employeeId, utcCounted)) { }
 
         public UpdateStockTakingItemCommandModel Model { get; }
 
         public class UpdateStockTakingItemCommandModel
         {
-            public UpdateStockTakingItemCommandModel(int stockTakingId, int wareId, long positionId, int currentStock, int countedStock, DateTime? utcCounted)
+            public UpdateStockTakingItemCommandModel(int stockTakingId, int wareId, long positionId, int currentStock, int countedStock, int employeeId, DateTime? utcCounted)
             {
                 this.StockTakingId = stockTakingId;
                 this.WareId = wareId;
                 this.PositionId = positionId;
+                this.EmployeeId = employeeId;
                 this.CurrentStock = currentStock;
                 this.CountedStock = countedStock;
                 this.UtcCounted = utcCounted;
@@ -28,6 +31,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Commands
             public int StockTakingId { get; }
             public int WareId { get; }
             public long PositionId { get; }
+            public int EmployeeId { get; }
 
             public int CurrentStock { get; }
             public int CountedStock { get; }
