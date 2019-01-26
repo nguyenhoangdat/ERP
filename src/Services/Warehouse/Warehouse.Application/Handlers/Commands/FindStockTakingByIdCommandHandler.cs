@@ -21,7 +21,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
 
         public async Task<StockTaking> Handle(FindStockTakingByIdCommand request, CancellationToken cancellationToken)
         {
-            StockTaking stockTaking = await this.DatabaseContext.StockTakings.FindAsync(request.Model.Id);
+            StockTaking stockTaking = await this.DatabaseContext.StockTakings.FindAsync(new object[] { request.Model.Id }, cancellationToken);
 
             if (stockTaking == null)
             {
