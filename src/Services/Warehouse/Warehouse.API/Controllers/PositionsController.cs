@@ -32,8 +32,7 @@ namespace Warehouse.API.Controllers
         {
             try
             {
-                Position position = await this.Mediator.Send(new FindPositionByIdCommand(id));
-                return position;
+                return this.Ok(await this.Mediator.Send(new FindPositionByIdCommand(id)));;
             }
             catch (EntityNotFoundException ex)
             {
@@ -106,8 +105,7 @@ namespace Warehouse.API.Controllers
         {
             try
             {
-                Position position = await this.Mediator.Send(new DeletePositionCommand(id));
-                return position;
+                return this.Ok(await this.Mediator.Send(new DeletePositionCommand(id)));
             }
             catch (EntityNotFoundException ex)
             {
@@ -130,8 +128,7 @@ namespace Warehouse.API.Controllers
         {
             try
             {
-                Position position = await this.Mediator.Send(new RelocatePositionCommand(fromId, toId));
-                return position;
+                return this.Ok(await this.Mediator.Send(new RelocatePositionCommand(fromId, toId)));
             }
             catch (PositionEmptyException ex)
             {

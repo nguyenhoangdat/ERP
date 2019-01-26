@@ -31,7 +31,7 @@ namespace Warehouse.API.Controllers
         {
             try
             {
-                return await this.Mediator.Send(new FindStockTakingByIdCommand(id));
+                return this.Ok(await this.Mediator.Send(new FindStockTakingByIdCommand(id)));
             }
             catch (EntityNotFoundException ex)
             {
@@ -52,7 +52,7 @@ namespace Warehouse.API.Controllers
         {
             try
             {
-                return await this.Mediator.Send(new CreateStockTakingForWarehouseCommand(id));
+                return this.Ok(await this.Mediator.Send(new CreateStockTakingForWarehouseCommand(id)));
             }
             catch (EntityNotFoundException ex)
             {
@@ -73,7 +73,7 @@ namespace Warehouse.API.Controllers
         {
             try
             {
-                return await this.Mediator.Send(new CreateStockTakingForSectionCommand(id));
+                return this.Ok(await this.Mediator.Send(new CreateStockTakingForSectionCommand(id)));
             }
             catch (EntityNotFoundException ex)
             {
@@ -94,7 +94,7 @@ namespace Warehouse.API.Controllers
         {
             try
             {
-                return await this.Mediator.Send(new DeleteStockTakingCommand(id));
+                return this.Ok(await this.Mediator.Send(new DeleteStockTakingCommand(id)));
             }
             catch (EntityNotFoundException ex)
             {

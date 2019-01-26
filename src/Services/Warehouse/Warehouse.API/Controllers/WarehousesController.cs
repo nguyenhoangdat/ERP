@@ -24,12 +24,14 @@ namespace Warehouse.API.Controllers
 
         // GET: api/Warehouses/5
         [HttpGet("{id}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
         public async Task<ActionResult<Entities.Warehouse>> GetWarehouse(int id)
         {
             try
             {
-                Entities.Warehouse warehouse = await this.Mediator.Send(new FindWarehouseByIdCommand(id));
-                return warehouse;
+                return this.Ok(await this.Mediator.Send(new FindWarehouseByIdCommand(id)));
             }
             catch (EntityNotFoundException ex)
             {
@@ -102,8 +104,7 @@ namespace Warehouse.API.Controllers
         {
             try
             {
-                Entities.Warehouse warehouse = await this.Mediator.Send(new DeleteWarehouseCommand(id));
-                return warehouse;
+                return this.Ok(await this.Mediator.Send(new DeleteWarehouseCommand(id)));
             }
             catch (EntityNotFoundException ex)
             {

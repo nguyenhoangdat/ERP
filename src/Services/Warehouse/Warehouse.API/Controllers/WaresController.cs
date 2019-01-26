@@ -31,7 +31,7 @@ namespace Warehouse.API.Controllers
         {
             try
             {
-                return await this.Mediator.Send(new FindWareByIdCommand(id));
+                return this.Ok(await this.Mediator.Send(new FindWareByIdCommand(id)));
             }
             catch (EntityNotFoundException ex)
             {
@@ -105,7 +105,49 @@ namespace Warehouse.API.Controllers
             try
             {
                 Ware ware = await this.Mediator.Send(new DeleteWareCommand(id));
-                return ware;
+                return this.Ok(ware);
+            }
+            catch (EntityNotFoundException ex)
+            {
+                return this.NotFound(ex.Message);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        // GET: api/GetWaresInWarehouse/1
+        [HttpGet("GetWaresInWarehouse/{warehouseId}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
+        public async Task<ActionResult<IEnumerable<Ware>>> GetWaresInWarehouse(int warehouseId)
+        {
+            try
+            {
+                return this.Ok(await this.Mediator.Send(new FindWaresInWarehouseCommand(warehouseId)));
+            }
+            catch (EntityNotFoundException ex)
+            {
+                return this.NotFound(ex.Message);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        // GET: api/GetWaresInWarehouse/1
+        [HttpGet("GetWaresInSection/{warehouseId}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
+        public async Task<ActionResult<IEnumerable<Ware>>> GetWaresInSection(int sectionId)
+        {
+            try
+            {
+                return this.Ok(await this.Mediator.Send(new FindWaresInSectionCommand(sectionId)));
             }
             catch (EntityNotFoundException ex)
             {
