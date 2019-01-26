@@ -139,7 +139,7 @@ namespace Warehouse.API.Controllers
         }
 
         // GET: api/GetWaresInWarehouse/1
-        [HttpGet("GetWaresInSection/{warehouseId}")]
+        [HttpGet("GetWaresInSection/{sectionId}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(500)]
