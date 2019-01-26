@@ -43,6 +43,9 @@ namespace Warehouse.API.Controllers
 
         // POST: api/Warehouses
         [HttpPost]
+        [ProducesResponseType(201)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(500)]
         public async Task<ActionResult<Entities.Warehouse>> PostWarehouse(Entities.Warehouse warehouse)
         {
             this.ModelState.Remove("Id");
@@ -64,6 +67,10 @@ namespace Warehouse.API.Controllers
 
         // PUT: api/Warehouses/5
         [HttpPut("{id}")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
         public async Task<ActionResult<Entities.Warehouse>> PutWarehouse(int id, Entities.Warehouse warehouse)
         {
             if (id != warehouse.Id)
@@ -88,6 +95,9 @@ namespace Warehouse.API.Controllers
 
         // DELETE: api/Warehouses/5
         [HttpDelete("{id}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
         public async Task<ActionResult<Entities.Warehouse>> DeleteWarehouse(int id)
         {
             try

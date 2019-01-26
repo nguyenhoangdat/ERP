@@ -24,6 +24,9 @@ namespace Warehouse.API.Controllers
 
         // GET: api/Wares/5
         [HttpGet("{id}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
         public async Task<ActionResult<Ware>> GetWare(int id)
         {
             try
@@ -42,6 +45,9 @@ namespace Warehouse.API.Controllers
 
         // POST: api/Wares
         [HttpPost]
+        [ProducesResponseType(201)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(500)]
         public async Task<ActionResult<Ware>> PostWare(Ware ware)
         {
             this.ModelState.Remove("Id");
@@ -63,6 +69,10 @@ namespace Warehouse.API.Controllers
 
         // PUT: api/Wares/5
         [HttpPut("{id}")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
         public async Task<ActionResult<Ware>> PutWare(int id, Ware ware)
         {
             if (id != ware.Id)
@@ -87,6 +97,9 @@ namespace Warehouse.API.Controllers
 
         // DELETE: api/ApiWithActions/5
         [HttpDelete("{id}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
         public async Task<ActionResult<Ware>> DeleteWare(int id)
         {
             try
