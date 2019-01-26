@@ -24,6 +24,9 @@ namespace Warehouse.API.Controllers
 
         // GET: api/IssueSlipItems/5
         [HttpGet("{issueSlipId}/{wareId}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
         public async Task<ActionResult<IssueSlip.Item>> GetIssueSlipItem(long issueSlipId, int wareId)
         {
             try
@@ -44,6 +47,7 @@ namespace Warehouse.API.Controllers
         [HttpPut("{issueSlipId}/{wareId}")]
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
         [ProducesResponseType(500)]
         public async Task<ActionResult<IssueSlip.Item>> PutIssueSlipItem(long issueSlipId, int wareId, IssueSlip.Item item)
         {
