@@ -3,6 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp2.2</TargetFramework>
     <RootNamespace>Restmium.ERP.Services.Warehouse.API</RootNamespace>
+    <UserSecretsId>eff8833b-5fb9-427a-84ed-03797a6a9243</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>

@@ -21,7 +21,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
 
         public async Task<Position> Handle(FindPositionByIdCommand request, CancellationToken cancellationToken)
         {
-            Position position = await this.DatabaseContext.Positions.FindAsync(request.Model.Id, cancellationToken);
+            Position position = await this.DatabaseContext.Positions.FindAsync(new object[] { request.Model.Id }, cancellationToken);
 
             if (position == null)
             {
