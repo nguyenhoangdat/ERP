@@ -1,0 +1,42 @@
+﻿using MediatR;
+using Restmium.ERP.Services.Warehouse.Application.Commands;
+using Restmium.ERP.Services.Warehouse.Application.Models;
+using Restmium.ERP.Services.Warehouse.Domain.Entities;
+using Restmium.ERP.Services.Warehouse.Domain.Entities.Extensions;
+using Restmium.ERP.Services.Warehouse.Domain.Exceptions;
+using Restmium.ERP.Services.Warehouse.Infrastructure.Database;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
+
+namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
+{
+    public class GetWareAvailabilityCommandHandler : IRequestHandler<GetWareAvailabilityCommand, IEnumerable<WareAvailabilityDTO>>
+    {
+        public GetWareAvailabilityCommandHandler(DatabaseContext context)
+        {
+            this.DatabaseContext = context;
+        }
+
+        public DatabaseContext DatabaseContext { get; }
+
+        public async Task<IEnumerable<WareAvailabilityDTO>> Handle(GetWareAvailabilityCommand request, CancellationToken cancellationToken)
+        {
+            Ware ware = await this.DatabaseContext.Wares.FindAsync(new object[] { request.Model.WareId }, cancellationToken);
+            if (ware == null)
+            {
+                throw new EntityNotFoundException(string.Format(ResourceExceptions.KeyValues["Ware_EntityNotFoundException"], request.Model.WareId));
+            }
+
+            return this.DatabaseContext.Positions.Where(x => x.GetWare().Id == request.Model.WareId).Select(x => new WareAvailabilityDTO()
+            {
+                Ware = x.GetWare(),
+                Warehouse = x.Section.Warehouse,
+                UnitsAvailable = x.CountWare()
+            });
+        }
+    }
+}

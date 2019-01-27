@@ -6,6 +6,7 @@ using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Restmium.ERP.Services.Warehouse.Application.Commands;
+using Restmium.ERP.Services.Warehouse.Application.Models;
 using Restmium.ERP.Services.Warehouse.Domain.Entities;
 using Restmium.ERP.Services.Warehouse.Domain.Exceptions;
 
@@ -148,6 +149,26 @@ namespace Warehouse.API.Controllers
             try
             {
                 return this.Ok(await this.Mediator.Send(new FindWaresInSectionCommand(sectionId)));
+            }
+            catch (EntityNotFoundException ex)
+            {
+                return this.NotFound(ex.Message);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        [HttpGet("GetWareAvailability/{wareId}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
+        public async Task<ActionResult<IEnumerable<WareAvailabilityDTO>>> GetWareAvailability(int id)
+        {
+            try
+            {
+                return this.Ok(await this.Mediator.Send(new GetWareAvailabilityCommand(id)));
             }
             catch (EntityNotFoundException ex)
             {
