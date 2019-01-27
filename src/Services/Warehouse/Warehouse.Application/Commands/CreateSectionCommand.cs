@@ -9,6 +9,8 @@ namespace Restmium.ERP.Services.Warehouse.Application.Commands
         {
             this.Model = model;
         }
+        public CreateSectionCommand(string name, int warehouseId)
+            : this(new CreateSectionCommandModel(name, warehouseId)) { }
 
         public CreateSectionCommandModel Model { get; }
 

@@ -9,6 +9,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Commands
         {
             this.Model = model;
         }
+        public UpdateSectionCommand(int id, string name) : this(new UpdateSectionCommandModel(id, name)) { }
 
         public UpdateSectionCommandModel Model { get; }
 
