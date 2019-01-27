@@ -15,7 +15,6 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Integration
     public class SuppliesOrderedIntegrationEventHandler : IIntegrationEventHandler<SuppliesOrderedIntegrationEvent>
     {
         protected const string SuppliesOrderedIntegrationEventHandlerReceiptName = "Supplies from {0} expected on {1}";
-        protected const string SuppliesOrderedIntegrationEventHandlerWareNullReference = "Unable to find Ware with Product Id={0}";
         protected const string SuppliesOrderedIntegrationEventHandlerWarehouseIsFull = "Unable to allocate position for Ware with Id={0} and ammount={1}";
 
         public SuppliesOrderedIntegrationEventHandler(DatabaseContext databaseContext, IMediator mediator)
@@ -40,7 +39,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Integration
                 Ware ware = this.DatabaseContext.Wares.Where(x => x.ProductId == item.ProductId).FirstOrDefault();
                 if (ware == null)
                 {
-                    this.Logger.Log(LogLevel.Critical, SuppliesOrderedIntegrationEventHandlerWareNullReference, item.ProductId);
+                    this.Logger.Log(LogLevel.Critical, Resources.Exceptions.Values["Ware_ProductId_EntityNotFoundException"], item.ProductId);
                 }
 
                 Position position = this.Mediator.Send(new FindPositionForAllocationCommand(@event.WarehouseId, ware.Id, item.Count)).Result;

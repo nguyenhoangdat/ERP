@@ -12,9 +12,6 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
 {
     public class CreateWareCommandHandler : IRequestHandler<CreateWareCommand, Ware>
     {
-        //TODO: Check grammar
-        protected const string CreateWareCommandHandlerEntityAlreadyExitsException = "Unable to create Ware with ProductId={0} because it already exists!";
-
         public CreateWareCommandHandler(DatabaseContext context, IMediator mediator)
         {
             this.DatabaseContext = context;
@@ -28,7 +25,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
         {
             if (this.DatabaseContext.Wares.Any(x => x.ProductId == request.Model.ProductId))
             {
-                throw new EntityAlreadyExitsException(string.Format(CreateWareCommandHandlerEntityAlreadyExitsException, request.Model.ProductId));
+                throw new EntityAlreadyExitsException(string.Format(Resources.Exceptions.Values["Ware_EntityAlreadyExitsException"], request.Model.ProductId));
             }
 
             Ware ware = this.DatabaseContext.Wares.Add(new Ware(request.Model.ProductId, request.Model.ProductName)).Entity;

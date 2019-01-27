@@ -10,8 +10,6 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
 {
     public class FindReceiptByIdCommandHandler : IRequestHandler<FindReceiptByIdCommand, Receipt>
     {
-        protected const string FindReceiptByIdCommandHandler_EntityNotFoundException = "Receipt (Id={0}) not found!";
-
         public FindReceiptByIdCommandHandler(DatabaseContext context)
         {
             this.DatabaseContext = context;
@@ -24,7 +22,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
             Receipt receipt = await this.DatabaseContext.Receipts.FindAsync(new object[] { request.Model.ReceiptId }, cancellationToken);
             if (receipt == null)
             {
-                throw new EntityNotFoundException(string.Format(FindReceiptByIdCommandHandler_EntityNotFoundException, request.Model.ReceiptId));
+                throw new EntityNotFoundException(string.Format(Resources.Exceptions.Values["Receipt_EntityNotFoundException"], request.Model.ReceiptId));
             }
 
             return receipt;

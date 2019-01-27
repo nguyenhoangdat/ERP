@@ -13,8 +13,6 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
 {
     public class UpdateReceiptCommandHandler : IRequestHandler<UpdateReceiptCommand, Receipt>
     {
-        protected const string UpdateReceiptCommandHandlerEntityNotFoundException = "Unable to update Receipt with id={0}. Receipt not found!";
-
         public UpdateReceiptCommandHandler(DatabaseContext databaseContext, IMediator mediator)
         {
             this.DatabaseContext = databaseContext;
@@ -28,7 +26,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
         {
             if (!this.DatabaseContext.Receipts.Any(x => x.Id == request.Model.Id))
             {
-                throw new EntityNotFoundException(string.Format(UpdateReceiptCommandHandlerEntityNotFoundException, request.Model.Id));
+                throw new EntityNotFoundException(string.Format(Resources.Exceptions.Values["Receipt_Update_EntityNotFoundException"], request.Model.Id));
             }
 
             List<Receipt.Item> items = new List<Receipt.Item>();

@@ -12,8 +12,6 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
 {
     public class UpdateWarehouseCommandHandler : IRequestHandler<UpdateWarehouseCommand, Warehouse.Domain.Entities.Warehouse>
     {
-        protected const string UpdateWarehouseCommandHandlerEntityNotFoundException = "Unable to update Warehouse with id={0}. Warehouse not found!";
-
         public UpdateWarehouseCommandHandler(DatabaseContext databaseContext, IMediator mediator)
         {
             this.DatabaseContext = databaseContext;
@@ -27,7 +25,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
         {
             if (!this.DatabaseContext.Warehouses.Any(x => x.Id == request.Model.Id))
             {
-                throw new EntityNotFoundException(string.Format(UpdateWarehouseCommandHandlerEntityNotFoundException, request.Model.Id));
+                throw new EntityNotFoundException(string.Format(Resources.Exceptions.Values["Warehouse_Update_EntityNotFoundException"], request.Model.Id));
             }
 
             // Update Warehouse and Save it to the Database

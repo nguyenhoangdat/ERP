@@ -12,8 +12,6 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
 {
     public class UpdateSectionCommandHandler : IRequestHandler<UpdateSectionCommand, Section>
     {
-        protected const string UpdateSectionCommandHandlerEntityNotFoundException = "Unable to update Section with id={0}. Section not found!";
-
         public UpdateSectionCommandHandler(DatabaseContext databaseContext, IMediator mediator)
         {
             this.DatabaseContext = databaseContext;
@@ -27,7 +25,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
         {
             if (!this.DatabaseContext.Sections.Any(x => x.Id == request.Model.Id))
             {
-                throw new EntityNotFoundException(string.Format(UpdateSectionCommandHandlerEntityNotFoundException, request.Model.Id));
+                throw new EntityNotFoundException(string.Format(Resources.Exceptions.Values["Section_Update_EntityNotFoundException"], request.Model.Id));
             }
 
             Section section = this.DatabaseContext.Sections.Find(request.Model.Id);

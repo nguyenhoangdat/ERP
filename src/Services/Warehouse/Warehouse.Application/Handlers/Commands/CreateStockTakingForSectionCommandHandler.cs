@@ -14,9 +14,6 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
 {
     public class CreateStockTakingForSectionCommandHandler : IRequestHandler<CreateStockTakingForSectionCommand, StockTaking>
     {
-        protected const string CreateStockTakingForSectionCommandHandler_EntityNotFoundException = "Section(Id={0}) not found!";
-        protected const string CreateStockTakingForSectionCommandHandler_StockTakingName = "Stock-Taking in Section(Id={0})";
-
         public CreateStockTakingForSectionCommandHandler(DatabaseContext context, IMediator mediator)
         {
             this.DatabaseContext = context;
@@ -32,7 +29,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
             Section section = this.DatabaseContext.Sections.Find(request.Model.SectionId);
             if (section == null)
             {
-                throw new EntityNotFoundException(string.Format(CreateStockTakingForSectionCommandHandler_EntityNotFoundException, request.Model.SectionId));
+                throw new EntityNotFoundException(string.Format(Resources.Exceptions.Values["Section_EntityNotFoundException"], request.Model.SectionId));
             }
 
             // Create Model.Items for Positions
@@ -44,7 +41,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
             }
 
             // Create StockTaking through command
-            StockTaking stockTaking = await this.Mediator.Send(new CreateStockTakingCommand(string.Format(CreateStockTakingForSectionCommandHandler_StockTakingName, section.Id), items));
+            StockTaking stockTaking = await this.Mediator.Send(new CreateStockTakingCommand(string.Format(Resources.Exceptions.Values["StockTaking_Name_Section"], section.Id), items));
 
             // Publish DomainEvent that the StockTaking has been created
             await this.Mediator.Publish(new StockTakingCreatedDomainEvent(stockTaking));

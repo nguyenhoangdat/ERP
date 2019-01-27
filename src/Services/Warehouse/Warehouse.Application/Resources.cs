@@ -1,0 +1,55 @@
+﻿using System.Collections.Generic;
+
+namespace Restmium.ERP.Services.Warehouse.Application
+{
+    internal static class Resources
+    {
+        internal static class Exceptions
+        {
+            static Exceptions()
+            {
+                Values.Add("IssueSlip_Delete_EntityNotFoundException", "Unable to delete IssueSlip(Id={0}). IssueSlip not found!");
+                Values.Add("IssueSlip_EntityNotFoundException", "IssueSlip(Id={0}) not found!");
+                Values.Add("IssueSlip_Update_EntityNotFoundException", "Unable to update IssueSlip(Id={0}). IssueSlip not found!");
+
+                Values.Add("IssueSlipItem_EntityNotFoundException", "IssueSlip.Item(IssueSlipId={0}, WareId={1}) not found!");
+
+                Values.Add("Movement_Delete_EntityNotFoundException", "Unable to delete Movement(Id={0}). Movement not found!");
+
+                Values.Add("Position_Delete_EntityNotFoundException", "Unable to delete Position(Id={0}). Position not found!");
+                Values.Add("Position_EntityNotFoundException", "Position(Id={0}) not found!");
+                Values.Add("Position_Update_EntityNotFoundException", "Unable to update Position(Id={0}). Position not found!");
+
+                Values.Add("Receipt_Delete_EntityNotFoundException", "Unable to delete Receipt(Id={0}). Receipt not found!");
+                Values.Add("Receipt_EntityNotFoundException", "Receipt(Id={0}) not found!");
+                Values.Add("Receipt_Update_EntityNotFoundException", "Unable to update Receipt(Id={0}). Receipt not found!");
+
+                Values.Add("Relocation_PositionEmptyException", "Unable to relocate Wares from Position(Id={0}). Position is empty!");
+                Values.Add("Relocation_PositionLoadCapacityException", "Unable to relocate Wares from Position(Id={0}) to Position(Id={1}). Load capacity exceeded!");
+                Values.Add("Relocation_PositionWareConflictException", "Unable to relocate Wares from Position(Id={0}) to Position(Id={1}). Positions store different Wares.");
+
+                Values.Add("Section_Delete_EntityNotFoundException", "Unable to delete Section(Id={0}) not found!");
+                Values.Add("Section_EntityNotFoundException", "Section(Id={0}) not found!");
+                Values.Add("Section_Update_EntityNotFoundException", "Unable to update Section(Id={0}) not found!");
+
+                Values.Add("StockTaking_EntityNotFoundException", "StockTaking(Id={0}) not found!");
+                Values.Add("StockTaking_Name_Section", "Stock-Taking in Section(Id={0})");
+                Values.Add("StockTaking_Name_Warehouse", "Stock-Taking in Warehouse(Id={0})");
+
+                Values.Add("StockTakingItem_EntityNotFoundException", "StockTaking.Item(StockTakingId={0}, PositionId={1}) not found!");
+
+                Values.Add("Ware_Delete_EntityNotFoundException", "Unable to delete Ware(Id={0}). Ware not found!");
+                Values.Add("Ware_EntityAlreadyExitsException", "Unable to create Ware(ProductId={0}). Ware already exists!");
+                Values.Add("Ware_EntityNotFoundException", "Ware(Id={0}) not found!");
+                Values.Add("Ware_ProductId_EntityNotFoundException", "Ware(ProductId={0}) not found!");
+                Values.Add("Ware_Update_EntityNotFoundException", "Unable to update Ware(Id={0}). Ware not found!");
+
+                Values.Add("Warehouse_Delete_EntityNotFoundException", "Unable to delete Warehouse(Id={0}). Warehouse not found!");
+                Values.Add("Warehouse_EntityNotFoundException", "Warehouse(Id={0}) not found!");
+                Values.Add("Warehouse_Update_EntityNotFoundException", "Unable to update Warehouse(Id={0}). Warehouse not found!");
+            }
+
+            public static Dictionary<string, string> Values { get; } = new Dictionary<string, string>();
+        }
+    }
+}

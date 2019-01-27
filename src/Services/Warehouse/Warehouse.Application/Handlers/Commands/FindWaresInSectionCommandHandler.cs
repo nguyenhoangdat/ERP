@@ -13,8 +13,6 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
 {
     public class FindWaresInSectionCommandHandler : IRequestHandler<FindWaresInSectionCommand, IEnumerable<Ware>>
     {
-        protected const string FindWaresInSectionCommandHandler_EntityNotFoundException = "Section (Id={0}) not found!";
-
         public FindWaresInSectionCommandHandler(DatabaseContext context)
         {
             this.DatabaseContext = context;
@@ -28,7 +26,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
 
             if (section == null)
             {
-                throw new EntityNotFoundException(string.Format(FindWaresInSectionCommandHandler_EntityNotFoundException, request.Model.SectionId));
+                throw new EntityNotFoundException(string.Format(Resources.Exceptions.Values["Section_EntityNotFoundException"], request.Model.SectionId));
             }
 
             return this.DatabaseContext.Positions

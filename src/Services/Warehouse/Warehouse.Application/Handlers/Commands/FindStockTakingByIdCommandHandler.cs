@@ -10,8 +10,6 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
 {
     public class FindStockTakingByIdCommandHandler : IRequestHandler<FindStockTakingByIdCommand, StockTaking>
     {
-        protected const string FindStockTakingByIdCommandHandler_EntityNotFoundException = "StockTaking(Id={0}) not found!";
-
         public FindStockTakingByIdCommandHandler(DatabaseContext context)
         {
             this.DatabaseContext = context;
@@ -25,7 +23,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
 
             if (stockTaking == null)
             {
-                throw new EntityNotFoundException(string.Format(FindStockTakingByIdCommandHandler_EntityNotFoundException, request.Model.Id));
+                throw new EntityNotFoundException(string.Format(Resources.Exceptions.Values["StockTaking_EntityNotFoundException"], request.Model.Id));
             }
 
             return stockTaking;

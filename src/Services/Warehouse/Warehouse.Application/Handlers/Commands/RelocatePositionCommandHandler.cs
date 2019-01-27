@@ -12,12 +12,7 @@ using System.Threading.Tasks;
 namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
 {
     public class RelocatePositionCommandHandler : IRequestHandler<RelocatePositionCommand, Position>
-    {
-        protected const string RelocatePositionCommandHandler_PositionEmptyException = "Unable to relocate wares from Position(Id={0}). Position is empty!";
-        protected const string RelocatePositionCommandHandler_EntityNotFoundException = "Position(Id={0}) not found!";
-        protected const string RelocatePositionCommandHandler_PositionWareConflictException = "Unable to relocate Wares from Position(Id={0}) to Position(Id={1}). Positions store different Wares.";
-        protected const string RelocatePositionCommandHandler_PositionLoadCapacityException = "Unable to relocate Wares from Position(Id={0}) to Position(Id={1}). Load capacity exceeded!";
-        
+    {        
         public RelocatePositionCommandHandler(DatabaseContext context, IMediator mediator)
         {
             this.DatabaseContext = context;
@@ -47,30 +42,30 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
             // Throw exceptions when Position is not found
             if (positionFrom == null)
             {
-                throw new EntityNotFoundException(string.Format(RelocatePositionCommandHandler_EntityNotFoundException, request.Model.FromPositionWithId));
+                throw new EntityNotFoundException(string.Format(Resources.Exceptions.Values["Position_EntityNotFoundException"], request.Model.FromPositionWithId));
             }
             if (positionTo == null)
             {
-                throw new EntityNotFoundException(string.Format(RelocatePositionCommandHandler_EntityNotFoundException, request.Model.ToPositionWithId));
+                throw new EntityNotFoundException(string.Format(Resources.Exceptions.Values["Position_EntityNotFoundException"], request.Model.ToPositionWithId));
             }
 
             // Throw an exception when Position from which is transfered is empty
             if (positionFrom.CountWare() == 0)
             {
-                throw new PositionEmptyException(string.Format(RelocatePositionCommandHandler_PositionEmptyException, positionFrom.Id));
+                throw new PositionEmptyException(string.Format(Resources.Exceptions.Values["Relocation_PositionEmptyException"], positionFrom.Id));
             }
 
             // Throw an exception when Positions do not store that same Ware
             if (positionFrom.GetWare() != positionTo.GetWare() && positionTo.GetWare() != null)
             {
-                throw new PositionWareConflictException(string.Format(RelocatePositionCommandHandler_PositionWareConflictException, positionFrom.Id, positionTo.Id));
+                throw new PositionWareConflictException(string.Format(Resources.Exceptions.Values["Relocation_PositionWareConflictException"], positionFrom.Id, positionTo.Id));
             }
 
             // Throw an exception if Position cannot hold the ammount of Wares that user want to relocate
             int countTotal = positionTo.CountWare() + positionFrom.CountWare();
             if (!positionTo.HasLoadCapacity(positionFrom.GetWare(), countTotal))
             {
-                throw new PositionLoadCapacityException(string.Format(RelocatePositionCommandHandler_PositionLoadCapacityException, positionFrom.Id, positionTo.Id));
+                throw new PositionLoadCapacityException(string.Format(Resources.Exceptions.Values["Relocation_PositionLoadCapacityException"], positionFrom.Id, positionTo.Id));
             }
             if (!positionTo.HasSpaceCapacity(positionFrom.GetWare(), countTotal))
             {

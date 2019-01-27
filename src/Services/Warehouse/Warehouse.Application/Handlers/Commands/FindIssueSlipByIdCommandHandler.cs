@@ -10,8 +10,6 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
 {
     public class FindIssueSlipByIdCommandHandler : IRequestHandler<FindIssueSlipByIdCommand, IssueSlip>
     {
-        protected const string FindIssueSlipByIdCommandHandler_EntityNotFoundException = "IssueSlip (Id={0}) not found!";
-
         public FindIssueSlipByIdCommandHandler(DatabaseContext context)
         {
             this.DatabaseContext = context;
@@ -25,7 +23,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
 
             if (issueSlip == null)
             {
-                throw new EntityNotFoundException(string.Format(FindIssueSlipByIdCommandHandler_EntityNotFoundException, request.Model.IssueSlipId));
+                throw new EntityNotFoundException(string.Format(Resources.Exceptions.Values["IssueSlip_EntityNotFoundException"], request.Model.IssueSlipId));
             }
 
             return issueSlip;

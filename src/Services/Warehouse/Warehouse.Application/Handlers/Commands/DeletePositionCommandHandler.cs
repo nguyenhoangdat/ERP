@@ -12,8 +12,6 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
 {
     public class DeletePositionCommandHandler : IRequestHandler<DeletePositionCommand, Position>
     {
-        protected const string DeletePositionCommandHandlerEntityNotFoundException = "Unable to delete Position with Id={0}. Position not found!";
-
         public DeletePositionCommandHandler(DatabaseContext databaseContext, IMediator mediator)
         {
             this.DatabaseContext = databaseContext;
@@ -27,7 +25,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
         {
             if (!this.DatabaseContext.Positions.Any(x => x.Id == request.Model.Id))
             {
-                throw new EntityNotFoundException(string.Format(DeletePositionCommandHandlerEntityNotFoundException, request.Model.Id));
+                throw new EntityNotFoundException(string.Format(Resources.Exceptions.Values["Position_Delete_EntityNotFoundException"], request.Model.Id));
             }
 
             Position position = this.DatabaseContext.Positions.Remove(this.DatabaseContext.Positions.Find(request.Model.Id)).Entity;

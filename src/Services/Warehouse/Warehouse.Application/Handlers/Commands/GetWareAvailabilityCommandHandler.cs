@@ -28,7 +28,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
             Ware ware = await this.DatabaseContext.Wares.FindAsync(new object[] { request.Model.WareId }, cancellationToken);
             if (ware == null)
             {
-                throw new EntityNotFoundException(string.Format(ResourceExceptions.KeyValues["Ware_EntityNotFoundException"], request.Model.WareId));
+                throw new EntityNotFoundException(string.Format(Resources.Exceptions.Values["Ware_EntityNotFoundException"], request.Model.WareId));
             }
 
             return this.DatabaseContext.Positions.Where(x => x.GetWare().Id == request.Model.WareId).Select(x => new WareAvailabilityDTO()

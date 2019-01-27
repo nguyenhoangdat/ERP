@@ -14,8 +14,6 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
 {
     public class FindWaresInWarehouseCommandHandler : IRequestHandler<FindWaresInWarehouseCommand, IEnumerable<Ware>>
     {
-        protected const string FindWaresInWarehouseCommandHandler_EntityNotFoundException = "Warehouse (Id={0}) not found!";
-
         public FindWaresInWarehouseCommandHandler(DatabaseContext context)
         {
             this.DatabaseContext = context;
@@ -29,7 +27,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
 
             if (warehouse == null)
             {
-                throw new EntityNotFoundException(string.Format(FindWaresInWarehouseCommandHandler_EntityNotFoundException, request.Model.WarehouseId));
+                throw new EntityNotFoundException(string.Format(Resources.Exceptions.Values["Warehouse_EntityNotFoundException"], request.Model.WarehouseId));
             }
 
             return this.DatabaseContext.Positions

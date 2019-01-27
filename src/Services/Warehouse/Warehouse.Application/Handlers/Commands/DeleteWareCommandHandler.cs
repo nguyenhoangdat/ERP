@@ -12,9 +12,6 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
 {
     public class DeleteWareCommandHandler : IRequestHandler<DeleteWareCommand, Ware>
     {
-        //TODO: Check grammar
-        protected const string DeleteWareCommandHandlerEntityNotFoundException = "Unable to delete ware with id={0}. Ware not found!";
-
         public DeleteWareCommandHandler(DatabaseContext context, IMediator mediator)
         {
             this.DatabaseContext = context;
@@ -28,7 +25,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
         {
             if (!this.DatabaseContext.Wares.Any(x => x.Id == request.Model.WareId))
             {
-                throw new EntityNotFoundException(string.Format(DeleteWareCommandHandlerEntityNotFoundException, request.Model.WareId));
+                throw new EntityNotFoundException(string.Format(Resources.Exceptions.Values["Ware_Delete_EntityNotFoundException"], request.Model.WareId));
             }
 
             Ware ware = this.DatabaseContext.Wares.Remove(this.DatabaseContext.Wares.Find(request.Model.WareId)).Entity;

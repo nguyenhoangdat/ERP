@@ -13,8 +13,6 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
 {
     public class UpdateIssueSlipCommandHandler : IRequestHandler<UpdateIssueSlipCommand, IssueSlip>
     {
-        protected const string UpdateIssueSlipCommandHandlerEntityNotFoundException = "Unable to update Issue slip with id={0}. Issue slip not found!";
-
         public UpdateIssueSlipCommandHandler(DatabaseContext databaseContext, IMediator mediator)
         {
             this.DatabaseContext = databaseContext;
@@ -28,7 +26,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
         {
             if (!this.DatabaseContext.IssueSlips.Any(x => x.Id == request.Model.Id))
             {
-                throw new EntityNotFoundException(string.Format(UpdateIssueSlipCommandHandlerEntityNotFoundException, request.Model.Id));
+                throw new EntityNotFoundException(string.Format(Resources.Exceptions.Values["IssueSlip_Update_EntityNotFoundException"], request.Model.Id));
             }
 
             List<IssueSlip.Item> items = new List<IssueSlip.Item>();

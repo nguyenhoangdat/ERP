@@ -11,8 +11,6 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
 {
     public class UpdateStockTakingItemCommandHandler : IRequestHandler<UpdateStockTakingItemCommand, StockTaking.Item>
     {
-        protected const string UpdateStockTakingItemCommandHandler_EntityNotFoundException = "StockTaking.Item (StockTakingId={0}, PositionId={1}) not found!";
-
         public UpdateStockTakingItemCommandHandler(DatabaseContext context, IMediator mediator)
         {
             this.DatabaseContext = context;
@@ -32,7 +30,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
             }, cancellationToken);
             if (item == null)
             {
-                throw new EntityNotFoundException(string.Format(UpdateStockTakingItemCommandHandler_EntityNotFoundException, request.Model.StockTakingId, request.Model.PositionId));
+                throw new EntityNotFoundException(string.Format(Resources.Exceptions.Values["StockTakingItem_EntityNotFoundException"], request.Model.StockTakingId, request.Model.PositionId));
             }
 
             // Update and Save

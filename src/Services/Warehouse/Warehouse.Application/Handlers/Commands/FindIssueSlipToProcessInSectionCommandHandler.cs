@@ -12,8 +12,6 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
 {
     public class FindIssueSlipToProcessInSectionCommandHandler : IRequestHandler<FindIssueSlipToProcessInSectionCommand, IssueSlip>
     {
-        protected const string FindIssueSlipToProcessInSectionCommandHandler_EntityNotFoundException = "Section (Id={0}) not found!";
-
         public FindIssueSlipToProcessInSectionCommandHandler(DatabaseContext context)
         {
             this.DatabaseContext = context;
@@ -27,7 +25,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
             Section section = await this.DatabaseContext.Sections.FindAsync(new object[] { request.Model.SectionId }, cancellationToken);
             if (section == null)
             {
-                throw new EntityNotFoundException(string.Format(FindIssueSlipToProcessInSectionCommandHandler_EntityNotFoundException, request.Model.SectionId));
+                throw new EntityNotFoundException(string.Format(Resources.Exceptions.Values["Section_EntityNotFoundException"], request.Model.SectionId));
             }
 
             // Return IssueSlip that need to be processed ASAP

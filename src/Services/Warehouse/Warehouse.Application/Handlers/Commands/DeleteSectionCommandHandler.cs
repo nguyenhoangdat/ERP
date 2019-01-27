@@ -12,8 +12,6 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
 {
     public class DeleteSectionCommandHandler : IRequestHandler<DeleteSectionCommand, Section>
     {
-        protected const string DeleteSectionCommandHandlerEntityNotFoundException = "Unable to delete Section with id={0}. Section not found!";
-
         public DeleteSectionCommandHandler(DatabaseContext databaseContext, IMediator mediator)
         {
             this.DatabaseContext = databaseContext;
@@ -27,7 +25,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
         {
             if (!this.DatabaseContext.Sections.Any(x => x.Id == request.Model.Id))
             {
-                throw new EntityNotFoundException(string.Format(DeleteSectionCommandHandlerEntityNotFoundException, request.Model.Id));
+                throw new EntityNotFoundException(string.Format(Resources.Exceptions.Values["Section_Delete_EntityNotFoundException"], request.Model.Id));
             }
 
             Section section = this.DatabaseContext.Sections.Remove(this.DatabaseContext.Sections.Find(request.Model.Id)).Entity;

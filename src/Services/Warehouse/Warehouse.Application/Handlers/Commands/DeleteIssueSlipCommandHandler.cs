@@ -11,8 +11,6 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
 {
     public class DeleteIssueSlipCommandHandler : IRequestHandler<DeleteIssueSlipCommand, IssueSlip>
     {
-        protected const string DeleteIssueSlipCommandHandler_EntityNotFoundException = "IssueSlip (Id={0}) not found!";
-
         public DeleteIssueSlipCommandHandler(DatabaseContext context, IMediator mediator)
         {
             this.DatabaseContext = context;
@@ -28,7 +26,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
             IssueSlip issueSlip = await this.DatabaseContext.IssueSlips.FindAsync(new object[] { request.Model.Id }, cancellationToken);
             if (issueSlip == null)
             {
-                throw new EntityNotFoundException(string.Format(DeleteIssueSlipCommandHandler_EntityNotFoundException, request.Model.Id));
+                throw new EntityNotFoundException(string.Format(Resources.Exceptions.Values["IssueSlip_Delete_EntityNotFoundException"], request.Model.Id));
             }
 
             // Delete and Save

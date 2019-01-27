@@ -11,8 +11,6 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
 {
     public class DeleteWarehouseCommandHandler : IRequestHandler<DeleteWarehouseCommand, Warehouse.Domain.Entities.Warehouse>
     {
-        protected const string UpdateWarehouseCommandHandlerEntityNotFoundException = "Unable to delete Warehouse with id={0}. Warehouse not found!";
-
         public DeleteWarehouseCommandHandler(DatabaseContext databaseContext, IMediator mediator)
         {
             this.DatabaseContext = databaseContext;
@@ -26,7 +24,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
         {
             if (this.DatabaseContext.Warehouses.Any(x => x.Id == request.Model.Id))
             {
-                throw new EntityNotFoundException(string.Format(UpdateWarehouseCommandHandlerEntityNotFoundException, request.Model.Id));
+                throw new EntityNotFoundException(string.Format(Resources.Exceptions.Values["Warehouse_Delete_EntityNotFoundException"], request.Model.Id));
             }
 
             Warehouse.Domain.Entities.Warehouse warehouse = this.DatabaseContext.Warehouses.Find(request.Model.Id);

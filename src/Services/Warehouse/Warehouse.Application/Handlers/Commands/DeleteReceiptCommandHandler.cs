@@ -12,9 +12,6 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
 {
     public class DeleteReceiptCommandHandler : IRequestHandler<DeleteReceiptCommand, Receipt>
     {
-        //TODO: Check grammar
-        protected const string DeleteWareCommandHandlerEntityNotFoundException = "Unable to delete Receipt with id={0}. Receipt not found!";
-
         public DeleteReceiptCommandHandler(DatabaseContext databaseContext, IMediator mediator)
         {
             this.DatabaseContext = databaseContext;
@@ -28,7 +25,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
         {
             if (!this.DatabaseContext.Receipts.Any(x => x.Id == request.Model.Id))
             {
-                throw new EntityNotFoundException(string.Format(DeleteWareCommandHandlerEntityNotFoundException, request.Model.Id));
+                throw new EntityNotFoundException(string.Format(Resources.Exceptions.Values["Receipt_Delete_EntityNotFoundException"], request.Model.Id));
             }
 
             Receipt receipt = this.DatabaseContext.Receipts.Remove(this.DatabaseContext.Receipts.Find(request.Model.Id)).Entity;

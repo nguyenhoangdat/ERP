@@ -12,9 +12,6 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
 {
     public class UpdateWareCommandHandler : IRequestHandler<UpdateWareCommand, Ware>
     {
-        //TODO: Check grammar
-        protected const string UpdateWareCommandHandlerEntityNotFoundException = "Unable to update Ware with id={0}. Ware not found!";
-
         public UpdateWareCommandHandler(DatabaseContext context, IMediator mediator)
         {
             this.DatabaseContext = context;
@@ -28,7 +25,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
         {
             if (!this.DatabaseContext.Wares.Any(x => x.Id == request.Model.WareId))
             {
-                throw new EntityNotFoundException(string.Format(UpdateWareCommandHandlerEntityNotFoundException, request.Model.WareId));
+                throw new EntityNotFoundException(string.Format(Resources.Exceptions.Values["Ware_Update_EntityNotFoundException"], request.Model.WareId));
             }
 
             Ware ware = this.DatabaseContext.Wares.Find(request.Model.WareId);

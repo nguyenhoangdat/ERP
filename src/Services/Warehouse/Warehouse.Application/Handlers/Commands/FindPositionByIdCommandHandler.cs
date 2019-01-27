@@ -10,8 +10,6 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
 {
     public class FindPositionByIdCommandHandler : IRequestHandler<FindPositionByIdCommand, Position>
     {
-        protected const string FindPositionByIdCommandHandler_EntityNotFoundException = "Position(Id={0}) not found!";
-
         public FindPositionByIdCommandHandler(DatabaseContext context)
         {
             this.DatabaseContext = context;
@@ -25,7 +23,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
 
             if (position == null)
             {
-                throw new EntityNotFoundException(string.Format(FindPositionByIdCommandHandler_EntityNotFoundException, request.Model.Id));
+                throw new EntityNotFoundException(string.Format(Resources.Exceptions.Values["Position_EntityNotFoundException"], request.Model.Id));
             }
 
             return position;
