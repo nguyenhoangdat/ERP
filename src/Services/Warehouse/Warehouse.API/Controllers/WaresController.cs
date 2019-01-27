@@ -164,11 +164,11 @@ namespace Warehouse.API.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(500)]
-        public async Task<ActionResult<IEnumerable<WareAvailabilityDTO>>> GetWareAvailability(int id)
+        public async Task<ActionResult<IEnumerable<WareAvailabilityDTO>>> GetWareAvailability(int wareId)
         {
             try
             {
-                return this.Ok(await this.Mediator.Send(new GetWareAvailabilityCommand(id)));
+                return this.Ok(await this.Mediator.Send(new GetWareAvailabilityCommand(wareId)));
             }
             catch (EntityNotFoundException ex)
             {
