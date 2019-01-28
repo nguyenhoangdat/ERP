@@ -31,7 +31,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
             Ware ware = this.DatabaseContext.Wares.Add(new Ware(request.Model.ProductId, request.Model.ProductName)).Entity;
             await this.DatabaseContext.SaveChangesAsync(cancellationToken);
 
-            await this.Mediator.Publish(new WareCreatedDomainEvent(ware));
+            await this.Mediator.Publish(new WareCreatedDomainEvent(ware), cancellationToken);
 
             return ware;
         }

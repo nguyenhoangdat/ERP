@@ -26,7 +26,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
             await this.DatabaseContext.SaveChangesAsync(cancellationToken);
 
             // Publish DomainEvent that the Warehouse has been created
-            await this.Mediator.Publish(new WarehouseCreatedDomainEvent(warehouse));
+            await this.Mediator.Publish(new WarehouseCreatedDomainEvent(warehouse), cancellationToken);
 
             return warehouse;
         }

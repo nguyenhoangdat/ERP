@@ -34,7 +34,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
             await this.DatabaseContext.SaveChangesAsync(cancellationToken);
 
             // Publish DomainEvent that the Movement has been deleted
-            await this.Mediator.Publish(new MovementDeletedDomainEvent(movement));
+            await this.Mediator.Publish(new MovementDeletedDomainEvent(movement), cancellationToken);
 
             return movement;
         }

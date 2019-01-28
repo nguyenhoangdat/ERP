@@ -24,7 +24,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
             Position position = this.DatabaseContext.Positions.Add(new Position(request.Model.Name, request.Model.Width, request.Model.Height, request.Model.Depth, request.Model.MaxWeight)).Entity;
             await this.DatabaseContext.SaveChangesAsync(cancellationToken);
 
-            await this.Mediator.Publish(new PositionCreatedDomainEvent(position));
+            await this.Mediator.Publish(new PositionCreatedDomainEvent(position), cancellationToken);
 
             return position;
         }

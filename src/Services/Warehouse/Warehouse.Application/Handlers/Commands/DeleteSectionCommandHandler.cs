@@ -31,7 +31,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
             Section section = this.DatabaseContext.Sections.Remove(this.DatabaseContext.Sections.Find(request.Model.Id)).Entity;
             await this.DatabaseContext.SaveChangesAsync(cancellationToken);
 
-            await this.Mediator.Publish(new SectionDeletedDomainEvent(section));
+            await this.Mediator.Publish(new SectionDeletedDomainEvent(section), cancellationToken);
 
             return section;
         }

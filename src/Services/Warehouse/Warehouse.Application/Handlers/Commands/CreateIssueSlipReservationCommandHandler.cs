@@ -27,7 +27,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
             position = this.DatabaseContext.Positions.Update(position).Entity;
             await this.DatabaseContext.SaveChangesAsync(cancellationToken);
 
-            await this.Mediator.Publish(new IssueSlipReservationCreatedDomainEvent(position));
+            await this.Mediator.Publish(new IssueSlipReservationCreatedDomainEvent(position), cancellationToken);
 
             return position;
         }

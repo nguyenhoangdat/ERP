@@ -34,7 +34,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
             await this.DatabaseContext.SaveChangesAsync(cancellationToken);
 
             // Publish DomainEvent that the IssueSlip has been created
-            await this.Mediator.Publish(new IssueSlipDeletedDomainEvent(issueSlip));
+            await this.Mediator.Publish(new IssueSlipDeletedDomainEvent(issueSlip), cancellationToken);
 
             return issueSlip;
         }

@@ -38,7 +38,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
             IssueSlip issueSlip = this.DatabaseContext.IssueSlips.Update(new IssueSlip(request.Model.Name, request.Model.OrderId, request.Model.UtcDispatchDate, request.Model.UtcDeliveryDate, items)).Entity;
             await this.DatabaseContext.SaveChangesAsync(cancellationToken);
 
-            await this.Mediator.Publish(new IssueSlipUpdatedDomainEvent(issueSlip));
+            await this.Mediator.Publish(new IssueSlipUpdatedDomainEvent(issueSlip), cancellationToken);
 
             return issueSlip;
         }

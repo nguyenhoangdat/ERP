@@ -33,7 +33,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Domain
                 item = this.DatabaseContext.StockTakingItems.Update(item).Entity;
                 await this.DatabaseContext.SaveChangesAsync(cancellationToken);
 
-                await this.Mediator.Publish(new StockTakingItemUpdatedDomainEvent(item));
+                await this.Mediator.Publish(new StockTakingItemUpdatedDomainEvent(item), cancellationToken);
             }
         }
     }

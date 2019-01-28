@@ -36,7 +36,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
             StockTaking stockTaking = this.DatabaseContext.StockTakings.Add(new StockTaking(request.Model.Name, items)).Entity;
             await this.DatabaseContext.SaveChangesAsync(cancellationToken);
 
-            await this.Mediator.Publish(new StockTakingCreatedDomainEvent(stockTaking));
+            await this.Mediator.Publish(new StockTakingCreatedDomainEvent(stockTaking), cancellationToken);
 
             return stockTaking;
         }

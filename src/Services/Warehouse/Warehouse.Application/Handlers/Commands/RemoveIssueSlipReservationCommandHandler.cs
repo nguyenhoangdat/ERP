@@ -31,7 +31,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
             await this.DatabaseContext.SaveChangesAsync(cancellationToken);
 
             // Publish DomainEvent that the reservation has been removed
-            await this.Mediator.Publish(new IssueSlipReservationRemovedDomainEvent(position));
+            await this.Mediator.Publish(new IssueSlipReservationRemovedDomainEvent(position), cancellationToken);
 
             return position;
         }

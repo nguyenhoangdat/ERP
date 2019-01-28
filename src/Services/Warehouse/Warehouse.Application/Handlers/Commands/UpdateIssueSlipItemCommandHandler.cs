@@ -31,7 +31,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
             await this.DatabaseContext.SaveChangesAsync(cancellationToken);
 
             // Publish DomainEvent
-            await this.Mediator.Publish(new IssueSlipItemUpdatedDomainEvent(item));
+            await this.Mediator.Publish(new IssueSlipItemUpdatedDomainEvent(item), cancellationToken);
 
             return item;
         }

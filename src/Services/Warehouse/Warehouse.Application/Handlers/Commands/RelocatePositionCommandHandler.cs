@@ -75,12 +75,12 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
             // Relocate Wares between Positions - create movements
             Ware ware = positionFrom.GetWare();
             int unitsToRelocate = positionFrom.CountWare();
-            await this.Mediator.Send(new CreateMovementCommand(ware.Id, positionFrom.Id, Movement.Direction.Out, unitsToRelocate, 0)); //TODO: Add EmployeeId
-            await this.Mediator.Send(new CreateMovementCommand(ware.Id, positionTo.Id, Movement.Direction.In, unitsToRelocate, 0)); //TODO: Add EmployeeId
+            await this.Mediator.Send(new CreateMovementCommand(ware.Id, positionFrom.Id, Movement.Direction.Out, unitsToRelocate, 0), cancellationToken); //TODO: Add EmployeeId
+            await this.Mediator.Send(new CreateMovementCommand(ware.Id, positionTo.Id, Movement.Direction.In, unitsToRelocate, 0), cancellationToken); //TODO: Add EmployeeId
 
             // Update ReservedUnits
-            positionFrom = await this.Mediator.Send(new RemoveIssueSlipReservationCommand(positionFrom, unitsToRelocate));
-            positionTo = await this.Mediator.Send(new CreateIssueSlipReservationCommand(positionTo.Id, unitsToRelocate));
+            positionFrom = await this.Mediator.Send(new RemoveIssueSlipReservationCommand(positionFrom, unitsToRelocate), cancellationToken);
+            positionTo = await this.Mediator.Send(new CreateIssueSlipReservationCommand(positionTo.Id, unitsToRelocate), cancellationToken);
 
             // Update IssueSlips through DomainEvent (PositionRelocatedDomainEvent)
             await this.Mediator.Publish(new PositionRelocatedDomainEvent(positionFrom, positionTo), cancellationToken);

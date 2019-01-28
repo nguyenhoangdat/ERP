@@ -28,7 +28,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
             List<IssueSlip.Item> items = new List<IssueSlip.Item>(request.Model.Items.Count);
             foreach (CreateIssueSlipCommand.CreateIssueSlipCommandModel.Item item in request.Model.Items)
             {
-                foreach (KeyValuePair<Position, int> valuePair in await this.FindPositions(item.Ware, item.RequstedUnits))
+                foreach (KeyValuePair<Position, int> valuePair in await this.FindPositions(item.Ware, item.RequstedUnits, cancellationToken))
                 {
                     items.Add(new IssueSlip.Item(0, item.Ware.Id, valuePair.Key.Id, valuePair.Value, 0, 0));
                 }
@@ -39,12 +39,12 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
             await this.DatabaseContext.SaveChangesAsync(cancellationToken);
 
             // Publish DomainEvent that the IssueSlip has been created
-            await this.Mediator.Publish(new IssueSlipCreatedDomainEvent(issueSlip));
+            await this.Mediator.Publish(new IssueSlipCreatedDomainEvent(issueSlip), cancellationToken);
 
             return issueSlip;
         }
 
-        protected async Task<Dictionary<Position, int>> FindPositions(Ware ware, int units)
+        protected async Task<Dictionary<Position, int>> FindPositions(Ware ware, int units, CancellationToken cancellationToken)
         {
             Dictionary<Position, int> pairs = new Dictionary<Position, int>();
 
@@ -62,13 +62,13 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
 
                 if (unitsAtPosition < units)
                 {
-                    await this.Mediator.Send(new CreateIssueSlipReservationCommand(position.Id, unitsAtPosition));
+                    await this.Mediator.Send(new CreateIssueSlipReservationCommand(position.Id, unitsAtPosition), cancellationToken);
                     pairs.Add(position, unitsAtPosition);
                     units -= unitsAtPosition;
                 }
                 else
                 {
-                    await this.Mediator.Send(new CreateIssueSlipReservationCommand(position.Id, units));
+                    await this.Mediator.Send(new CreateIssueSlipReservationCommand(position.Id, units), cancellationToken);
                     pairs.Add(position, units);
                     break;
                 }

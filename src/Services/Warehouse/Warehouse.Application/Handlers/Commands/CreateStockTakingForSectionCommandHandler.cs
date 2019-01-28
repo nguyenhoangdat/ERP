@@ -41,10 +41,10 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
             }
 
             // Create StockTaking through command
-            StockTaking stockTaking = await this.Mediator.Send(new CreateStockTakingCommand(string.Format(Resources.Exceptions.Values["StockTaking_Name_Section"], section.Id), items));
+            StockTaking stockTaking = await this.Mediator.Send(new CreateStockTakingCommand(string.Format(Resources.Exceptions.Values["StockTaking_Name_Section"], section.Id), items), cancellationToken);
 
             // Publish DomainEvent that the StockTaking has been created
-            await this.Mediator.Publish(new StockTakingCreatedDomainEvent(stockTaking));
+            await this.Mediator.Publish(new StockTakingCreatedDomainEvent(stockTaking), cancellationToken);
 
             return stockTaking;
         }

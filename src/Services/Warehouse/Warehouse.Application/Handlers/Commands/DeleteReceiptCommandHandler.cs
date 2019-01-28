@@ -31,7 +31,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
             Receipt receipt = this.DatabaseContext.Receipts.Remove(this.DatabaseContext.Receipts.Find(request.Model.Id)).Entity;
             await this.DatabaseContext.SaveChangesAsync(cancellationToken);
 
-            await this.Mediator.Publish(new ReceiptDeletedDomainEvent(receipt));
+            await this.Mediator.Publish(new ReceiptDeletedDomainEvent(receipt), cancellationToken);
 
             return receipt;
         }

@@ -23,10 +23,10 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Domain
             // Find all IssueSlip.Items which were not processed and are related to Position from which was the relocation done
             foreach (Warehouse.Domain.Entities.IssueSlip.Item item in this.DatabaseContext.IssueSlipItems.Where(x => x.PositionId == notification.PositionFrom.Id && x.IssuedUnits == 0))
             {
-                await this.Mediator.Send(new UpdateIssueSlipItemCommand(item.WareId, item.IssueSlipId, notification.PositionTo.Id, item.IssuedUnits));
+                await this.Mediator.Send(new UpdateIssueSlipItemCommand(item.WareId, item.IssueSlipId, notification.PositionTo.Id, item.IssuedUnits), cancellationToken);
             }
 
-            //TODO: Should I publish DomainEvent? - One is already published by the UpdateIssueSlipItemCommandHandler
+            // DomainEvent is already published by the UpdateIssueSlipItemCommandHandler!!!
         }
     }
 }

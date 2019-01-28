@@ -31,7 +31,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
             warehouse = this.DatabaseContext.Warehouses.Remove(warehouse).Entity;
             await this.DatabaseContext.SaveChangesAsync(cancellationToken);
 
-            await this.Mediator.Publish(new WarehouseDeletedDomainEvent(warehouse));
+            await this.Mediator.Publish(new WarehouseDeletedDomainEvent(warehouse), cancellationToken);
 
             return warehouse;
         }

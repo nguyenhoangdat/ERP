@@ -31,7 +31,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
             Position position = this.DatabaseContext.Positions.Remove(this.DatabaseContext.Positions.Find(request.Model.Id)).Entity;
             await this.DatabaseContext.SaveChangesAsync(cancellationToken);
 
-            await this.Mediator.Publish(new PositionDeletedDomainEvent(position));
+            await this.Mediator.Publish(new PositionDeletedDomainEvent(position), cancellationToken);
 
             return position;
         }

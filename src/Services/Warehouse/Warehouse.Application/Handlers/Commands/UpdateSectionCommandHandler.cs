@@ -32,7 +32,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
             section.Name = request.Model.Name;
             await this.DatabaseContext.SaveChangesAsync(cancellationToken);
 
-            await this.Mediator.Publish(new SectionUpdatedDomainEvent(section));
+            await this.Mediator.Publish(new SectionUpdatedDomainEvent(section), cancellationToken);
 
             return section;
         }

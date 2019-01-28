@@ -24,7 +24,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
             Section section = this.DatabaseContext.Sections.Add(new Section(request.Model.Name, request.Model.WarehouseId)).Entity;
             await this.DatabaseContext.SaveChangesAsync(cancellationToken);
 
-            await this.Mediator.Publish(new SectionCreatedDomainEvent(section));
+            await this.Mediator.Publish(new SectionCreatedDomainEvent(section), cancellationToken);
 
             return section;
         }
