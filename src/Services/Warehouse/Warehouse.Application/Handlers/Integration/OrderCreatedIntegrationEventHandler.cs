@@ -46,12 +46,9 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Integration
                 modelItems.Add(new CreateIssueSlipCommand.CreateIssueSlipCommandModel.Item(ware, item.Units));
             }
 
-            // Create CommandModel
-            string name = ""; //TODO: Add IssueSlip name
-            CreateIssueSlipCommand.CreateIssueSlipCommandModel commandModel = new CreateIssueSlipCommand.CreateIssueSlipCommandModel(name, @event.OrderId, @event.UtcDispatchDate, @event.UtcDeliveryDate, modelItems);
-
             // Create IssueSlip
-            IssueSlip issueSlip = await this.Mediator.Send(new CreateIssueSlipCommand(commandModel));
+            string name = ""; //TODO: Add IssueSlip name
+            IssueSlip issueSlip = await this.Mediator.Send(new CreateIssueSlipCommand(name, @event.OrderId, @event.UtcDispatchDate, @event.UtcDeliveryDate, modelItems));
         }
 
         protected bool IsOrderValid(List<OrderCreatedIntegrationEvent.OrderItem> items)

@@ -3,6 +3,7 @@ using Microsoft.Extensions.Logging;
 using Restmium.ERP.BuildingBlocks.EventBus.Abstractions;
 using Restmium.ERP.Services.Warehouse.Application.Commands;
 using Restmium.ERP.Services.Warehouse.Domain.Entities;
+using Restmium.ERP.Services.Warehouse.Domain.Events;
 using Restmium.ERP.Services.Warehouse.Infrastructure.Database;
 using Restmium.ERP.Services.Warehouse.Integration.Events;
 using System.Threading.Tasks;
@@ -23,8 +24,9 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Integration
 
         public async Task Handle(ProductAddedIntegrationEvent @event)
         {
-            // Create Ware
             Ware ware = await this.Mediator.Send(new CreateWareCommand(@event.ProductId, @event.ProductName));
+
+            await this.Mediator.Publish(new WareCreatedDomainEvent(ware));
         }
     }
 }
