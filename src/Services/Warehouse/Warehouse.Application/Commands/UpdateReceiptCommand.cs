@@ -11,11 +11,22 @@ namespace Restmium.ERP.Services.Warehouse.Application.Commands
         {
             this.Model = model;
         }
+        public UpdateReceiptCommand(long id, string name, DateTime utcExpected, DateTime? utcReceived, List<UpdateReceiptCommandModel.Item> items)
+            : this(new UpdateReceiptCommandModel(id, name, utcExpected, utcReceived, items)) { }
 
         public UpdateReceiptCommandModel Model { get; }
 
         public class UpdateReceiptCommandModel
         {
+            public UpdateReceiptCommandModel(long id, string name, DateTime utcExpected, DateTime? utcReceived, List<Item> items)
+            {
+                this.Id = id;
+                this.Name = name;
+                this.UtcExpected = utcExpected;
+                this.UtcReceived = utcReceived;
+                this.Items = items;
+            }
+
             public long Id { get; }
             public string Name { get; }
             public DateTime UtcExpected { get; }
@@ -24,6 +35,17 @@ namespace Restmium.ERP.Services.Warehouse.Application.Commands
 
             public class Item
             {
+                public Item(int wareId, long positionId, long receiptId, int countOrdered, int countReceived, DateTime? utcProcessed, int employeeId)
+                {
+                    this.WareId = wareId;
+                    this.PositionId = positionId;
+                    this.ReceiptId = receiptId;
+                    this.CountOrdered = countOrdered;
+                    this.CountReceived = countReceived;
+                    this.UtcProcessed = utcProcessed;
+                    this.EmployeeId = employeeId;
+                }
+
                 public int WareId { get; }
                 public long PositionId { get; }
                 public long ReceiptId { get; }

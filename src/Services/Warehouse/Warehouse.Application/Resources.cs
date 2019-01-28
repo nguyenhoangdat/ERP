@@ -24,6 +24,9 @@ namespace Restmium.ERP.Services.Warehouse.Application
                 Values.Add("Receipt_EntityNotFoundException", "Receipt(Id={0}) not found!");
                 Values.Add("Receipt_Update_EntityNotFoundException", "Unable to update Receipt(Id={0}). Receipt not found!");
 
+                Values.Add("ReceiptItem_EntityNotFoundException", "Receipt.Item(ReceiptId={0}, WareId={1}) not found!");
+                Values.Add("ReceiptItem_Update_EntityNotFoundException", "Unable to update Receipt.Item(ReceiptId={0}, WareId={1}). Receipt.Item not found!");
+
                 Values.Add("Relocation_PositionEmptyException", "Unable to relocate Wares from Position(Id={0}). Position is empty!");
                 Values.Add("Relocation_PositionLoadCapacityException", "Unable to relocate Wares from Position(Id={0}) to Position(Id={1}). Load capacity exceeded!");
                 Values.Add("Relocation_PositionWareConflictException", "Unable to relocate Wares from Position(Id={0}) to Position(Id={1}). Positions store different Wares.");

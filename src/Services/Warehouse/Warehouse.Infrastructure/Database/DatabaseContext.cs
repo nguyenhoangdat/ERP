@@ -20,7 +20,7 @@ namespace Restmium.ERP.Services.Warehouse.Infrastructure.Database
         public DbSet<Position> Positions { get; set; }
         public DbSet<Section> Sections { get; set; }
         public DbSet<Receipt> Receipts { get; set; }
-        public DbSet<Receipt.Item> Items { get; set; }
+        public DbSet<Receipt.Item> ReceiptItems { get; set; }
         public DbSet<Ware> Wares { get; set; }
         public DbSet<Domain.Entities.Warehouse> Warehouses { get; set; }
 

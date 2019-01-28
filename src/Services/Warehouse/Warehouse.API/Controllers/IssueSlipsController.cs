@@ -43,6 +43,40 @@ namespace Warehouse.API.Controllers
             }
         }
 
+        // PUT: api/IssueSlips/5
+        [HttpPut("{id}")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
+        public async Task<ActionResult<Section>> PutIssueSlip(long id, IssueSlip issueSlip)
+        {
+            if (id != issueSlip.Id)
+            {
+                return this.BadRequest();
+            }
+
+            try
+            {
+                List<UpdateIssueSlipCommand.UpdateIssueSlipCommandModel.Item> items = new List<UpdateIssueSlipCommand.UpdateIssueSlipCommandModel.Item>();
+                foreach (IssueSlip.Item item in issueSlip.Items)
+                {
+                    items.Add(new UpdateIssueSlipCommand.UpdateIssueSlipCommandModel.Item(item.IssueSlipId, item.WareId, item.PositionId, item.RequestedUnits, item.IssuedUnits));
+                }
+
+                issueSlip = await this.Mediator.Send(new UpdateIssueSlipCommand(issueSlip.Id, issueSlip.OrderId, issueSlip.Name, issueSlip.UtcDispatchDate, issueSlip.UtcDeliveryDate, items));
+                return this.NoContent();
+            }
+            catch (EntityNotFoundException ex)
+            {
+                return this.NotFound(ex.Message);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
         // DELETE: api/ApiWithActions/5
         [HttpDelete("{id}")]
         [ProducesResponseType(200)]

@@ -43,6 +43,40 @@ namespace Warehouse.API.Controllers
             }
         }
 
+        // PUT: api/Receipts/5
+        [HttpPut("{id}")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
+        public async Task<ActionResult<Section>> PutReceipt(long id, Receipt receipt)
+        {
+            if (id != receipt.Id)
+            {
+                return this.BadRequest();
+            }
+
+            try
+            {
+                List<UpdateReceiptCommand.UpdateReceiptCommandModel.Item> items = new List<UpdateReceiptCommand.UpdateReceiptCommandModel.Item>();
+                foreach (Receipt.Item item in receipt.Items)
+                {
+                    items.Add(new UpdateReceiptCommand.UpdateReceiptCommandModel.Item(item.WareId, item.PositionId, item.ReceiptId, item.CountOrdered, item.CountReceived, item.UtcProcessed, item.EmployeeId));
+                }
+
+                receipt = await this.Mediator.Send(new UpdateReceiptCommand(receipt.Id, receipt.Name, receipt.UtcExpected, receipt.UtcReceived, items));
+                return this.NoContent();
+            }
+            catch (EntityNotFoundException ex)
+            {
+                return this.NotFound(ex.Message);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
         // DELETE: api/Receipts/5
         [HttpDelete("{id}")]
         [ProducesResponseType(200)]
