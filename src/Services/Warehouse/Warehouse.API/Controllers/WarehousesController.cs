@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Restmium.ERP.Services.Warehouse.Application.Commands;
 using Restmium.ERP.Services.Warehouse.Application.Models;
 using Restmium.ERP.Services.Warehouse.Domain.Exceptions;
+using Restmium.ERP.Services.Warehouse.Infrastructure.Database;
 using Entities = Restmium.ERP.Services.Warehouse.Domain.Entities;
 
 namespace Warehouse.API.Controllers
@@ -17,10 +18,12 @@ namespace Warehouse.API.Controllers
     public class WarehousesController : ControllerBase
     {
         protected IMediator Mediator { get; }
+        protected DatabaseContext DatabaseContext { get; } //TODO: Remove as soon as the problem with multiple warehouses is solved
 
-        public WarehousesController(IMediator mediator)
+        public WarehousesController(IMediator mediator, DatabaseContext context)
         {
             this.Mediator = mediator;
+            this.DatabaseContext = context;
         }
 
         // GET: api/Warehouses/5
@@ -48,9 +51,17 @@ namespace Warehouse.API.Controllers
         [HttpPost]
         [ProducesResponseType(201)]
         [ProducesResponseType(400)]
+        [ProducesResponseType(403)] //TODO: Warehouse RESTRICTION
         [ProducesResponseType(500)]
         public async Task<ActionResult<Entities.Warehouse>> PostWarehouse(Entities.Warehouse warehouse)
         {
+            //TODO: Warehouse RESTRICTION
+
+            if (this.DatabaseContext.Warehouses.Count() > 0)
+            {
+                return this.StatusCode(403);
+            }
+
             this.ModelState.Remove("Id");
             if (!this.ModelState.IsValid)
             {
