@@ -25,7 +25,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
             List<Receipt.Item> items = new List<Receipt.Item>();
             foreach (CreateReceiptCommand.CreateReceiptCommandModel.Item item in request.Model.Items)
             {
-                items.Add(new Receipt.Item(0, item.PositionId, item.WareId, item.CountOrdered, 0, 0));
+                items.Add(new Receipt.Item(0, null, item.WareId, item.CountOrdered, 0, 0));
             }
 
             Receipt receipt = this.DatabaseContext.Receipts.Add(new Receipt(0, request.Model.Name, request.Model.UtcExpected, items)).Entity;

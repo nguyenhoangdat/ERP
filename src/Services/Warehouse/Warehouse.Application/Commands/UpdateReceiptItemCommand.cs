@@ -10,14 +10,14 @@ namespace Restmium.ERP.Services.Warehouse.Application.Commands
         {
             this.Model = model;
         }
-        public UpdateReceiptItemCommand(int wareId, long positionId, long receiptId, int countOrdered, int countReceived, DateTime? utcProcessed, int employeeId)
+        public UpdateReceiptItemCommand(int wareId, long? positionId, long receiptId, int countOrdered, int countReceived, DateTime? utcProcessed, int employeeId)
             : this(new UpdateReceiptItemCommandModel(wareId, positionId, receiptId, countOrdered, countReceived, utcProcessed, employeeId)) { }
 
         public UpdateReceiptItemCommandModel Model { get; }
 
         public class UpdateReceiptItemCommandModel
         {
-            public UpdateReceiptItemCommandModel(int wareId, long positionId, long receiptId, int countOrdered, int countReceived, DateTime? utcProcessed, int employeeId)
+            public UpdateReceiptItemCommandModel(int wareId, long? positionId, long receiptId, int countOrdered, int countReceived, DateTime? utcProcessed, int employeeId)
             {
                 this.WareId = wareId;
                 this.PositionId = positionId;
@@ -29,7 +29,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Commands
             }
 
             public int WareId { get; }
-            public long PositionId { get; }
+            public long? PositionId { get; }
             public long ReceiptId { get; }
 
             public int CountOrdered { get; }

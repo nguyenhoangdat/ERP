@@ -1,5 +1,4 @@
 ﻿using Restmium.ERP.BuildingBlocks.Common.Entities;
-using Restmium.ERP.Services.Warehouse.Domain.Entities.Abstract;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -8,7 +7,7 @@ namespace Restmium.ERP.Services.Warehouse.Domain.Entities
 {
     public partial class StockTaking
     {
-        public class Item : WarePosition
+        public class Item : DatabaseEntity
         {
             public Item()
             {
@@ -27,6 +26,20 @@ namespace Restmium.ERP.Services.Warehouse.Domain.Entities
             {
                 this.UtcCounted = utcCounted;
             }
+
+            [Required]
+            public int WareId { get; set; }
+            public virtual Ware Ware { get; set; }
+
+            [Required]
+            public long PositionId { get; set; }
+            public virtual Position Position { get; set; }
+
+            /// <summary>
+            /// FK to Employees.API
+            /// </summary>
+            [Required]
+            public int EmployeeId { get; set; }
 
             [Required]
             public int StockTakingId { get; set; }

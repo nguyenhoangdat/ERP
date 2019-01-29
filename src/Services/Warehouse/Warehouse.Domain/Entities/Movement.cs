@@ -1,9 +1,9 @@
-﻿using Restmium.ERP.Services.Warehouse.Domain.Entities.Abstract;
+﻿using Restmium.ERP.BuildingBlocks.Common.Entities;
 using System.ComponentModel.DataAnnotations;
 
 namespace Restmium.ERP.Services.Warehouse.Domain.Entities
 {
-    public partial class Movement : WarePosition
+    public partial class Movement : DatabaseEntity
     {
         public Movement()
         {
@@ -29,6 +29,20 @@ namespace Restmium.ERP.Services.Warehouse.Domain.Entities
 
         [Required]
         public long Id { get; set; }
+
+        [Required]
+        public int WareId { get; set; }
+        public virtual Ware Ware { get; set; }
+
+        [Required]
+        public long PositionId { get; set; }
+        public virtual Position Position { get; set; }
+
+        /// <summary>
+        /// FK to Employees.API
+        /// </summary>
+        [Required]
+        public int EmployeeId { get; set; }
 
         [Required]
         public Direction MovementDirection { get; set; }
