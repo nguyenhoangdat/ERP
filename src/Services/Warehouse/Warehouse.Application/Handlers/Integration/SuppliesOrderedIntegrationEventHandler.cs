@@ -35,7 +35,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Integration
                 Ware ware = this.DatabaseContext.Wares.Where(x => x.ProductId == item.ProductId).FirstOrDefault();
                 if (ware == null)
                 {
-                    this.Logger.Log(LogLevel.Critical, Resources.Exceptions.Values["Ware_EntityNotFoundException"], item.ProductId);
+                    this.Logger.Log(LogLevel.Critical, string.Format(Resources.Exceptions.Values["ReceiptItem_Create_Ware_EntityNotFoundException"], item.ProductId, item.Count));
                 }
                 else
                 {
@@ -43,13 +43,11 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Integration
                 }
             }
 
-            //TODO: Create Receipt
+            // Create Receipt
             Receipt receipt = await this.Mediator.Send(new CreateReceiptCommand(@event.UtcExpected, items));
 
-            // WareId, Count
-            // DO NOT ASSIGN POSITIONS!!! - This need to be processed REAL-TIME!!!
-
-            throw new System.NotImplementedException();
+            // Publish DomainEven that the Receipt has been created
+            await this.Mediator.Publish(new ReceiptCreatedDomainEvent(receipt));
         }
     }
 }
