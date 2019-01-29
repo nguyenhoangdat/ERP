@@ -23,7 +23,7 @@ namespace Warehouse.API.Controllers
         }
 
         // PUT: api/StockTakingItems/5
-        [HttpPut("{id}")]
+        [HttpPut("{stockTakingId}/{positionId}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
