@@ -38,6 +38,11 @@ namespace Restmium.ERP.Services.Warehouse.Domain.Entities.Extensions
             return position.MaxWeight < ware.Weight * unitsTotal;
         }
 
+        public static int MaxLoadCapacity(this Position position, Ware ware)
+        {
+            return Convert.ToInt32(Math.Floor(position.MaxWeight / ware.Weight));
+        }
+
         public static bool HasSpaceCapacity(this Position position, int unitsTotal) => HasSpaceCapacity(position, position.GetWare(), unitsTotal);
 
         public static bool HasSpaceCapacity(this Position position, Ware ware, int unitsTotal)

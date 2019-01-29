@@ -10,9 +10,9 @@ using Entities = Restmium.ERP.Services.Warehouse.Domain.Entities;
 
 namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
 {
-    public class FindSectionInWarehouseCommandHandler : IRequestHandler<FindSectionsInWarehouseCommand, IEnumerable<Section>>
+    public class FindSectionsInWarehouseCommandHandler : IRequestHandler<FindSectionsInWarehouseCommand, IEnumerable<Section>>
     {
-        public FindSectionInWarehouseCommandHandler(DatabaseContext context)
+        public FindSectionsInWarehouseCommandHandler(DatabaseContext context)
         {
             this.DatabaseContext = context;
         }
