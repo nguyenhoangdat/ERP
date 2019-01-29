@@ -15,18 +15,36 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Integration
 {
     public class SuppliesOrderedIntegrationEventHandler : IIntegrationEventHandler<SuppliesOrderedIntegrationEvent>
     {
-        public SuppliesOrderedIntegrationEventHandler(DatabaseContext databaseContext, IMediator mediator)
+        public SuppliesOrderedIntegrationEventHandler(DatabaseContext databaseContext, ILogger<SuppliesOrderedIntegrationEventHandler> logger, IMediator mediator)
         {
             this.DatabaseContext = databaseContext;
+            this.Logger = logger;
             this.Mediator = mediator;
         }
 
         protected DatabaseContext DatabaseContext { get; }
+        ILogger<SuppliesOrderedIntegrationEventHandler> Logger { get; }
         protected IMediator Mediator { get; }
 
         public async Task Handle(SuppliesOrderedIntegrationEvent @event)
         {
+            // Create Receipt.Items without assigning positions
+            List<CreateReceiptCommand.CreateReceiptCommandModel.Item> items = new List<CreateReceiptCommand.CreateReceiptCommandModel.Item>();
+            foreach (SuppliesOrderedIntegrationEvent.SupplyItem item in @event.Items)
+            {
+                Ware ware = this.DatabaseContext.Wares.Where(x => x.ProductId == item.ProductId).FirstOrDefault();
+                if (ware == null)
+                {
+                    this.Logger.Log(LogLevel.Critical, Resources.Exceptions.Values["Ware_EntityNotFoundException"], item.ProductId);
+                }
+                else
+                {
+                    items.Add(new CreateReceiptCommand.CreateReceiptCommandModel.Item(ware.Id, item.Count));
+                }
+            }
+
             //TODO: Create Receipt
+            Receipt receipt = await this.Mediator.Send(new CreateReceiptCommand(@event.UtcExpected, items));
 
             // WareId, Count
             // DO NOT ASSIGN POSITIONS!!! - This need to be processed REAL-TIME!!!

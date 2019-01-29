@@ -64,7 +64,7 @@ namespace Warehouse.API.Controllers
                     items.Add(new UpdateReceiptCommand.UpdateReceiptCommandModel.Item(item.WareId, item.PositionId, item.ReceiptId, item.CountOrdered, item.CountReceived, item.UtcProcessed, item.EmployeeId));
                 }
 
-                receipt = await this.Mediator.Send(new UpdateReceiptCommand(receipt.Id, receipt.Name, receipt.UtcExpected, receipt.UtcReceived, items));
+                receipt = await this.Mediator.Send(new UpdateReceiptCommand(receipt.Id, receipt.UtcExpected, receipt.UtcReceived, items));
                 return this.NoContent();
             }
             catch (EntityNotFoundException ex)

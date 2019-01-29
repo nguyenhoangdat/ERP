@@ -11,21 +11,19 @@ namespace Restmium.ERP.Services.Warehouse.Application.Commands
         {
             this.Model = model;
         }
-        public CreateReceiptCommand(string name, DateTime utcExpected, List<CreateReceiptCommandModel.Item> items)
-            : this(new CreateReceiptCommandModel(name, utcExpected, items)) { }
+        public CreateReceiptCommand(DateTime utcExpected, List<CreateReceiptCommandModel.Item> items)
+            : this(new CreateReceiptCommandModel(utcExpected, items)) { }
 
         public CreateReceiptCommandModel Model { get; }
 
         public class CreateReceiptCommandModel
         {
-            public CreateReceiptCommandModel(string name, DateTime utcExpected, List<Item> items)
+            public CreateReceiptCommandModel(DateTime utcExpected, List<Item> items)
             {
-                this.Name = name;
                 this.UtcExpected = utcExpected;
                 this.Items = items;
             }
 
-            public string Name { get; }
             public DateTime UtcExpected { get; }
             public List<Item> Items { get; }
 

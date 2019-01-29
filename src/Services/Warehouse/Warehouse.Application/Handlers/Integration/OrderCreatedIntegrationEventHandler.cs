@@ -47,8 +47,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Integration
             }
 
             // Create IssueSlip
-            string name = ""; //TODO: Add IssueSlip name
-            IssueSlip issueSlip = await this.Mediator.Send(new CreateIssueSlipCommand(name, @event.OrderId, @event.UtcDispatchDate, @event.UtcDeliveryDate, modelItems));
+            IssueSlip issueSlip = await this.Mediator.Send(new CreateIssueSlipCommand(@event.OrderId, @event.UtcDispatchDate, @event.UtcDeliveryDate, modelItems));
         }
 
         protected bool IsOrderValid(List<OrderCreatedIntegrationEvent.OrderItem> items)

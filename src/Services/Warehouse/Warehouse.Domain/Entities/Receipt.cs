@@ -11,29 +11,26 @@ namespace Restmium.ERP.Services.Warehouse.Domain.Entities
         {
             this.Items = new HashSet<Item>();
         }
-        public Receipt(long id, string name, DateTime utcExpected) : this()
+        protected Receipt(long id, DateTime utcExpected) : this()
         {
             this.Id = id;
-            this.Name = name;
             this.UtcExpected = utcExpected;
         }
-        public Receipt(long id, string name, DateTime utcExpected, ICollection<Item> items) : this(id, name, utcExpected)
+        public Receipt(long id, DateTime utcExpected, ICollection<Item> items) : this(id, utcExpected)
         {
             this.Items = items;
         }
-        public Receipt(long id, string name, DateTime utcExpected, DateTime? utcReceived) : this(id, name, utcExpected)
+        public Receipt(long id, DateTime utcExpected, DateTime? utcReceived) : this(id, utcExpected)
         {
             this.UtcReceived = utcReceived;
         }
-        public Receipt(long id, string name, DateTime utcExpected, DateTime? utcReceived, ICollection<Item> items) : this(id, name, utcExpected, utcReceived)
+        public Receipt(long id, DateTime utcExpected, DateTime? utcReceived, ICollection<Item> items) : this(id, utcExpected, utcReceived)
         {
             this.Items = items;
         }
 
         [Required]
         public long Id { get; set; }
-        [Required]
-        public string Name { get; set; }
 
         [Required]
         public DateTime UtcExpected { get; set; }

@@ -11,17 +11,16 @@ namespace Restmium.ERP.Services.Warehouse.Application.Commands
         {
             this.Model = model;
         }
-        public UpdateIssueSlipCommand(long id, long orderId, string name, DateTime utcDispatchDate, DateTime utcDeliveryDate, List<UpdateIssueSlipCommand.UpdateIssueSlipCommandModel.Item> items)
-            : this(new UpdateIssueSlipCommandModel(id, orderId, name, utcDispatchDate, utcDeliveryDate, items)) { }
+        public UpdateIssueSlipCommand(long id, long orderId, DateTime utcDispatchDate, DateTime utcDeliveryDate, List<UpdateIssueSlipCommand.UpdateIssueSlipCommandModel.Item> items)
+            : this(new UpdateIssueSlipCommandModel(id, orderId, utcDispatchDate, utcDeliveryDate, items)) { }
 
         public UpdateIssueSlipCommandModel Model { get; }
 
         public class UpdateIssueSlipCommandModel
         {
-            public UpdateIssueSlipCommandModel(long id, long orderId, string name, DateTime utcDispatchDate, DateTime utcDeliveryDate, List<Item> items)
+            public UpdateIssueSlipCommandModel(long id, long orderId, DateTime utcDispatchDate, DateTime utcDeliveryDate, List<Item> items)
             {
                 this.Id = id;
-                this.Name = name;
                 this.OrderId = orderId;
                 this.UtcDispatchDate = utcDispatchDate;
                 this.UtcDeliveryDate = utcDeliveryDate;
@@ -29,7 +28,6 @@ namespace Restmium.ERP.Services.Warehouse.Application.Commands
             }
 
             public long Id { get; }
-            public string Name { get; }
             public long OrderId { get; }
             public DateTime UtcDispatchDate { get; }
             public DateTime UtcDeliveryDate { get; }
@@ -47,10 +45,8 @@ namespace Restmium.ERP.Services.Warehouse.Application.Commands
                     this.IssuedUnits = issuedUnits;
                     this.EmployeeId = employeeId;
                 }
-                public Item(long issueSlipId, int wareId, long positionId, int requestedUnits, int issuedUnits) : this(issueSlipId, wareId, positionId, requestedUnits, issuedUnits, 0)
-                {
-
-                }
+                public Item(long issueSlipId, int wareId, long positionId, int requestedUnits, int issuedUnits)
+                    : this(issueSlipId, wareId, positionId, requestedUnits, issuedUnits, 0) { }
 
                 public long IssueSlipId { get; }
                 public int WareId { get; }

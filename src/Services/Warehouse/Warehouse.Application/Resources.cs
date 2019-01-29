@@ -54,5 +54,14 @@ namespace Restmium.ERP.Services.Warehouse.Application
 
             public static Dictionary<string, string> Values { get; } = new Dictionary<string, string>();
         }
+        internal static class Naming
+        {
+            static Naming()
+            {
+                Values.Add("", "");
+            }
+
+            public static Dictionary<string, string> Values { get; } = new Dictionary<string, string>();
+        }
     }
 }

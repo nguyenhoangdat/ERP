@@ -35,7 +35,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
             }
 
             // Create IssueSlip and save it to database
-            IssueSlip issueSlip = this.DatabaseContext.IssueSlips.Add(new IssueSlip(request.Model.Name, request.Model.OrderId, request.Model.UtcDispatchDate, request.Model.UtcDeliveryDate, items)).Entity;
+            IssueSlip issueSlip = this.DatabaseContext.IssueSlips.Add(new IssueSlip(request.Model.OrderId, request.Model.UtcDispatchDate, request.Model.UtcDeliveryDate, items)).Entity;
             await this.DatabaseContext.SaveChangesAsync(cancellationToken);
 
             // Publish DomainEvent that the IssueSlip has been created

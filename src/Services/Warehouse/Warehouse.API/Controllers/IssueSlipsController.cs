@@ -64,7 +64,7 @@ namespace Warehouse.API.Controllers
                     items.Add(new UpdateIssueSlipCommand.UpdateIssueSlipCommandModel.Item(item.IssueSlipId, item.WareId, item.PositionId, item.RequestedUnits, item.IssuedUnits));
                 }
 
-                issueSlip = await this.Mediator.Send(new UpdateIssueSlipCommand(issueSlip.Id, issueSlip.OrderId, issueSlip.Name, issueSlip.UtcDispatchDate, issueSlip.UtcDeliveryDate, items));
+                issueSlip = await this.Mediator.Send(new UpdateIssueSlipCommand(issueSlip.Id, issueSlip.OrderId, issueSlip.UtcDispatchDate, issueSlip.UtcDeliveryDate, items));
                 return this.NoContent();
             }
             catch (EntityNotFoundException ex)

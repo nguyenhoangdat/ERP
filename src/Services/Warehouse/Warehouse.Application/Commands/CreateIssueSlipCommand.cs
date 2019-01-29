@@ -11,23 +11,21 @@ namespace Restmium.ERP.Services.Warehouse.Application.Commands
         {
             this.Model = model;
         }
-        public CreateIssueSlipCommand(string name, long orderId, DateTime utcDispatchDate, DateTime utcDeliveryDate, List<CreateIssueSlipCommandModel.Item> items)
-            : this(new CreateIssueSlipCommandModel(name, orderId, utcDispatchDate, utcDeliveryDate, items)) { }
+        public CreateIssueSlipCommand(long orderId, DateTime utcDispatchDate, DateTime utcDeliveryDate, List<CreateIssueSlipCommandModel.Item> items)
+            : this(new CreateIssueSlipCommandModel(orderId, utcDispatchDate, utcDeliveryDate, items)) { }
 
         public CreateIssueSlipCommandModel Model { get; }
 
         public class CreateIssueSlipCommandModel
         {
-            public CreateIssueSlipCommandModel(string name, long orderId, DateTime utcDispatchDate, DateTime utcDeliveryDate, List<Item> items)
+            public CreateIssueSlipCommandModel(long orderId, DateTime utcDispatchDate, DateTime utcDeliveryDate, List<Item> items)
             {
-                this.Name = name;
                 this.OrderId = orderId;
                 this.UtcDispatchDate = utcDispatchDate;
                 this.UtcDeliveryDate = utcDeliveryDate;
                 this.Items = items;
             }
 
-            public string Name { get; }
             public long OrderId { get; }
             public DateTime UtcDispatchDate { get; }
             public DateTime UtcDeliveryDate { get; }

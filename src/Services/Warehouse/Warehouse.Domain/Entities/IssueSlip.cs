@@ -12,23 +12,19 @@ namespace Restmium.ERP.Services.Warehouse.Domain.Entities
         {
             this.Items = new HashSet<Item>();
         }
-        public IssueSlip(string name, long orderId, DateTime utcDispatchDate, DateTime utcDeliveryDate) : this()
+        public IssueSlip(long orderId, DateTime utcDispatchDate, DateTime utcDeliveryDate) : this()
         {
-            this.Name = name;
             this.OrderId = orderId;
             this.UtcDispatchDate = utcDispatchDate;
             this.UtcDeliveryDate = utcDeliveryDate;
         }
-        public IssueSlip(string name, long orderId, DateTime utcDispatchDate, DateTime utcDeliveryDate, ICollection<Item> items) : this(name, orderId, utcDispatchDate, utcDeliveryDate)
+        public IssueSlip(long orderId, DateTime utcDispatchDate, DateTime utcDeliveryDate, ICollection<Item> items) : this(orderId, utcDispatchDate, utcDeliveryDate)
         {
             this.Items = items;
         }
 
         [Required]
         public long Id { get; set; }
-
-        [Required]
-        public string Name { get; set; }
 
         [Required]
         public long OrderId { get; set; }
