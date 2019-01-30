@@ -92,5 +92,25 @@ namespace Warehouse.API.Controllers
                 throw;
             }
         }
+
+        [HttpPost("PlaceReceiptItemAtPosition/{receiptId}/{wareId}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
+        public async Task<ActionResult<IEnumerable<PositionCountDTO>>> PlaceReceiptItemAtPosition(long receiptId, int wareId, PositionCountDTO positionCount)
+        {
+            try
+            {
+                return this.Ok(await this.Mediator.Send(new StoreReceiptItemAtPositionCommand(receiptId, wareId, positionCount)));
+            }
+            catch (EntityNotFoundException ex)
+            {
+                return this.NotFound(ex.Message);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
     }
 }

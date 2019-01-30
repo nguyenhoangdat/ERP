@@ -14,12 +14,14 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
 {
     public class FindPositionsForReceiptItemCommandHandler : IRequestHandler<FindPositionsForReceiptItemCommand, IEnumerable<PositionCountDTO>>
     {
-        public FindPositionsForReceiptItemCommandHandler(DatabaseContext context)
+        public FindPositionsForReceiptItemCommandHandler(DatabaseContext context, IMediator mediator)
         {
             this.DatabaseContext = context;
+            this.Mediator = mediator;
         }
 
         protected DatabaseContext DatabaseContext { get; }
+        protected IMediator Mediator { get; }
 
         public async Task<IEnumerable<PositionCountDTO>> Handle(FindPositionsForReceiptItemCommand request, CancellationToken cancellationToken)
         {
@@ -47,6 +49,9 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
 
                     outputDTOs.Add(new PositionCountDTO(position, possibleToPlace));
                     itemsToPlace -= possibleToPlace;
+
+                    // Update Receipt.Item (just PositionId)
+                    await this.Mediator.Send(new UpdateReceiptItemCommand(item.WareId, position.Id, item.ReceiptId, item.CountOrdered, item.CountOrdered, item.UtcProcessed, item.EmployeeId));
 
                     if (itemsToPlace == 0)
                     {
