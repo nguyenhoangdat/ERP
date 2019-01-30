@@ -77,7 +77,7 @@ namespace Warehouse.API.Controllers
             }
         }
 
-        // DELETE: api/ApiWithActions/5
+        // DELETE: api/IssueSlips/5
         [HttpDelete("{id}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
@@ -98,6 +98,7 @@ namespace Warehouse.API.Controllers
             }
         }
 
+        // GET: api/IssueSlips/NextIssueSlipToProcessInSection/1
         [HttpGet("NextIssueSlipToProcessInSection/{id}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
@@ -111,6 +112,22 @@ namespace Warehouse.API.Controllers
             catch (EntityNotFoundException ex)
             {
                 return this.NotFound(ex.Message);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        // GET: api/IssueSlips/IssueSlipsForOrderWithId/5
+        [HttpGet("IssueSlipsForOrderWithId/{id}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(500)]
+        public async Task<ActionResult<IEnumerable<IssueSlip>>> GetIssueSlipsForOrderWithId(long id)
+        {
+            try
+            {
+                return this.Ok(await this.Mediator.Send(new FindIssueSlipsByOrderIdCommand(id)));
             }
             catch (Exception)
             {

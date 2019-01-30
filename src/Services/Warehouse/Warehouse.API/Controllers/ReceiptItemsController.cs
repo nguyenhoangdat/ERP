@@ -6,6 +6,7 @@ using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Restmium.ERP.Services.Warehouse.Application.Commands;
+using Restmium.ERP.Services.Warehouse.Application.Models;
 using Restmium.ERP.Services.Warehouse.Domain.Entities;
 using Restmium.ERP.Services.Warehouse.Domain.Exceptions;
 
@@ -61,6 +62,26 @@ namespace Warehouse.API.Controllers
             {
                 item = await this.Mediator.Send(new UpdateReceiptItemCommand(item.WareId, item.PositionId, item.ReceiptId, item.CountOrdered, item.CountReceived, item.UtcProcessed, item.EmployeeId));
                 return this.NoContent();
+            }
+            catch (EntityNotFoundException ex)
+            {
+                return this.NotFound(ex.Message);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        [HttpGet("FindPositionsForReceiptItem/{receiptId}/{wareId}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
+        public async Task<ActionResult<IEnumerable<PositionCountDTO>>> FindPositionsForReceiptItem(long receiptId, int wareId)
+        {
+            try
+            {
+                return this.Ok(await this.Mediator.Send(new FindPositionsForReceiptItemCommand(receiptId, wareId)));
             }
             catch (EntityNotFoundException ex)
             {

@@ -25,6 +25,7 @@ namespace Restmium.ERP.Services.Warehouse.Application
                 Values.Add("Receipt_Update_EntityNotFoundException", "Unable to update Receipt(Id={0}). Receipt not found!");
 
                 Values.Add("ReceiptItem_Create_Ware_EntityNotFoundException", "Unable to create Receipt.Item(Ware(ProductId={0}), Units={1}). Ware not found!");
+                Values.Add("ReceiptItem_Create_WarehouseFullException", "Unable to process Receipt.Item(ReceiptId={0}, WareId={1}). Warehouse is full!");
                 Values.Add("ReceiptItem_EntityNotFoundException", "Receipt.Item(ReceiptId={0}, WareId={1}) not found!");
                 Values.Add("ReceiptItem_Update_EntityNotFoundException", "Unable to update Receipt.Item(ReceiptId={0}, WareId={1}). Receipt.Item not found!");
 
