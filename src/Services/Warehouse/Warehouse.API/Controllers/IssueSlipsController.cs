@@ -134,5 +134,21 @@ namespace Warehouse.API.Controllers
                 throw;
             }
         }
+
+        // GET: api/IssueSlips/IssueSlipsForOrderWithIdInWarehouse/5
+        [HttpGet("IssueSlipsForOrderWithIdInWarehouse/{id}/{warehouseId}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(500)]
+        public async Task<ActionResult<IEnumerable<IssueSlip>>> GetIssueSlipsForOrderWithIdInWarehouse(long id, int warehouseId)
+        {
+            try
+            {
+                return this.Ok(await this.Mediator.Send(new FindIssueSlipsByOrderIdAndWarehouseIdCommand(id, warehouseId)));
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
     }
 }
