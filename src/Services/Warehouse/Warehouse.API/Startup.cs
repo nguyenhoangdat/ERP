@@ -49,7 +49,6 @@ namespace Restmium.ERP.Services.Warehouse.API
                 });
             });
 
-            services.AddTransient(typeof(IPipelineBehavior<,>), typeof(RequestPreProcessorBehavior<,>));
             services.AddMediatR(typeof(CreateWareCommand).GetTypeInfo().Assembly);
 
             #region EventBus
