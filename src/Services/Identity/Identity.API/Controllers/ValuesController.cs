@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Identity.API.Controllers
+namespace Restmium.ERP.Services.Identity.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]

@@ -11,7 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
-namespace Identity.API
+namespace Restmium.ERP.Services.Identity.API
 {
     public class Startup
     {
