@@ -4,13 +4,16 @@
     <TargetFramework>netcoreapp2.2</TargetFramework>
     <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
     <RootNamespace>Restmium.ERP.Services.Identity.API</RootNamespace>
+    <UserSecretsId>d2d06d4f-b1dc-4489-b25a-908881b91b45</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="IdentityServer4" Version="2.3.2" />
     <PackageReference Include="IdentityServer4.EntityFramework" Version="2.3.2" />
+    <PackageReference Include="IdentityServer4.EntityFramework.Storage" Version="2.3.1" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="2.2.1" />
   </ItemGroup>
 
 </Project>

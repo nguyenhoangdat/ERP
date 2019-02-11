@@ -15,17 +15,27 @@ namespace Restmium.ERP.Services.Identity.API
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public Startup(IConfiguration configuration, IHostingEnvironment environment)
         {
-            Configuration = configuration;
+            this.Configuration = configuration;
+            this.Environment = environment;
         }
 
         public IConfiguration Configuration { get; }
+        public IHostingEnvironment Environment { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+
+            services.AddIdentityServer()
+                .AddTestUsers(TestUsers.Users)
+                // Uncomment for local debugging
+                //.AddSigningCredential("CN=localhost:5000") // New-SelfSignedCertificate -DnsName "localhost:5000" -CertStoreLocation "cert:\LocalMachine\My"
+                .AddInMemoryIdentityResources(Config.GetIdentityResources())
+                .AddInMemoryApiResources(Config.GetApis())
+                .AddInMemoryClients(Config.GetClients());
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
