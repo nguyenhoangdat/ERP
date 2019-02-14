@@ -45,6 +45,22 @@ namespace Warehouse.API.Controllers
             }
         }
 
+        // GET: api/ReceiptItems/1/20
+        [HttpGet("All/{page}/{itemsPerPage}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(500)]
+        public async Task<ActionResult<PageDTO<Receipt.Item>>> GetAll(int page, int itemsPerPage)
+        {
+            try
+            {
+                return this.Ok(await this.Mediator.Send(new FindReceiptItemsOnPageCommand(page, itemsPerPage)));
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
         // PUT: api/ReceiptItems/5
         [HttpPut("{receiptId}/{wareId}")]
         [ProducesResponseType(204)]

@@ -1,0 +1,29 @@
+﻿using MediatR;
+using Restmium.ERP.Services.Warehouse.Application.Commands;
+using Restmium.ERP.Services.Warehouse.Application.Models;
+using Restmium.ERP.Services.Warehouse.Domain.Entities;
+using Restmium.ERP.Services.Warehouse.Infrastructure.Database;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+
+namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
+{
+    public class FindPositionsOnPageCommandHandler : IRequestHandler<FindPositionsOnPageCommand, PageDTO<Position>>
+    {
+        protected DatabaseContext DatabaseContext { get; set; }
+
+        public FindPositionsOnPageCommandHandler(DatabaseContext context)
+        {
+            this.DatabaseContext = context;
+        }
+
+        public async Task<PageDTO<Position>> Handle(FindPositionsOnPageCommand request, CancellationToken cancellationToken)
+        {
+            return new PageDTO<Position>(
+                request.Page,
+                request.ItemsPerPage,
+                this.DatabaseContext.Positions.Skip(request.ItemsPerPage * --request.Page).Take(request.ItemsPerPage).AsEnumerable());
+        }
+    }
+}

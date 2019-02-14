@@ -44,6 +44,22 @@ namespace Warehouse.API.Controllers
             }
         }
 
+        // GET: api/Wares/1/20
+        [HttpGet("All/{page}/{itemsPerPage}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(500)]
+        public async Task<ActionResult<PageDTO<Ware>>> GetAll(int page, int itemsPerPage)
+        {
+            try
+            {
+                return this.Ok(await this.Mediator.Send(new FindWaresOnPageCommand(page, itemsPerPage)));
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
         // POST: api/Wares
         [HttpPost]
         [ProducesResponseType(201)]

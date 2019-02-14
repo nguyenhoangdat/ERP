@@ -6,6 +6,7 @@ using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Restmium.ERP.Services.Warehouse.Application.Commands;
+using Restmium.ERP.Services.Warehouse.Application.Models;
 using Restmium.ERP.Services.Warehouse.Domain.Entities;
 using Restmium.ERP.Services.Warehouse.Domain.Exceptions;
 
@@ -36,6 +37,22 @@ namespace Warehouse.API.Controllers
             catch (EntityNotFoundException ex)
             {
                 return this.NotFound(ex.Message);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        // GET: api/StockTakings/1/20
+        [HttpGet("All/{page}/{itemsPerPage}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(500)]
+        public async Task<ActionResult<PageDTO<StockTaking>>> GetAll(int page, int itemsPerPage)
+        {
+            try
+            {
+                return this.Ok(await this.Mediator.Send(new FindStockTakingsOnPageCommand(page, itemsPerPage)));
             }
             catch (Exception)
             {
