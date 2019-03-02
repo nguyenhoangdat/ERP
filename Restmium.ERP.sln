@@ -53,9 +53,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ApiGateways", "ApiGateways"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApiGatewayBase", "src\ApiGateways\ApiGatewayBase\ApiGatewayBase.csproj", "{4C4951CE-B269-4247-AEFF-138DE26F6E34}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Identity", "Identity", "{293B473B-D570-4C50-9A47-7DFC3543F75E}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Identity - Implement", "Identity - Implement", "{293B473B-D570-4C50-9A47-7DFC3543F75E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Identity.API", "src\Services\Identity\Identity.API\Identity.API.csproj", "{CD59EBB9-C9E3-49C3-AD1B-0456F24AD544}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Identity.API", "src\Services\Identity\Identity.API\Identity.API.csproj", "{CD59EBB9-C9E3-49C3-AD1B-0456F24AD544}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Restmium.ERP.Integration", "src\BuildingBlocks\Restmium.ERP.Integration\Restmium.ERP.Integration.csproj", "{98724B82-7E27-4EBB-8C6D-C62366B23A4F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -131,6 +133,10 @@ Global
 		{CD59EBB9-C9E3-49C3-AD1B-0456F24AD544}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CD59EBB9-C9E3-49C3-AD1B-0456F24AD544}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CD59EBB9-C9E3-49C3-AD1B-0456F24AD544}.Release|Any CPU.Build.0 = Release|Any CPU
+		{98724B82-7E27-4EBB-8C6D-C62366B23A4F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{98724B82-7E27-4EBB-8C6D-C62366B23A4F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{98724B82-7E27-4EBB-8C6D-C62366B23A4F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{98724B82-7E27-4EBB-8C6D-C62366B23A4F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -161,6 +167,7 @@ Global
 		{4C4951CE-B269-4247-AEFF-138DE26F6E34} = {DCB03EF7-EECB-4B2B-9638-095FA1068ED7}
 		{293B473B-D570-4C50-9A47-7DFC3543F75E} = {41C5CA4E-A350-4AC4-9CB7-3C052964E2FC}
 		{CD59EBB9-C9E3-49C3-AD1B-0456F24AD544} = {293B473B-D570-4C50-9A47-7DFC3543F75E}
+		{98724B82-7E27-4EBB-8C6D-C62366B23A4F} = {70866098-2614-4369-A475-EF00F9178EA9}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {EBCECFB2-5169-4290-A00D-41924EF592A6}

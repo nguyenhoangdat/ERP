@@ -1,12 +1,16 @@
 ﻿using Restmium.ERP.BuildingBlocks.EventBus.Events;
 
-namespace Restmium.ERP.Services.Warehouse.Integration.Events
+namespace Restmium.ERP.Integration.Warehouse
 {
     /// <summary>
-    /// Event produced by Warehouse.API
+    /// Integration event produced by Warehouse.API when availability of ware is changed
     /// </summary>
     public class WareAvailabilityChangedIntegrationEvent : IntegrationEvent
     {
+        public WareAvailabilityChangedIntegrationEvent()
+        {
+
+        }
         public WareAvailabilityChangedIntegrationEvent(int productId, int units) : base()
         {
             this.ProductId = productId;

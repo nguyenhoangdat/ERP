@@ -2,10 +2,10 @@
 using System;
 using System.Collections.Generic;
 
-namespace Restmium.ERP.Services.Warehouse.Integration.Events
+namespace Restmium.ERP.Integration.Warehouse
 {
     /// <summary>
-    /// Event produced by Warehouse.API
+    /// Integration event produced by Warehouse.API when Issue Slip is created
     /// </summary>
     public class IssueSlipCreatedIntegrationEvent : IntegrationEvent
     {

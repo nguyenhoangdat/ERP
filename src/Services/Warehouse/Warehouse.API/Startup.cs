@@ -10,6 +10,8 @@ using Microsoft.Extensions.Logging;
 using Restmium.ERP.BuildingBlocks.EventBus;
 using Restmium.ERP.BuildingBlocks.EventBus.Abstractions;
 using Restmium.ERP.BuildingBlocks.EventBusServiceBus;
+using Restmium.ERP.Integration.Catalog;
+using Restmium.ERP.Integration.Supply;
 using Restmium.ERP.Services.Warehouse.Application.Commands;
 using Restmium.ERP.Services.Warehouse.Application.Handlers.Integration;
 using Restmium.ERP.Services.Warehouse.Infrastructure.Database;
@@ -130,8 +132,8 @@ namespace Restmium.ERP.Services.Warehouse.API
 
             //TODO: Check
             // Do I need Loggers? - Ex. when Entity is not found
-            services.AddTransient<OrderCreatedIntegrationEventHandler>();
-            services.AddTransient<ProductAddedIntegrationEventHandler>();
+            services.AddTransient<OrderCreatedIntegrationEventHandler>(); //TODO: Check name
+            services.AddTransient<ProductCreatedIntegrationEventHandler>();
             services.AddTransient<ProductRemovedIntegrationEventHandler>();
             services.AddTransient<ProductRenamedIntegrationEventHandler>();
             services.AddTransient<SuppliesOrderedIntegrationEventHandler>();
@@ -141,8 +143,9 @@ namespace Restmium.ERP.Services.Warehouse.API
             IEventBus eventBus = app.ApplicationServices.GetRequiredService<IEventBus>();
 
             //TODO: Add missing subscriptions
-            eventBus.Subscribe<ProductAddedIntegrationEvent, ProductAddedIntegrationEventHandler>();
+            eventBus.Subscribe<ProductCreatedIntegrationEvent, ProductCreatedIntegrationEventHandler>();
             eventBus.Subscribe<ProductRemovedIntegrationEvent, ProductRemovedIntegrationEventHandler>();
+            eventBus.Subscribe<ProductRenamedIntegrationEvent, ProductRenamedIntegrationEventHandler>();
             eventBus.Subscribe<SuppliesOrderedIntegrationEvent, SuppliesOrderedIntegrationEventHandler>();
         }
         #endregion

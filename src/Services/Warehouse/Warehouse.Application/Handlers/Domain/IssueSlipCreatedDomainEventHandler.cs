@@ -1,8 +1,8 @@
 ﻿using MediatR;
 using Restmium.ERP.BuildingBlocks.EventBus.Abstractions;
+using Restmium.ERP.Integration.Warehouse;
 using Restmium.ERP.Services.Warehouse.Domain.Entities;
 using Restmium.ERP.Services.Warehouse.Domain.Events;
-using Restmium.ERP.Services.Warehouse.Integration.Events;
 using System.Threading;
 using System.Threading.Tasks;
 

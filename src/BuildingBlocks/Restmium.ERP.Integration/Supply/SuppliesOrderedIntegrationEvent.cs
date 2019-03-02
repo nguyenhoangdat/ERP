@@ -2,12 +2,8 @@
 using System;
 using System.Collections.Generic;
 
-namespace Restmium.ERP.Services.Warehouse.Integration.Events
+namespace Restmium.ERP.Integration.Supply
 {
-    /// <summary>
-    /// Integration Event created by Suppliers.API.
-    /// Used for creating a Receipt for specified Warehouse
-    /// </summary>
     public class SuppliesOrderedIntegrationEvent : IntegrationEvent
     {
         public int WarehouseId { get; }
