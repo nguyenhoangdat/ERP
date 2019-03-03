@@ -1,7 +1,7 @@
 # ERP
 Modular ERP application based on Microservices and ASP.NET Core
 
-## Tools
+## Used Packages
 - Entity Framework Core
 - Azure Service Bus (Messaging)
 - MediatR (CQRS)
