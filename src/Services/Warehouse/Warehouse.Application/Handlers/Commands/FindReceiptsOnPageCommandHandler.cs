@@ -20,10 +20,13 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
 
         public async Task<PageDTO<Receipt>> Handle(FindReceiptsOnPageCommand request, CancellationToken cancellationToken)
         {
+            IQueryable<Receipt> receipts = this.DatabaseContext.Receipts.Where(x => x.UtcMovedToBin == null);
+
             return new PageDTO<Receipt>(
                 request.Page,
                 request.ItemsPerPage,
-                this.DatabaseContext.Receipts.Skip(request.ItemsPerPage * --request.Page).Take(request.ItemsPerPage).AsEnumerable());
+                receipts.Count(),
+                receipts.Skip(request.ItemsPerPage * --request.Page).Take(request.ItemsPerPage).AsEnumerable());
         }
     }
 }

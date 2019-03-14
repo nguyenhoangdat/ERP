@@ -20,10 +20,13 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
 
         public async Task<PageDTO<StockTaking>> Handle(FindStockTakingsOnPageCommand request, CancellationToken cancellationToken)
         {
+            IQueryable<StockTaking> stockTakings = this.DatabaseContext.StockTakings.Where(x => x.UtcMovedToBin == null);
+
             return new PageDTO<StockTaking>(
                 request.Page,
                 request.ItemsPerPage,
-                this.DatabaseContext.StockTakings.Skip(request.ItemsPerPage * --request.Page).Take(request.ItemsPerPage).AsEnumerable());
+                stockTakings.Count(),
+                stockTakings.Skip(request.ItemsPerPage * --request.Page).Take(request.ItemsPerPage).AsEnumerable());
         }
     }
 }

@@ -20,10 +20,13 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
 
         public async Task<PageDTO<Section>> Handle(FindSectionsOnPageCommand request, CancellationToken cancellationToken)
         {
+            IQueryable<Section> sections = this.DatabaseContext.Sections.Where(x => x.UtcMovedToBin == null);
+
             return new PageDTO<Section>(
                 request.Page,
                 request.ItemsPerPage,
-                this.DatabaseContext.Sections.Skip(request.ItemsPerPage * --request.Page).Take(request.ItemsPerPage).AsEnumerable());
+                sections.Count(),
+                sections.Skip(request.ItemsPerPage * --request.Page).Take(request.ItemsPerPage).AsEnumerable());
         }
     }
 }

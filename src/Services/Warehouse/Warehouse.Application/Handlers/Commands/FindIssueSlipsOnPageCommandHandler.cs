@@ -20,10 +20,13 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
 
         public async Task<PageDTO<IssueSlip>> Handle(FindIssueSlipsOnPageCommand request, CancellationToken cancellationToken)
         {
+            IQueryable<IssueSlip> issueSlips = this.DatabaseContext.IssueSlips.Where(x => x.UtcMovedToBin == null);
+
             return new PageDTO<IssueSlip>(
                 request.Page,
                 request.ItemsPerPage,
-                this.DatabaseContext.IssueSlips.Skip(request.ItemsPerPage * --request.Page).Take(request.ItemsPerPage).AsEnumerable());
+                issueSlips.Count(),
+                issueSlips.Skip(request.ItemsPerPage * --request.Page).Take(request.ItemsPerPage).AsEnumerable());
         }
     }
 }

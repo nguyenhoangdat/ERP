@@ -20,10 +20,13 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
 
         public async Task<PageDTO<Position>> Handle(FindPositionsOnPageCommand request, CancellationToken cancellationToken)
         {
+            IQueryable<Position> positions = this.DatabaseContext.Positions.Where(x => x.UtcMovedToBin == null);
+
             return new PageDTO<Position>(
                 request.Page,
                 request.ItemsPerPage,
-                this.DatabaseContext.Positions.Skip(request.ItemsPerPage * --request.Page).Take(request.ItemsPerPage).AsEnumerable());
+                positions.Count(),
+                positions.Skip(request.ItemsPerPage * --request.Page).Take(request.ItemsPerPage).AsEnumerable());
         }
     }
 }

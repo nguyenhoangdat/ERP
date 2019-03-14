@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Restmium.ERP.Services.Warehouse.Application.Commands;
 using Restmium.ERP.Services.Warehouse.Application.Models;
+using Restmium.ERP.Services.Warehouse.Domain.Entities;
 using Restmium.ERP.Services.Warehouse.Infrastructure.Database;
 using System.Linq;
 using System.Threading;
@@ -18,12 +19,15 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
             this.DatabaseContext = context;
         }
 
-        public async Task<PageDTO<Entities.IssueSlip.Item>> Handle(FindIssueSlipItemsOnPageCommand request, CancellationToken cancellationToken)
+        public async Task<PageDTO<IssueSlip.Item>> Handle(FindIssueSlipItemsOnPageCommand request, CancellationToken cancellationToken)
         {
-            return new PageDTO<Entities.IssueSlip.Item>(
+            IQueryable<IssueSlip.Item> items = this.DatabaseContext.IssueSlipItems.Where(x => x.UtcMovedToBin == null);
+
+            return new PageDTO<IssueSlip.Item>(
                 request.Page,
                 request.ItemsPerPage,
-                this.DatabaseContext.IssueSlipItems.Skip(request.ItemsPerPage * --request.Page).Take(request.ItemsPerPage).AsEnumerable());
+                items.Count(),
+                items.Skip(request.ItemsPerPage * --request.Page).Take(request.ItemsPerPage).AsEnumerable());
         }
     }
 }
