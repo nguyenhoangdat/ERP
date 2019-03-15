@@ -164,5 +164,26 @@ namespace Warehouse.API.Controllers
                 throw;
             }
         }
+
+        // GET: api/Warehouses/GetByPositionId/3
+        [HttpGet("GetByPositionId/{positionId}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
+        public async Task<ActionResult<Entities.Warehouse>> GetByPositionId(long positionId)
+        {
+            try
+            {
+                return this.Ok(await this.Mediator.Send(new FindWarehouseByPositionIdCommand(positionId)));
+            }
+            catch (EntityNotFoundException ex)
+            {
+                return this.NotFound(ex.Message);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
     }
 }

@@ -9,6 +9,7 @@ using Restmium.ERP.Services.Warehouse.Application.Commands;
 using Restmium.ERP.Services.Warehouse.Application.Models;
 using Restmium.ERP.Services.Warehouse.Domain.Entities;
 using Restmium.ERP.Services.Warehouse.Domain.Exceptions;
+using Entities = Restmium.ERP.Services.Warehouse.Domain.Entities;
 
 namespace Warehouse.API.Controllers
 {
@@ -144,6 +145,26 @@ namespace Warehouse.API.Controllers
             try
             {
                 return this.Ok(await this.Mediator.Send(new FindSectionsInWarehouseCommand(warehouseId)));
+            }
+            catch (EntityNotFoundException ex)
+            {
+                return this.NotFound(ex.Message);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        [HttpGet("GetByPositionId/{positionId}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
+        public async Task<ActionResult<Section>> GetByPositionId(long positionId)
+        {
+            try
+            {
+                return this.Ok(await this.Mediator.Send(new FindSectionByPositionIdCommand(positionId)));
             }
             catch (EntityNotFoundException ex)
             {
