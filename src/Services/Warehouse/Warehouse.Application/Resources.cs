@@ -2,9 +2,9 @@
 
 namespace Restmium.ERP.Services.Warehouse.Application
 {
-    internal static class Resources
+    public static class Resources
     {
-        internal static class Exceptions
+        public static class Exceptions
         {
             static Exceptions()
             {
@@ -56,7 +56,7 @@ namespace Restmium.ERP.Services.Warehouse.Application
 
             public static Dictionary<string, string> Values { get; } = new Dictionary<string, string>();
         }
-        internal static class Naming
+        public static class Naming
         {
             static Naming()
             {
