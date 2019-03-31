@@ -40,11 +40,11 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Integration
             }
 
             // Create Model.Items
-            List<CreateIssueSlipCommand.CreateIssueSlipCommandModel.Item> modelItems = new List<CreateIssueSlipCommand.CreateIssueSlipCommandModel.Item>(@event.OrderItems.Count);
+            List<CreateIssueSlipCommand.Item> modelItems = new List<CreateIssueSlipCommand.Item>(@event.OrderItems.Count);
             foreach (OrderCreatedIntegrationEvent.OrderItem item in @event.OrderItems)
             {
                 Ware ware = this.DatabaseContext.Wares.Where(x => x.ProductId == item.ProductId).FirstOrDefault();
-                modelItems.Add(new CreateIssueSlipCommand.CreateIssueSlipCommandModel.Item(ware, item.Units));
+                modelItems.Add(new CreateIssueSlipCommand.Item(ware, item.Units));
             }
 
             // Create IssueSlip

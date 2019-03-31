@@ -7,42 +7,30 @@ namespace Restmium.ERP.Services.Warehouse.Application.Commands
 {
     public class CreateIssueSlipCommand : IRequest<IssueSlip>
     {
-        public CreateIssueSlipCommand(CreateIssueSlipCommandModel model)
+        public CreateIssueSlipCommand(long orderId, DateTime utcDispatchDate, DateTime utcDeliveryDate, IEnumerable<Item> items)
         {
-            this.Model = model;
+            this.OrderId = orderId;
+            this.UtcDispatchDate = utcDispatchDate;
+            this.UtcDeliveryDate = utcDeliveryDate;
+            this.Items = items;
         }
-        public CreateIssueSlipCommand(long orderId, DateTime utcDispatchDate, DateTime utcDeliveryDate, List<CreateIssueSlipCommandModel.Item> items)
-            : this(new CreateIssueSlipCommandModel(orderId, utcDispatchDate, utcDeliveryDate, items)) { }
 
-        public CreateIssueSlipCommandModel Model { get; }
+        public long OrderId { get; }
+        public DateTime UtcDispatchDate { get; }
+        public DateTime UtcDeliveryDate { get; }
 
-        public class CreateIssueSlipCommandModel
+        public IEnumerable<Item> Items { get; }
+
+        public class Item
         {
-            public CreateIssueSlipCommandModel(long orderId, DateTime utcDispatchDate, DateTime utcDeliveryDate, List<Item> items)
+            public Item(Ware ware, int requestedUnits)
             {
-                this.OrderId = orderId;
-                this.UtcDispatchDate = utcDispatchDate;
-                this.UtcDeliveryDate = utcDeliveryDate;
-                this.Items = items;
+                this.Ware = ware;
+                this.RequstedUnits = requestedUnits;
             }
 
-            public long OrderId { get; }
-            public DateTime UtcDispatchDate { get; }
-            public DateTime UtcDeliveryDate { get; }
-
-            public List<Item> Items { get; }
-
-            public class Item
-            {
-                public Item(Ware ware, int requestedUnits)
-                {
-                    this.Ware = ware;
-                    this.RequstedUnits = requestedUnits;
-                }
-
-                public Ware Ware { get; }
-                public int RequstedUnits { get; }
-            }
+            public Ware Ware { get; }
+            public int RequstedUnits { get; }
         }
     }
 }

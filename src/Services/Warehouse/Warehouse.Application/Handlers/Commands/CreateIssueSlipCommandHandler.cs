@@ -25,8 +25,8 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
         public async Task<IssueSlip> Handle(CreateIssueSlipCommand request, CancellationToken cancellationToken)
         {
             // Find positions for IssueSlip.Items and create them
-            List<IssueSlip.Item> items = new List<IssueSlip.Item>(request.Model.Items.Count);
-            foreach (CreateIssueSlipCommand.CreateIssueSlipCommandModel.Item item in request.Model.Items)
+            List<IssueSlip.Item> items = new List<IssueSlip.Item>(request.Items.Count);
+            foreach (CreateIssueSlipCommand.Item item in request.Items)
             {
                 foreach (KeyValuePair<Position, int> valuePair in await this.FindPositions(item.Ware, item.RequstedUnits, cancellationToken))
                 {
@@ -35,7 +35,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
             }
 
             // Create IssueSlip and save it to database
-            IssueSlip issueSlip = this.DatabaseContext.IssueSlips.Add(new IssueSlip(request.Model.OrderId, request.Model.UtcDispatchDate, request.Model.UtcDeliveryDate, items)).Entity;
+            IssueSlip issueSlip = this.DatabaseContext.IssueSlips.Add(new IssueSlip(request.OrderId, request.UtcDispatchDate, request.UtcDeliveryDate, items)).Entity;
             await this.DatabaseContext.SaveChangesAsync(cancellationToken);
 
             // Publish DomainEvent that the IssueSlip has been created

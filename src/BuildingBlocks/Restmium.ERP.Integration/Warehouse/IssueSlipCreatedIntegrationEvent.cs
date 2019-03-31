@@ -9,25 +9,26 @@ namespace Restmium.ERP.Integration.Warehouse
     /// </summary>
     public class IssueSlipCreatedIntegrationEvent : IntegrationEvent
     {
-        public IssueSlipCreatedIntegrationEvent(long orderId, DateTime utcDispatchDate, DateTime utcDeliveryDate)
+        public IssueSlipCreatedIntegrationEvent(long orderId, DateTime utcDispatchDate, DateTime utcDeliveryDate, IEnumerable<IssueSlipItem> items)
         {
             this.OrderId = orderId;
             this.UtcDispatchDate = utcDispatchDate;
             this.UtcDeliveryDate = utcDeliveryDate;
+            this.Items = items;
         }
 
         public long OrderId { get; }
         public DateTime UtcDispatchDate { get; } //Odeslat dne
         public DateTime UtcDeliveryDate { get; } //Dodat dne
 
-        public List<IssueSlipItem> Items { get; }
+        public IEnumerable<IssueSlipItem> Items { get; }
 
         public class IssueSlipItem
         {
-            public IssueSlipItem(int productId, int units, double width, double height, double depth, double weight)
+            public IssueSlipItem(int productId, int requestedUnits, double width, double height, double depth, double weight)
             {
                 this.ProductId = productId;
-                this.Units = units;
+                this.RequestedUnits = requestedUnits;
                 this.Width = width;
                 this.Height = height;
                 this.Depth = depth;
@@ -35,7 +36,7 @@ namespace Restmium.ERP.Integration.Warehouse
             }
 
             public int ProductId { get; }
-            public int Units { get; }
+            public int RequestedUnits { get; }
 
             public double Width { get; }
             public double Height { get; }
