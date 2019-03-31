@@ -1,11 +1,10 @@
 ﻿using MediatR;
-using Restmium.ERP.BuildingBlocks.EventBus.Abstractions;
 using Restmium.ERP.Integration.Catalog;
 using Restmium.ERP.Services.Warehouse.Application.Commands;
 using Restmium.ERP.Services.Warehouse.Domain.Entities;
 using Restmium.ERP.Services.Warehouse.Domain.Events;
 using Restmium.ERP.Services.Warehouse.Infrastructure.Database;
-using Restmium.ERP.Services.Warehouse.Integration.Events;
+using Restmium.Messaging;
 using System.Linq;
 using System.Threading.Tasks;
 

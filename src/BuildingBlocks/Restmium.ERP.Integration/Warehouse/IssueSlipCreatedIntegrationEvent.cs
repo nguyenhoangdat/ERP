@@ -1,4 +1,4 @@
-﻿using Restmium.ERP.BuildingBlocks.EventBus.Events;
+﻿using Restmium.Messaging;
 using System;
 using System.Collections.Generic;
 

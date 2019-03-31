@@ -21,19 +21,19 @@ namespace Restmium.ERP.Services.Warehouse.Domain.Entities
         {
         }
 
-        public Receipt(long id, DateTime utcExpected, IEnumerable<Item> items) : this(id, utcExpected)
+        public Receipt(long id, DateTime utcExpected, ICollection<Item> items) : this(id, utcExpected)
         {
             this.Items = items;
         }
-        public Receipt(DateTime utcExpected, IEnumerable<Item> items) : this(0, utcExpected, items)
+        public Receipt(DateTime utcExpected, ICollection<Item> items) : this(0, utcExpected, items)
         {
         }
 
-        public Receipt(long id, DateTime utcExpected, DateTime? utcReceived, IEnumerable<Item> items) : this(id, utcExpected, utcReceived)
+        public Receipt(long id, DateTime utcExpected, DateTime? utcReceived, ICollection<Item> items) : this(id, utcExpected, items)
         {
-            this.Items = items;
+            this.UtcReceived = utcReceived;
         }
-        public Receipt(DateTime utcExpected, DateTime? utcReceived, IEnumerable<Item> items) : this(0, utcExpected, utcReceived, items)
+        public Receipt(DateTime utcExpected, DateTime? utcReceived, ICollection<Item> items) : this(0, utcExpected, utcReceived, items)
         {
         }
 

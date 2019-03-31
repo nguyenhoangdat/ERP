@@ -7,15 +7,14 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Restmium.ERP.BuildingBlocks.EventBus;
-using Restmium.ERP.BuildingBlocks.EventBus.Abstractions;
-using Restmium.ERP.BuildingBlocks.EventBusServiceBus;
 using Restmium.ERP.Integration.Catalog;
 using Restmium.ERP.Integration.Supply;
 using Restmium.ERP.Services.Warehouse.Application.Commands;
 using Restmium.ERP.Services.Warehouse.Application.Handlers.Integration;
 using Restmium.ERP.Services.Warehouse.Infrastructure.Database;
 using Restmium.ERP.Services.Warehouse.Integration.Events;
+using Restmium.Messaging;
+using Restmium.Messaging.Azure.ServiceBus;
 using System.Reflection;
 
 namespace Restmium.ERP.Services.Warehouse.API
@@ -57,15 +56,11 @@ namespace Restmium.ERP.Services.Warehouse.API
 
             if (isServiceBusEnabled)
             {
-                services.AddSingleton<IServiceBusPersistentConnection>(sp =>
-                {
-                    ILogger<DefaultServiceBusPersisterConnection> logger = sp.GetRequiredService<ILogger<DefaultServiceBusPersisterConnection>>();
+                string serviceBusConnectionString = this.Configuration.GetSection("Azure").GetSection("ServiceBus").GetSection("Topic").GetValue<string>("PrimaryConnectionString");
+                string subscriptionClientName = this.Configuration.GetSection("Azure").GetSection("ServiceBus").GetSection("Topic").GetValue<string>("SubscriptionName");
 
-                    string serviceBusConnectionString = this.Configuration.GetSection("Azure").GetSection("ServiceBus").GetSection("Topic").GetValue<string>("PrimaryConnectionString");
-                    ServiceBusConnectionStringBuilder serviceBusConnection = new ServiceBusConnectionStringBuilder(serviceBusConnectionString);
+                services.AddAzureMessaging(serviceBusConnectionString, subscriptionClientName);
 
-                    return new DefaultServiceBusPersisterConnection(serviceBusConnection, logger);
-                });
                 this.RegisterEventBus(services);
             }
             #endregion
@@ -117,22 +112,7 @@ namespace Restmium.ERP.Services.Warehouse.API
         #region EventBus
         private void RegisterEventBus(IServiceCollection services)
         {
-            string subscriptionClientName = this.Configuration.GetSection("Azure").GetSection("ServiceBus").GetSection("Topic").GetValue<string>("SubscriptionName");
-
-            services.AddSingleton<IEventBus, EventBusServiceBus>(sp =>
-            {
-                IServiceBusPersistentConnection persistentConnection = sp.GetRequiredService<IServiceBusPersistentConnection>();
-                ILogger<EventBusServiceBus> logger = sp.GetRequiredService<ILogger<EventBusServiceBus>>();
-                IEventBusSubscriptionsManager subscriptionManager = sp.GetRequiredService<IEventBusSubscriptionsManager>();
-
-                return new EventBusServiceBus(sp, persistentConnection, logger, subscriptionManager, subscriptionClientName);
-            });
-
-            services.AddSingleton<IEventBusSubscriptionsManager, InMemoryEventBusSubscriptionsManager>();
-
-            //TODO: Check
-            // Do I need Loggers? - Ex. when Entity is not found
-            services.AddTransient<OrderCreatedIntegrationEventHandler>(); //TODO: Check name
+            services.AddTransient<OrderCreatedIntegrationEventHandler>();
             services.AddTransient<ProductCreatedIntegrationEventHandler>();
             services.AddTransient<ProductRemovedIntegrationEventHandler>();
             services.AddTransient<ProductRenamedIntegrationEventHandler>();

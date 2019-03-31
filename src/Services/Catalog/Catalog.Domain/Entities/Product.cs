@@ -6,7 +6,6 @@ namespace Restmium.ERP.Services.Catalog.Domain.Entities
 {
     public class Product : DatabaseEntity
     {
-        //TODO: Add localization support for texts
         public Product()
         {
             this.ParametersGroups = new HashSet<ParametersGroup>();

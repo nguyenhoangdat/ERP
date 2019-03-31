@@ -1,16 +1,15 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\EventBus\EventBus.csproj" />
+    <Folder Include="Basket\" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Basket\" />
-    <Folder Include="Ordering\" />
+    <PackageReference Include="Restmium.Messaging" Version="1.0.0" />
   </ItemGroup>
 
 </Project>

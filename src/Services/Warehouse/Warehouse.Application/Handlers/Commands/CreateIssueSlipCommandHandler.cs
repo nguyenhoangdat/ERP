@@ -44,7 +44,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
             return issueSlip;
         }
 
-        //TODO: Reimplement - if it's possible to take if just from one position, then take if from one
+        //TODO: Reimplement - if it's possible to take if just from one position, then take it from one
         protected async Task<Dictionary<Position, int>> FindPositions(Ware ware, int units, CancellationToken cancellationToken)
         {
             Dictionary<Position, int> pairs = new Dictionary<Position, int>();

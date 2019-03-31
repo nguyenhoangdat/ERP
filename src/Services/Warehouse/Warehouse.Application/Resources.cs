@@ -14,6 +14,9 @@ namespace Restmium.ERP.Services.Warehouse.Application
 
                 Values.Add("IssueSlipItem_EntityNotFoundException", "IssueSlip.Item(IssueSlipId={0}, WareId={1}) not found!");
 
+                Values.Add("Movement_Create_PositionEmptyException", "Unable to create Movement to retrieve Ware with Id={1} at Position with Id={2}. Position doesn't hold enough units!");
+                Values.Add("Movement_Create_PositionLoadCapacityException", "Unable to store Ware ({0}) at Position ({1}) in amount of {2} units. Load capacity exceeded.");
+                Values.Add("Movement_Create_PositionWareConflictException", "Unable to create Movement to {0} Ware with Id={1} at Position with Id={2}. Position contains another Ware with Id={3}!");
                 Values.Add("Movement_Delete_EntityNotFoundException", "Unable to delete Movement(Id={0}). Movement not found!");
 
                 Values.Add("Position_Delete_EntityNotFoundException", "Unable to delete Position(Id={0}). Position not found!");

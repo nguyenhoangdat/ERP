@@ -15,11 +15,6 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
 {
     public class CreateMovementCommandHandler : IRequestHandler<CreateMovementCommand, Movement>
     {
-        //TODO: Check grammar
-        protected const string CreateMovementCommandHandlerPositionWareConflictException = "Unable to create Movement to {0} Ware with Id={1} at Position with Id={2}. Position contains another Ware with Id={3}!";
-        protected const string CreateMovementCommandHandlerPositionEmptyException = "Unable to create Movement to retrieve Ware with Id={1} at Position with Id={2}. Position doesn't hold enough units!";
-        protected const string CreateMovementCommandHandlerPositionLoadCapacityException = "Unable to store Ware ({0}) at Position ({1}) in amount of {2} units. Load capacity exceeded.";
-
         public CreateMovementCommandHandler(DatabaseContext context, IMediator mediator)
         {
             this.DatabaseContext = context;
@@ -39,7 +34,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
 
             if (wareAtPosition != null && wareAtPosition.Id != request.Model.WareId && currentCount != 0)
             {
-                throw new PositionWareConflictException(string.Format(CreateMovementCommandHandlerPositionWareConflictException,
+                throw new PositionWareConflictException(string.Format(Resources.Exceptions.Values["Movement_Create_PositionWareConflictException"],
                     (request.Model.Direction == Movement.Direction.In) ? "store" : "retrieve",
                     request.Model.WareId,
                     request.Model.PositionId,
@@ -49,7 +44,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
             // Throw an exception if position doesn't hold enough units
             if (request.Model.Direction == Movement.Direction.Out && currentCount < request.Model.CountChange)
             {
-                throw new PositionEmptyException(string.Format(CreateMovementCommandHandlerPositionEmptyException, request.Model.WareId, request.Model.PositionId));
+                throw new PositionEmptyException(string.Format(Resources.Exceptions.Values["Movement_Create_PositionEmptyException"], request.Model.WareId, request.Model.PositionId));
             }
 
             Ware ware = this.DatabaseContext.Wares.Find(request.Model.WareId);
@@ -61,7 +56,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
             // Check load capacity (weight)
             if (!position.HasLoadCapacity(newCount))
             {
-                throw new PositionLoadCapacityException(string.Format(CreateMovementCommandHandlerPositionLoadCapacityException, ware.Id, position.Id, request.Model.CountChange));
+                throw new PositionLoadCapacityException(string.Format(Resources.Exceptions.Values["Movement_Create_PositionLoadCapacityException"], ware.Id, position.Id, request.Model.CountChange));
             }
 
             // Create Movement

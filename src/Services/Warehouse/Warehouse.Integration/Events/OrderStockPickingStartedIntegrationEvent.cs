@@ -1,4 +1,4 @@
-﻿using Restmium.ERP.BuildingBlocks.EventBus.Events;
+﻿using Restmium.Messaging;
 
 namespace Restmium.ERP.Services.Warehouse.Integration.Events
 {

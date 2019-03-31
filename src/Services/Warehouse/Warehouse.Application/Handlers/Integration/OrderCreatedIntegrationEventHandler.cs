@@ -1,11 +1,11 @@
 ﻿using MediatR;
-using Restmium.ERP.BuildingBlocks.EventBus.Abstractions;
+using Restmium.ERP.Integration.Ordering;
 using Restmium.ERP.Services.Warehouse.Application.Commands;
 using Restmium.ERP.Services.Warehouse.Domain.Entities;
 using Restmium.ERP.Services.Warehouse.Domain.Exceptions;
 using Restmium.ERP.Services.Warehouse.Infrastructure.Database;
 using Restmium.ERP.Services.Warehouse.Infrastructure.Database.Extensions;
-using Restmium.ERP.Services.Warehouse.Integration.Events;
+using Restmium.Messaging;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -14,6 +14,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Integration
 {
     public class OrderCreatedIntegrationEventHandler : IIntegrationEventHandler<OrderCreatedIntegrationEvent>
     {
+        //TODO: Move to RESOURCES
         private const string OrderCreatedIntegrationEventHandler_InvalidOrderException = "Unable to create Issue Slip from Order (id={0}). Products were not found!";
 
         protected DatabaseContext DatabaseContext { get; }
@@ -26,7 +27,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Integration
         }
 
         /// <summary>
-        /// Handle OrderCreatedIntegrationEvent and create new IssueSlip
+        /// Handles OrderCreatedIntegrationEvent and creates new IssueSlip
         /// </summary>
         /// <param name="event">The instance of OrderCreatedIntegrationEvent</param>
         /// <returns></returns>
