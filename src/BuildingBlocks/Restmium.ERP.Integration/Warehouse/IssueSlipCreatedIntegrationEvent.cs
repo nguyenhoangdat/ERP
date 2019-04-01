@@ -9,7 +9,11 @@ namespace Restmium.ERP.Integration.Warehouse
     /// </summary>
     public class IssueSlipCreatedIntegrationEvent : IntegrationEvent
     {
-        public IssueSlipCreatedIntegrationEvent(long orderId, DateTime utcDispatchDate, DateTime utcDeliveryDate, IEnumerable<IssueSlipItem> items)
+        public IssueSlipCreatedIntegrationEvent() : base()
+        {
+
+        }
+        public IssueSlipCreatedIntegrationEvent(long orderId, DateTime utcDispatchDate, DateTime utcDeliveryDate, IEnumerable<IssueSlipItem> items) : this()
         {
             this.OrderId = orderId;
             this.UtcDispatchDate = utcDispatchDate;

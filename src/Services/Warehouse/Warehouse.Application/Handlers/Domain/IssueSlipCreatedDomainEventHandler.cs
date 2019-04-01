@@ -18,7 +18,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Domain
 
         protected IEventBus EventBus { get; }
 
-        public Task Handle(IssueSlipCreatedDomainEvent notification, CancellationToken cancellationToken)
+        public async Task Handle(IssueSlipCreatedDomainEvent notification, CancellationToken cancellationToken)
         {
             IssueSlip issueSlip = notification.IssueSlip;
 
@@ -30,8 +30,6 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Domain
             }
 
             this.EventBus.Publish(new IssueSlipCreatedIntegrationEvent(issueSlip.OrderId, issueSlip.UtcDispatchDate, issueSlip.UtcDeliveryDate, items));
-
-            return Task.CompletedTask;
         }
     }
 }

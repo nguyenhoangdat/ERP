@@ -7,11 +7,11 @@ namespace Restmium.ERP.Integration.Warehouse
     /// </summary>
     public class WareAvailabilityChangedIntegrationEvent : IntegrationEvent
     {
-        public WareAvailabilityChangedIntegrationEvent()
+        public WareAvailabilityChangedIntegrationEvent() : base()
         {
 
         }
-        public WareAvailabilityChangedIntegrationEvent(int productId, int units) : base()
+        public WareAvailabilityChangedIntegrationEvent(int productId, int units) : this()
         {
             this.ProductId = productId;
             this.Units = units;

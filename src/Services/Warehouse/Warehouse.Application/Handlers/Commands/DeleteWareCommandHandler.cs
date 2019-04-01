@@ -23,12 +23,12 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
 
         public async Task<Ware> Handle(DeleteWareCommand request, CancellationToken cancellationToken)
         {
-            if (!this.DatabaseContext.Wares.Any(x => x.Id == request.Model.WareId))
+            if (!this.DatabaseContext.Wares.Any(x => x.Id == request.WareId))
             {
-                throw new EntityNotFoundException(string.Format(Resources.Exceptions.Values["Ware_Delete_EntityNotFoundException"], request.Model.WareId));
+                throw new EntityNotFoundException(string.Format(Resources.Exceptions.Values["Ware_Delete_EntityNotFoundException"], request.WareId));
             }
 
-            Ware ware = this.DatabaseContext.Wares.Remove(this.DatabaseContext.Wares.Find(request.Model.WareId)).Entity;
+            Ware ware = this.DatabaseContext.Wares.Remove(this.DatabaseContext.Wares.Find(request.WareId)).Entity;
             await this.DatabaseContext.SaveChangesAsync(cancellationToken);
 
             await this.Mediator.Publish(new WareDeletedDomainEvent(ware), cancellationToken);

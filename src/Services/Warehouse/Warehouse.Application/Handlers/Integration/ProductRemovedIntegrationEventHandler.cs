@@ -2,7 +2,6 @@
 using Restmium.ERP.Integration.Catalog;
 using Restmium.ERP.Services.Warehouse.Application.Commands;
 using Restmium.ERP.Services.Warehouse.Domain.Entities;
-using Restmium.ERP.Services.Warehouse.Domain.Events;
 using Restmium.ERP.Services.Warehouse.Infrastructure.Database;
 using Restmium.Messaging;
 using System.Linq;
@@ -25,8 +24,6 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Integration
         {
             Ware ware = this.DatabaseContext.Wares.Where(x => x.ProductId == @event.ProductId).FirstOrDefault();
             ware = await this.Mediator.Send(new DeleteWareCommand(ware.Id));
-
-            await this.Mediator.Publish(new WareDeletedDomainEvent(ware));
         }
     }
 }

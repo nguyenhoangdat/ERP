@@ -7,11 +7,11 @@ namespace Restmium.ERP.Integration.Catalog
     /// </summary>
     public class ProductCreatedIntegrationEvent : IntegrationEvent
     {
-        public ProductCreatedIntegrationEvent()
+        public ProductCreatedIntegrationEvent() : base()
         {
 
         }
-        public ProductCreatedIntegrationEvent(int productId, string name) : base()
+        public ProductCreatedIntegrationEvent(int productId, string name) : this()
         {
             this.ProductId = productId;
             this.ProductName = name;

@@ -25,12 +25,12 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
         public async Task<IssueSlip> Handle(CreateIssueSlipCommand request, CancellationToken cancellationToken)
         {
             // Find positions for IssueSlip.Items and create them
-            List<IssueSlip.Item> items = new List<IssueSlip.Item>(request.Items.Count);
+            LinkedList<IssueSlip.Item> items = new LinkedList<IssueSlip.Item>();
             foreach (CreateIssueSlipCommand.Item item in request.Items)
             {
                 foreach (KeyValuePair<Position, int> valuePair in await this.FindPositions(item.Ware, item.RequstedUnits, cancellationToken))
                 {
-                    items.Add(new IssueSlip.Item(0, item.Ware.Id, valuePair.Key.Id, valuePair.Value, 0, 0));
+                    items.AddLast(new IssueSlip.Item(0, item.Ware.Id, valuePair.Key.Id, valuePair.Value, 0, 0));
                 }
             }
 

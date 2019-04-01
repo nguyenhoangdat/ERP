@@ -7,11 +7,11 @@ namespace Restmium.ERP.Integration.Catalog
     /// </summary>
     public class ProductRemovedIntegrationEvent : IntegrationEvent
     {
-        public ProductRemovedIntegrationEvent()
+        public ProductRemovedIntegrationEvent() : base()
         {
 
         }
-        public ProductRemovedIntegrationEvent(int productId) : base()
+        public ProductRemovedIntegrationEvent(int productId) : this()
         {
             this.ProductId = productId;
         }

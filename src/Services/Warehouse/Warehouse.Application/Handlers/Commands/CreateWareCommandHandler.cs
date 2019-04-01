@@ -23,12 +23,12 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
 
         public async Task<Ware> Handle(CreateWareCommand request, CancellationToken cancellationToken)
         {
-            if (this.DatabaseContext.Wares.Any(x => x.ProductId == request.Model.ProductId))
+            if (this.DatabaseContext.Wares.Any(x => x.ProductId == request.ProductId))
             {
-                throw new EntityAlreadyExitsException(string.Format(Resources.Exceptions.Values["Ware_EntityAlreadyExitsException"], request.Model.ProductId));
+                throw new EntityAlreadyExitsException(string.Format(Resources.Exceptions.Values["Ware_EntityAlreadyExitsException"], request.ProductId));
             }
 
-            Ware ware = this.DatabaseContext.Wares.Add(new Ware(request.Model.ProductId, request.Model.ProductName)).Entity;
+            Ware ware = this.DatabaseContext.Wares.Add(new Ware(request.ProductId, request.ProductName)).Entity;
             await this.DatabaseContext.SaveChangesAsync(cancellationToken);
 
             await this.Mediator.Publish(new WareCreatedDomainEvent(ware), cancellationToken);

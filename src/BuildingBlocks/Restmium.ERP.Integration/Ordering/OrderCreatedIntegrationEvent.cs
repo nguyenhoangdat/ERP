@@ -9,8 +9,20 @@ namespace Restmium.ERP.Integration.Ordering
     /// </summary>
     public class OrderCreatedIntegrationEvent : IntegrationEvent
     {
+        public OrderCreatedIntegrationEvent() : base()
+        {
+
+        }
+        public OrderCreatedIntegrationEvent(long orderId, DateTime utcDispatchDate, DateTime utcDeliveryDate, IEnumerable<OrderItem> items) : this()
+        {
+            this.OrderId = orderId;
+            this.UtcDispatchDate = utcDispatchDate;
+            this.UtcDeliveryDate = utcDeliveryDate;
+            this.OrderItems = items;
+        }
+
         public long OrderId { get; set; }
-        public List<OrderItem> OrderItems { get; set; }
+        public IEnumerable<OrderItem> OrderItems { get; set; }
 
         public DateTime UtcDispatchDate { get; set; } //Odeslat dne
         public DateTime UtcDeliveryDate { get; set; } //Dodat dne

@@ -40,18 +40,18 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Integration
             }
 
             // Create Model.Items
-            List<CreateIssueSlipCommand.Item> modelItems = new List<CreateIssueSlipCommand.Item>(@event.OrderItems.Count);
+            LinkedList<CreateIssueSlipCommand.Item> modelItems = new LinkedList<CreateIssueSlipCommand.Item>();
             foreach (OrderCreatedIntegrationEvent.OrderItem item in @event.OrderItems)
             {
                 Ware ware = this.DatabaseContext.Wares.Where(x => x.ProductId == item.ProductId).FirstOrDefault();
-                modelItems.Add(new CreateIssueSlipCommand.Item(ware, item.Units));
+                modelItems.AddLast(new CreateIssueSlipCommand.Item(ware, item.Units));
             }
 
             // Create IssueSlip
             IssueSlip issueSlip = await this.Mediator.Send(new CreateIssueSlipCommand(@event.OrderId, @event.UtcDispatchDate, @event.UtcDeliveryDate, modelItems));
         }
 
-        protected bool IsOrderValid(List<OrderCreatedIntegrationEvent.OrderItem> items)
+        protected bool IsOrderValid(IEnumerable<OrderCreatedIntegrationEvent.OrderItem> items)
         {
             bool valid = true;
 

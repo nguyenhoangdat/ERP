@@ -5,25 +5,11 @@ namespace Restmium.ERP.Services.Warehouse.Application.Commands
 {
     public class DeleteWareCommand : IRequest<Ware>
     {
-        public DeleteWareCommand(DeleteWareCommandModel model)
+        public DeleteWareCommand(int wareId)
         {
-            this.Model = model;
-        }
-        public DeleteWareCommand(int wareId) : this(new DeleteWareCommandModel(wareId))
-        {
-
+            this.WareId = wareId;
         }
 
-        public DeleteWareCommandModel Model { get; }
-
-        public class DeleteWareCommandModel
-        {
-            public DeleteWareCommandModel(int wareId)
-            {
-                this.WareId = wareId;
-            }
-
-            public int WareId { get; }
-        }
+        public int WareId { get; }
     }
 }
