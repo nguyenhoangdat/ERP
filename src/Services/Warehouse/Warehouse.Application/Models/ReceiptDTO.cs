@@ -25,7 +25,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Models
         public class Item
         {
             /// <summary>
-            /// Creates new ReceiptDTO.Item.
+            /// Creates a new instance of <see cref="Item"/>.
             /// </summary>
             /// <param name="productId">Product Id</param>
             /// <param name="countOrdered">Number of received units</param>
@@ -35,7 +35,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Models
                 this.CountOrdered = countOrdered;
             }
             /// <summary>
-            /// Creates new ReceiptDTO.Item.
+            /// Creates a new instance of <see cref="Item"/>.
             /// </summary>
             /// <param name="productId">Product Id</param>
             /// <param name="countOrdered">Number of received units</param>
