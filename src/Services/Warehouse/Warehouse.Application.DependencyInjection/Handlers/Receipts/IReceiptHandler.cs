@@ -16,6 +16,6 @@ namespace Restmium.ERP.Services.Warehouse.Application.DependencyInjection.Handle
         /// <param name="receipt">The instance of ReceiptDTO</param>
         /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete.</param>
         /// <returns>A task that represents the asynchronous save operation. The task result contains the number of state entries written to the database.</returns>
-        Task<Receipt> HandleAsync(ReceiptDTO receiptDTO, CancellationToken cancellationToken = default(CancellationToken));
+        Task<Receipt> HandleAsync(ReceiptDto receiptDTO, CancellationToken cancellationToken = default(CancellationToken));
     }
 }

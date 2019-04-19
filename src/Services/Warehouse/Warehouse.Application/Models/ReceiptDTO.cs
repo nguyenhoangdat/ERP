@@ -6,7 +6,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Models
     /// <summary>
     /// DTO representing Receipt entity
     /// </summary>
-    public class ReceiptDTO
+    public class ReceiptDto
     {
         //TODO: Add supplier & transport details (contact, ...)
 

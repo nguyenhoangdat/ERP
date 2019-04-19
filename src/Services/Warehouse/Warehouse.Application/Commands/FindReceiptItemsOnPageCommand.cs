@@ -4,7 +4,7 @@ using Restmium.ERP.Services.Warehouse.Domain.Entities;
 
 namespace Restmium.ERP.Services.Warehouse.Application.Commands
 {
-    public class FindReceiptItemsOnPageCommand : IRequest<PageDTO<Receipt.Item>>
+    public class FindReceiptItemsOnPageCommand : IRequest<PageDto<Receipt.Item>>
     {
         public FindReceiptItemsOnPageCommand(int page, int itemsPerPage)
         {

@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
 {
-    public class FindPositionsOnPageCommandHandler : IRequestHandler<FindPositionsOnPageCommand, PageDTO<Position>>
+    public class FindPositionsOnPageCommandHandler : IRequestHandler<FindPositionsOnPageCommand, PageDto<Position>>
     {
         protected DatabaseContext DatabaseContext { get; set; }
 
@@ -18,11 +18,11 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
             this.DatabaseContext = context;
         }
 
-        public async Task<PageDTO<Position>> Handle(FindPositionsOnPageCommand request, CancellationToken cancellationToken)
+        public async Task<PageDto<Position>> Handle(FindPositionsOnPageCommand request, CancellationToken cancellationToken)
         {
             IQueryable<Position> positions = this.DatabaseContext.Positions.Where(x => x.UtcMovedToBin == null);
 
-            return new PageDTO<Position>(
+            return new PageDto<Position>(
                 request.Page,
                 request.ItemsPerPage,
                 positions.Count(),

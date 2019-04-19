@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
 {
-    public class FindReceiptItemsOnPageCommandHandler : IRequestHandler<FindReceiptItemsOnPageCommand, PageDTO<Receipt.Item>>
+    public class FindReceiptItemsOnPageCommandHandler : IRequestHandler<FindReceiptItemsOnPageCommand, PageDto<Receipt.Item>>
     {
         protected DatabaseContext DatabaseContext { get; set; }
 
@@ -18,11 +18,11 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
             this.DatabaseContext = context;
         }
 
-        public async Task<PageDTO<Receipt.Item>> Handle(FindReceiptItemsOnPageCommand request, CancellationToken cancellationToken)
+        public async Task<PageDto<Receipt.Item>> Handle(FindReceiptItemsOnPageCommand request, CancellationToken cancellationToken)
         {
             IQueryable<Receipt.Item> items = this.DatabaseContext.ReceiptItems.Where(x => x.UtcMovedToBin == null);
 
-            return new PageDTO<Receipt.Item>(
+            return new PageDto<Receipt.Item>(
                 request.Page,
                 request.ItemsPerPage,
                 items.Count(),
