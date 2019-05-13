@@ -23,13 +23,13 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
 
         public async Task<Entities.Warehouse> Handle(UpdateWarehouseCommand request, CancellationToken cancellationToken)
         {
-            if (!this.DatabaseContext.Warehouses.Any(x => x.Id == request.Model.Id))
+            if (!this.DatabaseContext.Warehouses.Any(x => x.Id == request.Id))
             {
-                throw new EntityNotFoundException(string.Format(Resources.Exceptions.Values["Warehouse_Update_EntityNotFoundException"], request.Model.Id));
+                throw new EntityNotFoundException(string.Format(Resources.Exceptions.Values["Warehouse_Update_EntityNotFoundException"], request.Id));
             }
 
             // Update Warehouse and Save it to the Database
-            Entities.Warehouse warehouse = this.DatabaseContext.Warehouses.Update(new Entities.Warehouse(request.Model.Id, request.Model.Name, request.Model.Address, request.Model.Sections)).Entity;
+            Entities.Warehouse warehouse = this.DatabaseContext.Warehouses.Update(new Entities.Warehouse(request.Id, request.Name, request.Address, request.Sections)).Entity;
             await this.DatabaseContext.SaveChangesAsync(cancellationToken);
 
             // Publish DomainEvent that the Warehouse has been updated

@@ -7,55 +7,39 @@ namespace Restmium.ERP.Services.Warehouse.Application.Commands
 {
     public class UpdateIssueSlipCommand : IRequest<IssueSlip>
     {
-        public UpdateIssueSlipCommand(UpdateIssueSlipCommandModel model)
+        public UpdateIssueSlipCommand(long id, long orderId, DateTime utcDispatchDate, DateTime utcDeliveryDate, List<Item> items)
         {
-            this.Model = model;
+            this.Id = id;
+            this.OrderId = orderId;
+            this.UtcDispatchDate = utcDispatchDate;
+            this.UtcDeliveryDate = utcDeliveryDate;
+            this.Items = items;
         }
-        public UpdateIssueSlipCommand(long id, long orderId, DateTime utcDispatchDate, DateTime utcDeliveryDate, List<UpdateIssueSlipCommand.UpdateIssueSlipCommandModel.Item> items)
-            : this(new UpdateIssueSlipCommandModel(id, orderId, utcDispatchDate, utcDeliveryDate, items)) { }
 
-        public UpdateIssueSlipCommandModel Model { get; }
+        public long Id { get; }
+        public long OrderId { get; }
+        public DateTime UtcDispatchDate { get; }
+        public DateTime UtcDeliveryDate { get; }
 
-        public class UpdateIssueSlipCommandModel
+        public List<Item> Items { get; }
+
+        public class Item
         {
-            public UpdateIssueSlipCommandModel(long id, long orderId, DateTime utcDispatchDate, DateTime utcDeliveryDate, List<Item> items)
+            public Item(long issueSlipId, int wareId, long positionId, int requestedUnits, int issuedUnits)
             {
-                this.Id = id;
-                this.OrderId = orderId;
-                this.UtcDispatchDate = utcDispatchDate;
-                this.UtcDeliveryDate = utcDeliveryDate;
-                this.Items = items;
+                this.IssueSlipId = issueSlipId;
+                this.WareId = wareId;
+                this.PositionId = positionId;
+                this.RequstedUnits = requestedUnits;
+                this.IssuedUnits = issuedUnits;
             }
 
-            public long Id { get; }
-            public long OrderId { get; }
-            public DateTime UtcDispatchDate { get; }
-            public DateTime UtcDeliveryDate { get; }
+            public long IssueSlipId { get; }
+            public int WareId { get; }
+            public long PositionId { get; }
 
-            public List<Item> Items { get; }
-
-            public class Item
-            {
-                public Item(long issueSlipId, int wareId, long positionId, int requestedUnits, int issuedUnits, int employeeId)
-                {
-                    this.IssueSlipId = issueSlipId;
-                    this.WareId = wareId;
-                    this.PositionId = positionId;
-                    this.RequstedUnits = requestedUnits;
-                    this.IssuedUnits = issuedUnits;
-                    this.EmployeeId = employeeId;
-                }
-                public Item(long issueSlipId, int wareId, long positionId, int requestedUnits, int issuedUnits)
-                    : this(issueSlipId, wareId, positionId, requestedUnits, issuedUnits, 0) { }
-
-                public long IssueSlipId { get; }
-                public int WareId { get; }
-                public long PositionId { get; }
-
-                public int RequstedUnits { get; }
-                public int IssuedUnits { get; }
-                public int EmployeeId { get; }
-            }
+            public int RequstedUnits { get; }
+            public int IssuedUnits { get; }
         }
     }
 }

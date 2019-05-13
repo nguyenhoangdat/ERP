@@ -23,10 +23,10 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
         public async Task<Movement> Handle(DeleteMovementCommand request, CancellationToken cancellationToken)
         {
             // Find Movement and throw an exception if not found
-            Movement movement = await this.DatabaseContext.Movements.FindAsync(new object[] { request.Model.Id }, cancellationToken);
+            Movement movement = await this.DatabaseContext.Movements.FindAsync(new object[] { request.Id }, cancellationToken);
             if (movement == null)
             {
-                throw new EntityNotFoundException(string.Format(Resources.Exceptions.Values["Movement_Delete_EntityNotFoundException"], request.Model.Id));
+                throw new EntityNotFoundException(string.Format(Resources.Exceptions.Values["Movement_Delete_EntityNotFoundException"], request.Id));
             }
 
             // Delete and Save

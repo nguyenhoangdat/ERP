@@ -48,7 +48,7 @@ namespace Warehouse.API.Controllers
         [HttpGet("All/{page}/{itemsPerPage}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(500)]
-        public async Task<ActionResult<PageDto<IssueSlip>>> GetAll(int page, int itemsPerPage)
+        public async Task<ActionResult<PageDTO<IssueSlip>>> GetAll(int page, int itemsPerPage)
         {
             try
             {
@@ -75,10 +75,10 @@ namespace Warehouse.API.Controllers
 
             try
             {
-                List<UpdateIssueSlipCommand.UpdateIssueSlipCommandModel.Item> items = new List<UpdateIssueSlipCommand.UpdateIssueSlipCommandModel.Item>();
+                List<UpdateIssueSlipCommand.Item> items = new List<UpdateIssueSlipCommand.Item>();
                 foreach (IssueSlip.Item item in issueSlip.Items)
                 {
-                    items.Add(new UpdateIssueSlipCommand.UpdateIssueSlipCommandModel.Item(item.IssueSlipId, item.WareId, item.PositionId, item.RequestedUnits, item.IssuedUnits));
+                    items.Add(new UpdateIssueSlipCommand.Item(item.IssueSlipId, item.WareId, item.PositionId, item.RequestedUnits, item.IssuedUnits));
                 }
 
                 issueSlip = await this.Mediator.Send(new UpdateIssueSlipCommand(issueSlip.Id, issueSlip.OrderId, issueSlip.UtcDispatchDate, issueSlip.UtcDeliveryDate, items));

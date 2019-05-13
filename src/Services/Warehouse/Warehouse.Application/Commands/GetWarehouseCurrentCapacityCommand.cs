@@ -5,22 +5,11 @@ namespace Restmium.ERP.Services.Warehouse.Application.Commands
 {
     public class GetWarehouseCurrentCapacityCommand : IRequest<WarehouseCapacityDTO>
     {
-        public GetWarehouseCurrentCapacityCommand(GetWarehouseCurrentCapacityCommandModel model)
+        public GetWarehouseCurrentCapacityCommand(int warehouseId)
         {
-            this.Model = model;
+            this.WarehouseId = warehouseId;
         }
-        public GetWarehouseCurrentCapacityCommand(int warehouseId) : this(new GetWarehouseCurrentCapacityCommandModel(warehouseId)) { }
 
-        public GetWarehouseCurrentCapacityCommandModel Model { get; }
-
-        public class GetWarehouseCurrentCapacityCommandModel
-        {
-            public GetWarehouseCurrentCapacityCommandModel(int warehouseId)
-            {
-                this.WarehouseId = warehouseId;
-            }
-
-            public int WarehouseId { get; }
-        }
+        public int WarehouseId { get; }
     }
 }

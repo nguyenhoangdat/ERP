@@ -24,18 +24,18 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
 
         public async Task<Receipt> Handle(UpdateReceiptCommand request, CancellationToken cancellationToken)
         {
-            if (!this.DatabaseContext.Receipts.Any(x => x.Id == request.Model.Id))
+            if (!this.DatabaseContext.Receipts.Any(x => x.Id == request.Id))
             {
-                throw new EntityNotFoundException(string.Format(Resources.Exceptions.Values["Receipt_Update_EntityNotFoundException"], request.Model.Id));
+                throw new EntityNotFoundException(string.Format(Resources.Exceptions.Values["Receipt_Update_EntityNotFoundException"], request.Id));
             }
 
             List<Receipt.Item> items = new List<Receipt.Item>();
-            foreach (UpdateReceiptCommand.UpdateReceiptCommandModel.Item item in request.Model.Items)
+            foreach (UpdateReceiptCommand.Item item in request.Items)
             {
-                items.Add(new Receipt.Item(item.ReceiptId, item.PositionId, item.WareId, item.CountOrdered, item.CountReceived, item.EmployeeId, item.UtcProcessed));
+                items.Add(new Receipt.Item(item.ReceiptId, item.PositionId, item.WareId, item.CountOrdered, item.CountReceived, item.UtcProcessed));
             }
 
-            Receipt receipt = this.DatabaseContext.Receipts.Update(new Receipt(request.Model.Id, request.Model.UtcExpected, request.Model.UtcReceived, items)).Entity;
+            Receipt receipt = this.DatabaseContext.Receipts.Update(new Receipt(request.Id, request.UtcExpected, request.UtcReceived, items)).Entity;
             await this.DatabaseContext.SaveChangesAsync(cancellationToken);
 
             await this.Mediator.Publish(new ReceiptUpdatedDomainEvent(receipt), cancellationToken);

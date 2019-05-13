@@ -2,9 +2,9 @@
 
 namespace Restmium.ERP.Services.Warehouse.Application.Models
 {
-    public class PageDto<T>
+    public class PageDTO<T>
     {
-        public PageDto(int pageId, int itemsPerPage, int itemsTotal, IEnumerable<T> items)
+        public PageDTO(int pageId, int itemsPerPage, int itemsTotal, IEnumerable<T> items)
         {
             this.PageId = pageId;
             this.ItemsPerPage = itemsPerPage;

@@ -27,7 +27,7 @@ namespace Warehouse.API.Controllers
         [HttpGet("All/{page}/{itemsPerPage}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(500)]
-        public async Task<ActionResult<PageDto<StockTaking.Item>>> GetAll(int page, int itemsPerPage)
+        public async Task<ActionResult<PageDTO<StockTaking.Item>>> GetAll(int page, int itemsPerPage)
         {
             try
             {
@@ -54,7 +54,7 @@ namespace Warehouse.API.Controllers
 
             try
             {
-                return this.Ok(await this.Mediator.Send(new UpdateStockTakingItemCommand(item.StockTakingId, item.WareId, item.PositionId, item.CurrentStock, item.CountedStock, item.EmployeeId, item.UtcCounted)));
+                return this.Ok(await this.Mediator.Send(new UpdateStockTakingItemCommand(item.StockTakingId, item.WareId, item.PositionId, item.CurrentStock, item.CountedStock, item.UtcCounted)));
             }
             catch (EntityNotFoundException ex)
             {

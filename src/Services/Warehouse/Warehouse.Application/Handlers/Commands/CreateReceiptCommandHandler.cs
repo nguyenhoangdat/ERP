@@ -23,12 +23,12 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
         public async Task<Receipt> Handle(CreateReceiptCommand request, CancellationToken cancellationToken)
         {
             List<Receipt.Item> items = new List<Receipt.Item>();
-            foreach (CreateReceiptCommand.CreateReceiptCommandModel.Item item in request.Model.Items)
+            foreach (CreateReceiptCommand.Item item in request.Items)
             {
-                items.Add(new Receipt.Item(0, null, item.WareId, item.CountOrdered, 0, 0));
+                items.Add(new Receipt.Item(0, null, item.WareId, item.CountOrdered, 0));
             }
 
-            Receipt receipt = this.DatabaseContext.Receipts.Add(new Receipt(0, request.Model.UtcExpected, items)).Entity;
+            Receipt receipt = this.DatabaseContext.Receipts.Add(new Receipt(0, request.UtcExpected, items)).Entity;
             await this.DatabaseContext.SaveChangesAsync(cancellationToken);
 
             await this.Mediator.Publish(new ReceiptCreateDomainEvent(receipt), cancellationToken);

@@ -4,7 +4,7 @@ using Restmium.ERP.Services.Warehouse.Domain.Entities;
 
 namespace Restmium.ERP.Services.Warehouse.Application.Commands
 {
-    public class FindSectionsOnPageCommand : IRequest<PageDto<Section>>
+    public class FindSectionsOnPageCommand : IRequest<PageDTO<Section>>
     {
         public FindSectionsOnPageCommand(int page, int itemsPerPage)
         {

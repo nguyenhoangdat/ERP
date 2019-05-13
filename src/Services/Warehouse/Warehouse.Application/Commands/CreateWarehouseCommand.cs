@@ -6,29 +6,18 @@ namespace Restmium.ERP.Services.Warehouse.Application.Commands
 {
     public class CreateWarehouseCommand : IRequest<Domain.Entities.Warehouse>
     {
-        public CreateWarehouseCommand(CreateWarehouseCommandModel model)
+        public CreateWarehouseCommand(string name, Address address, ICollection<Section> sections)
         {
-            this.Model = model;
+            this.Name = name;
+            this.Address = address;
+            this.Sections = sections;
         }
-        public CreateWarehouseCommand(Domain.Entities.Warehouse warehouse)
-            : this(new CreateWarehouseCommandModel(warehouse.Name, warehouse.Address, warehouse.Sections))
+        public CreateWarehouseCommand(Domain.Entities.Warehouse warehouse) : this(warehouse.Name, warehouse.Address, warehouse.Sections)
         {
         }
 
-        public CreateWarehouseCommandModel Model { get; }
-
-        public class CreateWarehouseCommandModel
-        {
-            public CreateWarehouseCommandModel(string name, Address address, ICollection<Section> sections)
-            {
-                this.Name = name;
-                this.Address = address;
-                this.Sections = sections;
-            }
-
-            public string Name { get; }
-            public Address Address { get; }
-            public ICollection<Section> Sections { get; }
-        }
+        public string Name { get; }
+        public Address Address { get; }
+        public ICollection<Section> Sections { get; }
     }
 }

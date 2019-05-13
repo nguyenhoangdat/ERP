@@ -49,7 +49,7 @@ namespace Warehouse.API.Controllers
         [HttpGet("All/{page}/{itemsPerPage}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(500)]
-        public async Task<ActionResult<PageDto<Entities.Warehouse>>> GetAll(int page, int itemsPerPage)
+        public async Task<ActionResult<PageDTO<Entities.Warehouse>>> GetAll(int page, int itemsPerPage)
         {
             try
             {

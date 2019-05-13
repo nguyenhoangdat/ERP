@@ -19,11 +19,11 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
 
         public async Task<Ware> Handle(FindWareByIdCommand request, CancellationToken cancellationToken)
         {
-            Ware ware = await this.DatabaseContext.Wares.FindAsync(new object[] { request.Model.WareId }, cancellationToken);
+            Ware ware = await this.DatabaseContext.Wares.FindAsync(new object[] { request.WareId }, cancellationToken);
 
             if (ware == null)
             {
-                throw new EntityNotFoundException(string.Format(Resources.Exceptions.Values["Ware_EntityNotFoundException"], request.Model.WareId));
+                throw new EntityNotFoundException(string.Format(Resources.Exceptions.Values["Ware_EntityNotFoundException"], request.WareId));
             }
 
             return ware;

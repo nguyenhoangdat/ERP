@@ -21,7 +21,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
 
         public async Task<Section> Handle(CreateSectionCommand request, CancellationToken cancellationToken)
         {
-            Section section = this.DatabaseContext.Sections.Add(new Section(request.Model.Name, request.Model.WarehouseId)).Entity;
+            Section section = this.DatabaseContext.Sections.Add(new Section(request.Name, request.WarehouseId)).Entity;
             await this.DatabaseContext.SaveChangesAsync(cancellationToken);
 
             await this.Mediator.Publish(new SectionCreatedDomainEvent(section), cancellationToken);

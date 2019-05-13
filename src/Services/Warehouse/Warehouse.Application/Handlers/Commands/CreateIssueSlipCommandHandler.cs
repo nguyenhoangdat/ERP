@@ -30,7 +30,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
             {
                 foreach (KeyValuePair<Position, int> valuePair in await this.FindPositions(item.Ware, item.RequstedUnits, cancellationToken))
                 {
-                    items.AddLast(new IssueSlip.Item(0, item.Ware.Id, valuePair.Key.Id, valuePair.Value, 0, 0));
+                    items.AddLast(new IssueSlip.Item(0, item.Ware.Id, valuePair.Key.Id, valuePair.Value, 0));
                 }
             }
 

@@ -26,18 +26,18 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
         public async Task<StockTaking> Handle(CreateStockTakingForSectionCommand request, CancellationToken cancellationToken)
         {
             // Ensure that Position with specified Id exists
-            Section section = this.DatabaseContext.Sections.Find(request.Model.SectionId);
+            Section section = this.DatabaseContext.Sections.Find(request.SectionId);
             if (section == null)
             {
-                throw new EntityNotFoundException(string.Format(Resources.Exceptions.Values["Section_EntityNotFoundException"], request.Model.SectionId));
+                throw new EntityNotFoundException(string.Format(Resources.Exceptions.Values["Section_EntityNotFoundException"], request.SectionId));
             }
 
             // Create Model.Items for Positions
-            IEnumerable<Position> positions = this.DatabaseContext.Positions.Where(x => x.SectionId == request.Model.SectionId).ToList();
-            List<CreateStockTakingCommand.CreateStockTakingCommandModel.Item> items = new List<CreateStockTakingCommand.CreateStockTakingCommandModel.Item>();
+            IEnumerable<Position> positions = this.DatabaseContext.Positions.Where(x => x.SectionId == request.SectionId).ToList();
+            List<CreateStockTakingCommand.Item> items = new List<CreateStockTakingCommand.Item>();
             foreach (Position item in positions)
             {
-                items.Add(new CreateStockTakingCommand.CreateStockTakingCommandModel.Item(item.GetWare().Id, item.Id, item.CountWare(), 0));
+                items.Add(new CreateStockTakingCommand.Item(item.GetWare().Id, item.Id, item.CountWare(), 0));
             }
 
             // Create StockTaking through command

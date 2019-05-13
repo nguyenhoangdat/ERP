@@ -22,15 +22,15 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
         public async Task<IssueSlip> Handle(FindIssueSlipToProcessInSectionCommand request, CancellationToken cancellationToken)
         {
             // Ensure that the Section exists and if not then throw an EntityNotFoundException
-            Section section = await this.DatabaseContext.Sections.FindAsync(new object[] { request.Model.SectionId }, cancellationToken);
+            Section section = await this.DatabaseContext.Sections.FindAsync(new object[] { request.SectionId }, cancellationToken);
             if (section == null)
             {
-                throw new EntityNotFoundException(string.Format(Resources.Exceptions.Values["Section_EntityNotFoundException"], request.Model.SectionId));
+                throw new EntityNotFoundException(string.Format(Resources.Exceptions.Values["Section_EntityNotFoundException"], request.SectionId));
             }
 
             // Return IssueSlip that need to be processed ASAP
             return this.DatabaseContext.IssueSlips
-                .Where(x => x.GetSection().Id == request.Model.SectionId)
+                .Where(x => x.GetSection().Id == request.SectionId)
                 .OrderBy(x => x.UtcDeliveryDate)
                 .FirstOrDefault();
         }

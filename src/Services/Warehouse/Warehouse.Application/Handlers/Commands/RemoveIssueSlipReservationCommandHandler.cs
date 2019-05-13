@@ -21,13 +21,13 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
 
         public async Task<Position> Handle(RemoveIssueSlipReservationCommand request, CancellationToken cancellationToken)
         {
-            Position position = request.Model.Position;
+            Position position = request.Position;
 
             // Remove reservation
-            position.ReservedUnits -= request.Model.ReservedUnitsToRemove;
+            position.ReservedUnits -= request.ReservedUnitsToRemove;
 
             // Update in Database
-            position = this.DatabaseContext.Positions.Update(request.Model.Position).Entity;
+            position = this.DatabaseContext.Positions.Update(request.Position).Entity;
             await this.DatabaseContext.SaveChangesAsync(cancellationToken);
 
             // Publish DomainEvent that the reservation has been removed

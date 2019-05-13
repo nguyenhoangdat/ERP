@@ -3,7 +3,7 @@ using Restmium.ERP.Services.Warehouse.Application.Models;
 
 namespace Restmium.ERP.Services.Warehouse.Application.Commands
 {
-    public class FindWarehousesOnPageCommand : IRequest<PageDto<Domain.Entities.Warehouse>>
+    public class FindWarehousesOnPageCommand : IRequest<PageDTO<Domain.Entities.Warehouse>>
     {
         public FindWarehousesOnPageCommand(int page, int itemsPerPage)
         {

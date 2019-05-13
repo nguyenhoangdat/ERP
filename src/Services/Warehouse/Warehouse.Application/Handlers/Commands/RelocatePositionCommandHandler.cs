@@ -36,17 +36,17 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
         /// <returns>Position to which were the Wares transfered</returns>
         public async Task<Position> Handle(RelocatePositionCommand request, CancellationToken cancellationToken)
         {
-            Position positionFrom = this.DatabaseContext.Positions.Find(request.Model.FromPositionWithId);
-            Position positionTo = this.DatabaseContext.Positions.Find(request.Model.ToPositionWithId);
+            Position positionFrom = this.DatabaseContext.Positions.Find(request.FromPositionWithId);
+            Position positionTo = this.DatabaseContext.Positions.Find(request.ToPositionWithId);
 
             // Throw exceptions when Position is not found
             if (positionFrom == null)
             {
-                throw new EntityNotFoundException(string.Format(Resources.Exceptions.Values["Position_EntityNotFoundException"], request.Model.FromPositionWithId));
+                throw new EntityNotFoundException(string.Format(Resources.Exceptions.Values["Position_EntityNotFoundException"], request.FromPositionWithId));
             }
             if (positionTo == null)
             {
-                throw new EntityNotFoundException(string.Format(Resources.Exceptions.Values["Position_EntityNotFoundException"], request.Model.ToPositionWithId));
+                throw new EntityNotFoundException(string.Format(Resources.Exceptions.Values["Position_EntityNotFoundException"], request.ToPositionWithId));
             }
 
             // Throw an exception when Position from which is transfered is empty
@@ -75,8 +75,8 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
             // Relocate Wares between Positions - create movements
             Ware ware = positionFrom.GetWare();
             int unitsToRelocate = positionFrom.CountWare();
-            await this.Mediator.Send(new CreateMovementCommand(ware.Id, positionFrom.Id, Movement.Direction.Out, unitsToRelocate, 0), cancellationToken); //TODO: Add EmployeeId
-            await this.Mediator.Send(new CreateMovementCommand(ware.Id, positionTo.Id, Movement.Direction.In, unitsToRelocate, 0), cancellationToken); //TODO: Add EmployeeId
+            await this.Mediator.Send(new CreateMovementCommand(ware.Id, positionFrom.Id, Movement.Direction.Out, unitsToRelocate), cancellationToken);
+            await this.Mediator.Send(new CreateMovementCommand(ware.Id, positionTo.Id, Movement.Direction.In, unitsToRelocate), cancellationToken);
 
             // Update ReservedUnits
             positionFrom = await this.Mediator.Send(new RemoveIssueSlipReservationCommand(positionFrom, unitsToRelocate), cancellationToken);

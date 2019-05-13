@@ -5,24 +5,11 @@ namespace Restmium.ERP.Services.Warehouse.Application.Commands
 {
     public class DeleteStockTakingCommand : IRequest<StockTaking>
     {
-        public DeleteStockTakingCommand(DeleteStockTakingCommandModel model)
+        public DeleteStockTakingCommand(int id)
         {
-            this.Model = model;
-        }
-        public DeleteStockTakingCommand(int id) : this(new DeleteStockTakingCommandModel(id))
-        {
+            this.Id = id;
         }
 
-        public DeleteStockTakingCommandModel Model { get; }
-
-        public class DeleteStockTakingCommandModel
-        {
-            public DeleteStockTakingCommandModel(int id)
-            {
-                this.Id = id;
-            }
-
-            public int Id { get; }
-        }
+        public int Id { get; }
     }
 }

@@ -17,22 +17,21 @@ namespace Restmium.ERP.Services.Warehouse.Domain.Entities
                 this.WareId = wareId;
                 this.CountOrdered = countOrdered;
             }
-            public Item(long receiptId, long? positionId, int wareId, int countOrdered, int countReceived, int employeeId) : this(wareId, countOrdered)
+            public Item(long receiptId, long? positionId, int wareId, int countOrdered, int countReceived) : this(wareId, countOrdered)
             {
                 this.ReceiptId = receiptId;
                 this.PositionId = positionId;
                 this.CountReceived = countReceived;
-                this.EmployeeId = employeeId;
             }
-            public Item(Receipt receipt, long? positionId, int wareId, int countOrdered, int countReceived, int employeeId) : this(receipt.Id, positionId, wareId, countOrdered, countReceived, employeeId)
+            public Item(Receipt receipt, long? positionId, int wareId, int countOrdered, int countReceived) : this(receipt.Id, positionId, wareId, countOrdered, countReceived)
             {
                 this.Receipt = receipt;
             }
-            public Item(long receiptId, long? positionId, int wareId, int countOrdered, int countReceived, int employeeId, DateTime? utcProcessed) : this(receiptId, positionId, wareId, countOrdered, countReceived, employeeId)
+            public Item(long receiptId, long? positionId, int wareId, int countOrdered, int countReceived, DateTime? utcProcessed) : this(receiptId, positionId, wareId, countOrdered, countReceived)
             {
                 this.UtcProcessed = utcProcessed;
             }
-            public Item(Receipt receipt, long? positionId, int wareId, int countOrdered, int countReceived, int employeeId, DateTime? utcProcessed) : this(receipt, positionId, wareId, countOrdered, countReceived, employeeId)
+            public Item(Receipt receipt, long? positionId, int wareId, int countOrdered, int countReceived, DateTime? utcProcessed) : this(receipt, positionId, wareId, countOrdered, countReceived)
             {
                 this.UtcProcessed = utcProcessed;
             }
@@ -43,12 +42,6 @@ namespace Restmium.ERP.Services.Warehouse.Domain.Entities
 
             public long? PositionId { get; set; }
             public virtual Position Position { get; set; }
-
-            /// <summary>
-            /// FK to Employees.API
-            /// </summary>
-            [Required]
-            public int EmployeeId { get; set; }
 
             [Required]
             public long ReceiptId { get; set; }

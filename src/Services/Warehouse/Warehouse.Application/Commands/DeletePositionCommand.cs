@@ -5,24 +5,11 @@ namespace Restmium.ERP.Services.Warehouse.Application.Commands
 {
     public class DeletePositionCommand : IRequest<Position>
     {
-        public DeletePositionCommand(DeletePositionCommandModel model)
+        public DeletePositionCommand(long id)
         {
-            this.Model = model;
-        }
-        public DeletePositionCommand(long id) : this(new DeletePositionCommandModel(id))
-        {
+            this.Id = id;
         }
 
-        public DeletePositionCommandModel Model { get; }
-
-        public class DeletePositionCommandModel
-        {
-            public DeletePositionCommandModel(long id)
-            {
-                this.Id = id;
-            }
-
-            public long Id { get; }
-        }
+        public long Id { get; }
     }
 }

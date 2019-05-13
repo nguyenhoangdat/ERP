@@ -6,22 +6,11 @@ namespace Restmium.ERP.Services.Warehouse.Application.Commands
 {
     public class FindSectionsInWarehouseCommand : IRequest<IEnumerable<Section>>
     {
-        public FindSectionsInWarehouseCommand(FindSectionInWarehouseCommandModel model)
+        public FindSectionsInWarehouseCommand(int warehouseId)
         {
-            this.Model = model;
+            this.WarehouseId = warehouseId;
         }
-        public FindSectionsInWarehouseCommand(int warehouseId) : this(new FindSectionInWarehouseCommandModel(warehouseId)) { }
 
-        public FindSectionInWarehouseCommandModel Model { get; }
-        
-        public class FindSectionInWarehouseCommandModel
-        {
-            public FindSectionInWarehouseCommandModel(int warehouseId)
-            {
-                this.WarehouseId = warehouseId;
-            }
-
-            public int WarehouseId { get; }
-        }
+        public int WarehouseId { get; }
     }
 }

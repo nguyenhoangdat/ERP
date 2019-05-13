@@ -23,19 +23,19 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
 
         public async Task<Position> Handle(UpdatePositionCommand request, CancellationToken cancellationToken)
         {
-            if (!this.DatabaseContext.Positions.Any(x => x.Id == request.Model.Id))
+            if (!this.DatabaseContext.Positions.Any(x => x.Id == request.Id))
             {
-                throw new EntityNotFoundException(string.Format(Resources.Exceptions.Values["Position_Update_EntityNotFoundException"], request.Model.Id));
+                throw new EntityNotFoundException(string.Format(Resources.Exceptions.Values["Position_Update_EntityNotFoundException"], request.Id));
             }
 
-            Position position = this.DatabaseContext.Positions.Find(request.Model.Id);
-            position.Name = request.Model.Name;
-            position.Width = request.Model.Width;
-            position.Height = request.Model.Height;
-            position.Depth = request.Model.Depth;
-            position.MaxWeight = request.Model.MaxWeight;
-            position.Rating = request.Model.Rating;
-            position.ReservedUnits = request.Model.ReservedUnits;
+            Position position = this.DatabaseContext.Positions.Find(request.Id);
+            position.Name = request.Name;
+            position.Width = request.Width;
+            position.Height = request.Height;
+            position.Depth = request.Depth;
+            position.MaxWeight = request.MaxWeight;
+            position.Rating = request.Rating;
+            position.ReservedUnits = request.ReservedUnits;
 
             await this.DatabaseContext.SaveChangesAsync(cancellationToken);
 

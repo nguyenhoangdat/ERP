@@ -6,43 +6,29 @@ namespace Restmium.ERP.Services.Warehouse.Application.Commands
 {
     public class CreateStockTakingCommand : IRequest<StockTaking>
     {
-        public CreateStockTakingCommand(CreateStockTakingCommandModel model)
+        public CreateStockTakingCommand(string name, List<Item> items)
         {
-            this.Model = model;
-        }
-        public CreateStockTakingCommand(string name, List<CreateStockTakingCommandModel.Item> items)
-            : this(new CreateStockTakingCommandModel(name, items))
-        {
+            this.Name = name;
+            this.Items = items;
         }
 
-        public CreateStockTakingCommandModel Model { get; }
+        public string Name { get; }
+        public List<Item> Items { get; }
 
-        public class CreateStockTakingCommandModel
+        public class Item
         {
-            public CreateStockTakingCommandModel(string name, List<Item> items)
+            public Item(int wareId, long positionId, int currentStock, int countedStock)
             {
-                this.Name = name;
-                this.Items = items;
+                this.WareId = wareId;
+                this.PositionId = positionId;
+                this.CurrentStock = currentStock;
+                this.CountedStock = countedStock;
             }
 
-            public string Name { get; }
-            public List<Item> Items { get; }
-
-            public class Item
-            {
-                public Item(int wareId, long positionId, int currentStock, int countedStock)
-                {
-                    this.WareId = wareId;
-                    this.PositionId = positionId;
-                    this.CurrentStock = currentStock;
-                    this.CountedStock = countedStock;
-                }
-
-                public int WareId { get; }
-                public long PositionId { get; }
-                public int CurrentStock { get; }
-                public int CountedStock { get; }
-            }
+            public int WareId { get; }
+            public long PositionId { get; }
+            public int CurrentStock { get; }
+            public int CountedStock { get; }
         }
     }
 }

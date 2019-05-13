@@ -22,7 +22,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
         public async Task<Entities.Warehouse> Handle(CreateWarehouseCommand request, CancellationToken cancellationToken)
         {
             // Create Warehouse and Save it in the Database
-            Entities.Warehouse warehouse = this.DatabaseContext.Warehouses.Add(new Entities.Warehouse(request.Model.Name, request.Model.Address, request.Model.Sections)).Entity;
+            Entities.Warehouse warehouse = this.DatabaseContext.Warehouses.Add(new Entities.Warehouse(request.Name, request.Address, request.Sections)).Entity;
             await this.DatabaseContext.SaveChangesAsync(cancellationToken);
 
             // Publish DomainEvent that the Warehouse has been created

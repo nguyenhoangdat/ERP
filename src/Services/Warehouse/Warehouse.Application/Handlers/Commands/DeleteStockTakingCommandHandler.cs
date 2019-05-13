@@ -21,10 +21,10 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
 
         public async Task<StockTaking> Handle(DeleteStockTakingCommand request, CancellationToken cancellationToken)
         {
-            StockTaking stockTaking = await this.DatabaseContext.StockTakings.FindAsync(new object[] { request.Model.Id }, cancellationToken);
+            StockTaking stockTaking = await this.DatabaseContext.StockTakings.FindAsync(new object[] { request.Id }, cancellationToken);
             if (stockTaking == null)
             {
-                throw new EntityNotFoundException(string.Format(Resources.Exceptions.Values["StockTaking_EntityNotFoundException"], request.Model.Id));
+                throw new EntityNotFoundException(string.Format(Resources.Exceptions.Values["StockTaking_EntityNotFoundException"], request.Id));
             }
 
             stockTaking = this.DatabaseContext.StockTakings.Remove(stockTaking).Entity;

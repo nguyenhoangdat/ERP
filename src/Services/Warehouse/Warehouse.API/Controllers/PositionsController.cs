@@ -49,7 +49,7 @@ namespace Warehouse.API.Controllers
         [HttpGet("All/{page}/{itemsPerPage}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(500)]
-        public async Task<ActionResult<PageDto<Position>>> GetAll(int page, int itemsPerPage)
+        public async Task<ActionResult<PageDTO<Position>>> GetAll(int page, int itemsPerPage)
         {
             try
             {
@@ -76,7 +76,7 @@ namespace Warehouse.API.Controllers
 
             try
             {
-                position = await this.Mediator.Send(new CreatePositionCommand(position.Name, position.Width, position.Height, position.Depth, position.MaxWeight, position.SectionId, position.Rating));
+                position = await this.Mediator.Send(new CreatePositionCommand(position.Name, position.Width, position.Height, position.Depth, position.MaxWeight, position.SectionId));
                 return this.CreatedAtAction("GetPosition", new { id = position.Id }, position);
             }
             catch (Exception)

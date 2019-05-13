@@ -11,19 +11,18 @@ namespace Restmium.ERP.Services.Warehouse.Domain.Entities
             {
 
             }
-            private Item(int requestedUnits, int issuedUnits, int employeeId) : this()
+            private Item(int requestedUnits, int issuedUnits) : this()
             {
                 this.RequestedUnits = requestedUnits;
                 this.IssuedUnits = issuedUnits;
-                this.EmployeeId = employeeId;
             }
-            public Item(long issueSlipId, int wareId, long positionId, int requestedUnits, int issuedUnits, int employeeId) : this(requestedUnits, issuedUnits, employeeId)
+            public Item(long issueSlipId, int wareId, long positionId, int requestedUnits, int issuedUnits) : this(requestedUnits, issuedUnits)
             {
                 this.IssueSlipId = issueSlipId;
                 this.WareId = wareId;
                 this.PositionId = positionId;
             }
-            public Item(IssueSlip issueSlip, Ware ware, Position position, int requestedUnits, int issuedUnits, int employeeId) : this(requestedUnits, issuedUnits, employeeId)
+            public Item(IssueSlip issueSlip, Ware ware, Position position, int requestedUnits, int issuedUnits) : this(requestedUnits, issuedUnits)
             {
                 this.IssueSlip = issueSlip;
                 this.Ware = ware;
@@ -37,12 +36,6 @@ namespace Restmium.ERP.Services.Warehouse.Domain.Entities
             [Required]
             public long PositionId { get; set; }
             public virtual Position Position { get; set; }
-
-            /// <summary>
-            /// FK to Employees.API
-            /// </summary>
-            [Required]
-            public int EmployeeId { get; set; }
 
             [Required]
             public long IssueSlipId { get; set; }

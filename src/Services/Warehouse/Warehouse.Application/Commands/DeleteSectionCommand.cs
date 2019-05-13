@@ -5,22 +5,11 @@ namespace Restmium.ERP.Services.Warehouse.Application.Commands
 {
     public class DeleteSectionCommand : IRequest<Section>
     {
-        public DeleteSectionCommand(DeleteSectionCommandModel model)
+        public DeleteSectionCommand(int id)
         {
-            this.Model = model;
+            this.Id = id;
         }
-        public DeleteSectionCommand(int id) : this(new DeleteSectionCommandModel(id)) { }
 
-        public DeleteSectionCommandModel Model { get; }
-
-        public class DeleteSectionCommandModel
-        {
-            public DeleteSectionCommandModel(int id)
-            {
-                this.Id = id;
-            }
-
-            public int Id { get; }
-        }
+        public int Id { get; }
     }
 }

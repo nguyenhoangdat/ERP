@@ -40,12 +40,12 @@ namespace Restmium.ERP.Services.Warehouse.Application.DependencyInjection.Handle
         /// <param name="receipt">The instance of ReceiptDTO</param>
         /// <param name="cancellationToken">A System.Threading.CancellationToken to observe while waiting for the task to complete.</param>
         /// <returns></returns>
-        public async Task<Receipt> HandleAsync(ReceiptDto receiptDTO, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<Receipt> HandleAsync(ReceiptDTO receiptDTO, CancellationToken cancellationToken = default(CancellationToken))
         {
             HashSet<Receipt.Item> items = new HashSet<Receipt.Item>(receiptDTO.Items.Count);
 
             // Create list of Receipt.Item from ReceiptDTO.Item
-            foreach (ReceiptDto.Item item in receiptDTO.Items)
+            foreach (ReceiptDTO.ItemDTO item in receiptDTO.Items)
             {
                 Ware ware = this.DatabaseContext.Wares.Where(x => x.ProductId == item.ProductId).FirstOrDefault();
 

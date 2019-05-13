@@ -19,10 +19,10 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
 
         public async Task<Receipt> Handle(FindReceiptByIdCommand request, CancellationToken cancellationToken)
         {
-            Receipt receipt = await this.DatabaseContext.Receipts.FindAsync(new object[] { request.Model.ReceiptId }, cancellationToken);
+            Receipt receipt = await this.DatabaseContext.Receipts.FindAsync(new object[] { request.ReceiptId }, cancellationToken);
             if (receipt == null)
             {
-                throw new EntityNotFoundException(string.Format(Resources.Exceptions.Values["Receipt_EntityNotFoundException"], request.Model.ReceiptId));
+                throw new EntityNotFoundException(string.Format(Resources.Exceptions.Values["Receipt_EntityNotFoundException"], request.ReceiptId));
             }
 
             return receipt;

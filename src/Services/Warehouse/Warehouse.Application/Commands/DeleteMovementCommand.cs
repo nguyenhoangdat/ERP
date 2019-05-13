@@ -5,21 +5,11 @@ namespace Restmium.ERP.Services.Warehouse.Application.Commands
 {
     public class DeleteMovementCommand : IRequest<Movement>
     {
-        public DeleteMovementCommand(DeleteMovementCommandModel model)
+        public DeleteMovementCommand(long id)
         {
-            this.Model = model;
+            this.Id = id;
         }
 
-        public DeleteMovementCommandModel Model { get; }
-
-        public class DeleteMovementCommandModel
-        {
-            public DeleteMovementCommandModel(long id)
-            {
-                this.Id = id;
-            }
-
-            public long Id { get; }
-        }
+        public long Id { get; }
     }
 }

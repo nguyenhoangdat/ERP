@@ -28,7 +28,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Integration
         public async Task Handle(SuppliesOrderedIntegrationEvent @event)
         {
             // Create Receipt.Items without assigning positions
-            List<CreateReceiptCommand.CreateReceiptCommandModel.Item> items = new List<CreateReceiptCommand.CreateReceiptCommandModel.Item>();
+            List<CreateReceiptCommand.Item> items = new List<CreateReceiptCommand.Item>();
             foreach (SuppliesOrderedIntegrationEvent.SupplyItem item in @event.Items)
             {
                 Ware ware = this.DatabaseContext.Wares.Where(x => x.ProductId == item.ProductId).FirstOrDefault();
@@ -38,7 +38,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Integration
                 }
                 else
                 {
-                    items.Add(new CreateReceiptCommand.CreateReceiptCommandModel.Item(ware.Id, item.Count));
+                    items.Add(new CreateReceiptCommand.Item(ware.Id, item.Count));
                 }
             }
 

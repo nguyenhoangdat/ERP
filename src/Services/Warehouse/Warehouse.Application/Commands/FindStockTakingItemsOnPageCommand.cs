@@ -4,7 +4,7 @@ using Restmium.ERP.Services.Warehouse.Domain.Entities;
 
 namespace Restmium.ERP.Services.Warehouse.Application.Commands
 {
-    public class FindStockTakingItemsOnPageCommand : IRequest<PageDto<StockTaking.Item>>
+    public class FindStockTakingItemsOnPageCommand : IRequest<PageDTO<StockTaking.Item>>
     {
         public FindStockTakingItemsOnPageCommand(int page, int itemsPerPage)
         {

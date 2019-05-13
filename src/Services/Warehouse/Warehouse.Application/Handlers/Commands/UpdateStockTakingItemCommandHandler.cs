@@ -25,16 +25,16 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
             // Find StockTaking.Item and throw an exception if not found
             StockTaking.Item item = await this.DatabaseContext.StockTakingItems.FindAsync(new object[]
             {
-                request.Model.StockTakingId,
-                request.Model.PositionId
+                request.StockTakingId,
+                request.PositionId
             }, cancellationToken);
             if (item == null)
             {
-                throw new EntityNotFoundException(string.Format(Resources.Exceptions.Values["StockTakingItem_EntityNotFoundException"], request.Model.StockTakingId, request.Model.PositionId));
+                throw new EntityNotFoundException(string.Format(Resources.Exceptions.Values["StockTakingItem_EntityNotFoundException"], request.StockTakingId, request.PositionId));
             }
 
             // Update and Save
-            item = this.DatabaseContext.StockTakingItems.Update(new StockTaking.Item(request.Model.StockTakingId, request.Model.WareId, request.Model.PositionId, request.Model.CurrentStock, request.Model.CountedStock, request.Model.EmployeeId, request.Model.UtcCounted)).Entity;
+            item = this.DatabaseContext.StockTakingItems.Update(new StockTaking.Item(request.StockTakingId, request.WareId, request.PositionId, request.CurrentStock, request.CountedStock, request.UtcCounted)).Entity;
             await this.DatabaseContext.SaveChangesAsync(cancellationToken);
 
             // Publish Domain Event that the StockTaking.Item has been updated

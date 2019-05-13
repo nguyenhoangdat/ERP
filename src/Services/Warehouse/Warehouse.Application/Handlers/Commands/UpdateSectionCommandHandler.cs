@@ -23,13 +23,13 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
 
         public async Task<Section> Handle(UpdateSectionCommand request, CancellationToken cancellationToken)
         {
-            if (!this.DatabaseContext.Sections.Any(x => x.Id == request.Model.Id))
+            if (!this.DatabaseContext.Sections.Any(x => x.Id == request.Id))
             {
-                throw new EntityNotFoundException(string.Format(Resources.Exceptions.Values["Section_Update_EntityNotFoundException"], request.Model.Id));
+                throw new EntityNotFoundException(string.Format(Resources.Exceptions.Values["Section_Update_EntityNotFoundException"], request.Id));
             }
 
-            Section section = this.DatabaseContext.Sections.Find(request.Model.Id);
-            section.Name = request.Model.Name;
+            Section section = this.DatabaseContext.Sections.Find(request.Id);
+            section.Name = request.Name;
             await this.DatabaseContext.SaveChangesAsync(cancellationToken);
 
             await this.Mediator.Publish(new SectionUpdatedDomainEvent(section), cancellationToken);

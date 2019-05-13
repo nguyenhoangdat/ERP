@@ -24,18 +24,18 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
 
         public async Task<IssueSlip> Handle(UpdateIssueSlipCommand request, CancellationToken cancellationToken)
         {
-            if (!this.DatabaseContext.IssueSlips.Any(x => x.Id == request.Model.Id))
+            if (!this.DatabaseContext.IssueSlips.Any(x => x.Id == request.Id))
             {
-                throw new EntityNotFoundException(string.Format(Resources.Exceptions.Values["IssueSlip_Update_EntityNotFoundException"], request.Model.Id));
+                throw new EntityNotFoundException(string.Format(Resources.Exceptions.Values["IssueSlip_Update_EntityNotFoundException"], request.Id));
             }
 
             List<IssueSlip.Item> items = new List<IssueSlip.Item>();
-            foreach (UpdateIssueSlipCommand.UpdateIssueSlipCommandModel.Item item in request.Model.Items)
+            foreach (UpdateIssueSlipCommand.Item item in request.Items)
             {
-                items.Add(new IssueSlip.Item(item.IssueSlipId, item.WareId, item.PositionId, item.RequstedUnits, item.IssuedUnits, item.EmployeeId));
+                items.Add(new IssueSlip.Item(item.IssueSlipId, item.WareId, item.PositionId, item.RequstedUnits, item.IssuedUnits));
             }
 
-            IssueSlip issueSlip = this.DatabaseContext.IssueSlips.Update(new IssueSlip(request.Model.OrderId, request.Model.UtcDispatchDate, request.Model.UtcDeliveryDate, items)).Entity;
+            IssueSlip issueSlip = this.DatabaseContext.IssueSlips.Update(new IssueSlip(request.OrderId, request.UtcDispatchDate, request.UtcDeliveryDate, items)).Entity;
             await this.DatabaseContext.SaveChangesAsync(cancellationToken);
 
             await this.Mediator.Publish(new IssueSlipUpdatedDomainEvent(issueSlip), cancellationToken);

@@ -19,11 +19,11 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
 
         public async Task<IssueSlip> Handle(FindIssueSlipByIdCommand request, CancellationToken cancellationToken)
         {
-            IssueSlip issueSlip = await this.DatabaseContext.IssueSlips.FindAsync(new object[] { request.Model.IssueSlipId }, cancellationToken);
+            IssueSlip issueSlip = await this.DatabaseContext.IssueSlips.FindAsync(new object[] { request.IssueSlipId }, cancellationToken);
 
             if (issueSlip == null)
             {
-                throw new EntityNotFoundException(string.Format(Resources.Exceptions.Values["IssueSlip_EntityNotFoundException"], request.Model.IssueSlipId));
+                throw new EntityNotFoundException(string.Format(Resources.Exceptions.Values["IssueSlip_EntityNotFoundException"], request.IssueSlipId));
             }
 
             return issueSlip;

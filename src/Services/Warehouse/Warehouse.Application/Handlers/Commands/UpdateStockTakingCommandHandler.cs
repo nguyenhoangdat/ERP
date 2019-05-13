@@ -22,13 +22,13 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
 
         public async Task<StockTaking> Handle(UpdateStockTakingCommand request, CancellationToken cancellationToken)
         {
-            List<StockTaking.Item> items = new List<StockTaking.Item>(request.Model.Items.Count);
-            foreach (UpdateStockTakingCommand.UpdateStockTakingCommandModel.Item item in request.Model.Items)
+            List<StockTaking.Item> items = new List<StockTaking.Item>(request.Items.Count);
+            foreach (UpdateStockTakingCommand.Item item in request.Items)
             {
-                items.Add(new StockTaking.Item(item.StockTakingId, item.WareId, item.PositionId, item.CurrentStock, item.CountedStock, item.EmployeeId, item.UtcCounted));
+                items.Add(new StockTaking.Item(item.StockTakingId, item.WareId, item.PositionId, item.CurrentStock, item.CountedStock, item.UtcCounted));
             }
 
-            StockTaking stockTaking = this.DatabaseContext.StockTakings.Update(new StockTaking(request.Model.Name, items)).Entity;
+            StockTaking stockTaking = this.DatabaseContext.StockTakings.Update(new StockTaking(request.Name, items)).Entity;
             await this.DatabaseContext.SaveChangesAsync(cancellationToken);
 
             await this.Mediator.Publish(new StockTakingUpdatedDomainEvent(stockTaking), cancellationToken);

@@ -48,7 +48,7 @@ namespace Warehouse.API.Controllers
         [HttpGet("All/{page}/{itemsPerPage}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(500)]
-        public async Task<ActionResult<PageDto<Receipt>>> GetAll(int page, int itemsPerPage)
+        public async Task<ActionResult<PageDTO<Receipt>>> GetAll(int page, int itemsPerPage)
         {
             try
             {
@@ -75,10 +75,10 @@ namespace Warehouse.API.Controllers
 
             try
             {
-                List<UpdateReceiptCommand.UpdateReceiptCommandModel.Item> items = new List<UpdateReceiptCommand.UpdateReceiptCommandModel.Item>();
+                List<UpdateReceiptCommand.Item> items = new List<UpdateReceiptCommand.Item>();
                 foreach (Receipt.Item item in receipt.Items)
                 {
-                    items.Add(new UpdateReceiptCommand.UpdateReceiptCommandModel.Item(item.WareId, item.PositionId, item.ReceiptId, item.CountOrdered, item.CountReceived, item.UtcProcessed, item.EmployeeId));
+                    items.Add(new UpdateReceiptCommand.Item(item.WareId, item.PositionId, item.ReceiptId, item.CountOrdered, item.CountReceived, item.UtcProcessed));
                 }
 
                 receipt = await this.Mediator.Send(new UpdateReceiptCommand(receipt.Id, receipt.UtcExpected, receipt.UtcReceived, items));

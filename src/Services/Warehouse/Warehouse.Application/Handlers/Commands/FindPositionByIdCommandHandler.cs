@@ -19,11 +19,11 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
 
         public async Task<Position> Handle(FindPositionByIdCommand request, CancellationToken cancellationToken)
         {
-            Position position = await this.DatabaseContext.Positions.FindAsync(new object[] { request.Model.Id }, cancellationToken);
+            Position position = await this.DatabaseContext.Positions.FindAsync(new object[] { request.Id }, cancellationToken);
 
             if (position == null)
             {
-                throw new EntityNotFoundException(string.Format(Resources.Exceptions.Values["Position_EntityNotFoundException"], request.Model.Id));
+                throw new EntityNotFoundException(string.Format(Resources.Exceptions.Values["Position_EntityNotFoundException"], request.Id));
             }
 
             return position;

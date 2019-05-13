@@ -5,24 +5,11 @@ namespace Restmium.ERP.Services.Warehouse.Application.Commands
 {
     public class FindStockTakingByIdCommand : IRequest<StockTaking>
     {
-        public FindStockTakingByIdCommand(FindStockTakingByIdCommandModel model)
+        public FindStockTakingByIdCommand(int id)
         {
-            this.Model = model;
-        }
-        public FindStockTakingByIdCommand(int id) : this(new FindStockTakingByIdCommandModel(id))
-        {
+            this.Id = id;
         }
 
-        public FindStockTakingByIdCommandModel Model { get; }
-
-        public class FindStockTakingByIdCommandModel
-        {
-            public FindStockTakingByIdCommandModel(int id)
-            {
-                this.Id = id;
-            }
-
-            public int Id { get; }
-        }
+        public int Id { get; }
     }
 }

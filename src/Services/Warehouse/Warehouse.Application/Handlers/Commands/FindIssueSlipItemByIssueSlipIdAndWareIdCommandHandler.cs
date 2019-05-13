@@ -22,12 +22,12 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
             // Find an IssueSlip.Item and throw an exception if not found
             IssueSlip.Item item = await this.DatabaseContext.IssueSlipItems.FindAsync(new object[]
             {
-                request.Model.IssueSlipId,
-                request.Model.WareId
+                request.IssueSlipId,
+                request.WareId
             }, cancellationToken);
             if (item == null)
             {
-                throw new EntityNotFoundException(string.Format(Resources.Exceptions.Values["IssueSlipItem_EntityNotFoundException"], request.Model.IssueSlipId, request.Model.WareId));
+                throw new EntityNotFoundException(string.Format(Resources.Exceptions.Values["IssueSlipItem_EntityNotFoundException"], request.IssueSlipId, request.WareId));
             }
 
             return item;

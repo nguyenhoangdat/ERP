@@ -13,16 +13,15 @@ namespace Restmium.ERP.Services.Warehouse.Domain.Entities
             {
 
             }
-            public Item(int stockTakingId, int wareId, long positionId, int currentStock, int countedStock, int employeeId) : this()
+            public Item(int stockTakingId, int wareId, long positionId, int currentStock, int countedStock) : this()
             {
                 this.StockTakingId = stockTakingId;
                 this.WareId = wareId;
                 this.PositionId = positionId;
                 this.CurrentStock = currentStock;
                 this.CountedStock = countedStock;
-                this.EmployeeId = employeeId;
             }
-            public Item(int stockTakingId, int wareId, long positionId, int currentStock, int countedStock, int employeeId, DateTime? utcCounted) : this(stockTakingId, wareId, positionId, currentStock, countedStock, employeeId)
+            public Item(int stockTakingId, int wareId, long positionId, int currentStock, int countedStock, DateTime? utcCounted) : this(stockTakingId, wareId, positionId, currentStock, countedStock)
             {
                 this.UtcCounted = utcCounted;
             }
@@ -34,12 +33,6 @@ namespace Restmium.ERP.Services.Warehouse.Domain.Entities
             [Required]
             public long PositionId { get; set; }
             public virtual Position Position { get; set; }
-
-            /// <summary>
-            /// FK to Employees.API
-            /// </summary>
-            [Required]
-            public int EmployeeId { get; set; }
 
             [Required]
             public int StockTakingId { get; set; }

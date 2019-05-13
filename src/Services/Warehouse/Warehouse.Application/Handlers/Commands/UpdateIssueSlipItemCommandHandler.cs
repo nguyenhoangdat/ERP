@@ -23,10 +23,10 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
         public async Task<IssueSlip.Item> Handle(UpdateIssueSlipItemCommand request, CancellationToken cancellationToken)
         {
             // Find IssueSlip in the Database
-            IssueSlip.Item item = this.DatabaseContext.IssueSlipItems.Where(x => x.IssueSlipId == request.Model.IssueSlipId && x.WareId == request.Model.WareId).FirstOrDefault();
+            IssueSlip.Item item = this.DatabaseContext.IssueSlipItems.Where(x => x.IssueSlipId == request.IssueSlipId && x.WareId == request.WareId).FirstOrDefault();
 
             // Update and Save
-            item.PositionId = request.Model.PositionId;
+            item.PositionId = request.PositionId;
             item = this.DatabaseContext.IssueSlipItems.Update(item).Entity;
             await this.DatabaseContext.SaveChangesAsync(cancellationToken);
 

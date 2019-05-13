@@ -34,7 +34,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
             }
 
             // Create Movement
-            await this.Mediator.Send(new CreateMovementCommand(item.WareId, position.Id, Movement.Direction.In, request.PositionCount.Count, 0)); //TODO: Add EmployeeId
+            await this.Mediator.Send(new CreateMovementCommand(item.WareId, position.Id, Movement.Direction.In, request.PositionCount.Count));
 
             return position;
         }

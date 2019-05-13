@@ -26,18 +26,18 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
         public async Task<StockTaking> Handle(CreateStockTakingForWarehouseCommand request, CancellationToken cancellationToken)
         {
             // Ensure that Warehouse with specified Id exists
-            Warehouse.Domain.Entities.Warehouse warehouse = this.DatabaseContext.Warehouses.Find(request.Model.WarehouseId);
+            Warehouse.Domain.Entities.Warehouse warehouse = this.DatabaseContext.Warehouses.Find(request.WarehouseId);
             if (warehouse == null)
             {
-                throw new EntityNotFoundException(string.Format(Resources.Exceptions.Values["Warehouse_EntityNotFoundException"], request.Model.WarehouseId));
+                throw new EntityNotFoundException(string.Format(Resources.Exceptions.Values["Warehouse_EntityNotFoundException"], request.WarehouseId));
             }
 
             // Create Model.Items for Positions in Warehouse
-            IEnumerable<Position> positions = this.DatabaseContext.Positions.Where(x => x.Section.WarehouseId == request.Model.WarehouseId).ToList();
-            List<CreateStockTakingCommand.CreateStockTakingCommandModel.Item> items = new List<CreateStockTakingCommand.CreateStockTakingCommandModel.Item>();
+            IEnumerable<Position> positions = this.DatabaseContext.Positions.Where(x => x.Section.WarehouseId == request.WarehouseId).ToList();
+            List<CreateStockTakingCommand.Item> items = new List<CreateStockTakingCommand.Item>();
             foreach (Position item in positions)
             {
-                items.Add(new CreateStockTakingCommand.CreateStockTakingCommandModel.Item(item.GetWare().Id, item.Id, item.CountWare(), 0));
+                items.Add(new CreateStockTakingCommand.Item(item.GetWare().Id, item.Id, item.CountWare(), 0));
             }
 
             // Create StockTaking through command

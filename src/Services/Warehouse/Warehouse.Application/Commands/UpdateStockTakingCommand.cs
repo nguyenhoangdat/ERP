@@ -7,47 +7,35 @@ namespace Restmium.ERP.Services.Warehouse.Application.Commands
 {
     public class UpdateStockTakingCommand : IRequest<StockTaking>
     {
-        public UpdateStockTakingCommand(UpdateStockTakingCommandModel model)
+        public UpdateStockTakingCommand(int id, string name, List<Item> items)
         {
-            this.Model = model;
+            this.Id = id;
+            this.Name = name;
+            this.Items = items;
         }
 
-        public UpdateStockTakingCommandModel Model { get; }
+        public int Id { get; }
+        public string Name { get; }
+        public List<Item> Items { get; }
 
-        public class UpdateStockTakingCommandModel
+        public class Item
         {
-            public UpdateStockTakingCommandModel(int id, string name, List<Item> items)
+            public Item(int stockTakingId, int wareId, long positionId, int currentStock, int countedStock, DateTime? utcCounted)
             {
-                this.Id = id;
-                this.Name = name;
-                this.Items = items;
+                this.StockTakingId = stockTakingId;
+                this.WareId = wareId;
+                this.PositionId = positionId;
+                this.CurrentStock = currentStock;
+                this.CountedStock = countedStock;
+                this.UtcCounted = utcCounted;
             }
 
-            public int Id { get; }
-            public string Name { get; }
-            public List<Item> Items { get; }
-
-            public class Item
-            {
-                public Item(int stockTakingId, int wareId, long positionId, int currentStock, int countedStock, int employeeId, DateTime? utcCounted)
-                {
-                    this.StockTakingId = stockTakingId;
-                    this.WareId = wareId;
-                    this.PositionId = positionId;
-                    this.CurrentStock = currentStock;
-                    this.CountedStock = countedStock;
-                    this.UtcCounted = utcCounted;
-                    this.EmployeeId = employeeId;
-                }
-
-                public int StockTakingId { get; }
-                public int WareId { get; }
-                public long PositionId { get; }
-                public int CurrentStock { get; }
-                public int CountedStock { get; }
-                public int EmployeeId { get; }
-                public DateTime? UtcCounted { get; }
-            }
+            public int StockTakingId { get; }
+            public int WareId { get; }
+            public long PositionId { get; }
+            public int CurrentStock { get; }
+            public int CountedStock { get; }
+            public DateTime? UtcCounted { get; }
         }
     }
 }
