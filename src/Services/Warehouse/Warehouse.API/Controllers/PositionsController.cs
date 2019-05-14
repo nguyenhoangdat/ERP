@@ -100,7 +100,7 @@ namespace Warehouse.API.Controllers
 
             try
             {
-                position = await this.Mediator.Send(new UpdatePositionCommand(position.Id, position.Name, position.Width, position.Height, position.Depth, position.MaxWeight, position.Rating, position.ReservedUnits));
+                position = await this.Mediator.Send(new UpdatePositionCommand(position.Id, position.Name, position.Width, position.Height, position.Depth, position.MaxWeight, position.ReservedUnits));
                 return this.NoContent();
             }
             catch (EntityNotFoundException ex)

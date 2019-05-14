@@ -34,7 +34,6 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
             position.Height = request.Height;
             position.Depth = request.Depth;
             position.MaxWeight = request.MaxWeight;
-            position.Rating = request.Rating;
             position.ReservedUnits = request.ReservedUnits;
 
             await this.DatabaseContext.SaveChangesAsync(cancellationToken);

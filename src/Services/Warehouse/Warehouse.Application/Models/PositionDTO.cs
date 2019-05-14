@@ -24,8 +24,5 @@ namespace Restmium.ERP.Services.Warehouse.Application.Models
 
         [Required]
         public int SectionId { get; set; }
-
-        [Required]
-        public int Rating { get; set; }
     }
 }

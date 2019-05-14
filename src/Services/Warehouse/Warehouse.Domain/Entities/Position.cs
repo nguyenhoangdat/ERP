@@ -21,15 +21,11 @@ namespace Restmium.ERP.Services.Warehouse.Domain.Entities
             this.Depth = depth;
             this.MaxWeight = maxWeight;
         }
-        public Position(string name, double width, double height, double depth, double maxWeight, int rating) : this(name, width, height, depth, maxWeight)
-        {
-            this.Rating = rating;
-        }
-        public Position(string name, double width, double height, double depth, double maxWeight, int sectionId, int rating) : this(name, width, height, depth, maxWeight, rating)
+        public Position(string name, double width, double height, double depth, double maxWeight, int sectionId) : this(name, width, height, depth, maxWeight)
         {
             this.SectionId = sectionId;
         }
-        public Position(string name, double width, double height, double depth, double maxWeight, Section section, int rating) : this(name, width, height, depth, maxWeight, rating)
+        public Position(string name, double width, double height, double depth, double maxWeight, Section section) : this(name, width, height, depth, maxWeight, section.Id)
         {
             this.Section = section;
         }
@@ -52,9 +48,6 @@ namespace Restmium.ERP.Services.Warehouse.Domain.Entities
         [Required]
         public int SectionId { get; set; }
         public virtual Section Section { get; set; }
-        
-        [Required]
-        public int Rating { get; set; }
 
         public virtual ICollection<Movement> Movements { get; protected set; }
         public virtual ICollection<IssueSlip.Item> IssueSlipItems { get; protected set; }

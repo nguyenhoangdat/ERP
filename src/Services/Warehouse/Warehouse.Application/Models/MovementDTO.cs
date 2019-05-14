@@ -17,9 +17,6 @@ namespace Restmium.ERP.Services.Warehouse.Application.Models
         public long PositionId { get; set; }
 
         [Required]
-        public int EmployeeId { get; set; }
-
-        [Required]
         public DirectionDTO MovementDirection { get; set; }
 
         [Required]

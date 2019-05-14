@@ -52,8 +52,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
             // Get all positions where Ware is stored
             IEnumerable<Position> positions = this.DatabaseContext.Positions
                 .Where(x => x.GetWare() == ware)
-                .OrderBy(x => x.Rating)
-                .ThenByDescending(x => x.CountWare())
+                .OrderBy(x => x.CountWare())
                 .ToList();
 
             // Issue units from positions + create reservations

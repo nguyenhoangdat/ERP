@@ -16,6 +16,7 @@ using Restmium.ERP.Services.Warehouse.Integration.Events;
 using Restmium.Messaging;
 using Restmium.Messaging.Azure.ServiceBus;
 using System.Reflection;
+using AutoMapper;
 
 namespace Restmium.ERP.Services.Warehouse.API
 {
@@ -75,6 +76,7 @@ namespace Restmium.ERP.Services.Warehouse.API
                     });
                 swagger.CustomSchemaIds(x => x.FullName);
             });
+            services.AddAutoMapper();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
