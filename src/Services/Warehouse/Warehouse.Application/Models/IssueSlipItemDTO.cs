@@ -7,7 +7,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Models
         /// <summary>
         /// DTO for <see cref="Domain.Entities.IssueSlip.Item"/>
         /// </summary>
-        public class IssueSlipItemDTO
+        public class ItemDTO
         {
             [Required]
             public int WareId { get; set; }

@@ -17,6 +17,7 @@ using Restmium.Messaging;
 using Restmium.Messaging.Azure.ServiceBus;
 using System.Reflection;
 using AutoMapper;
+using Restmium.ERP.Services.Warehouse.Application.Models.Mapping;
 
 namespace Restmium.ERP.Services.Warehouse.API
 {
@@ -76,7 +77,7 @@ namespace Restmium.ERP.Services.Warehouse.API
                     });
                 swagger.CustomSchemaIds(x => x.FullName);
             });
-            services.AddAutoMapper();
+            services.AddAutoMapper(typeof(AddressMappingProfile).Assembly);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
