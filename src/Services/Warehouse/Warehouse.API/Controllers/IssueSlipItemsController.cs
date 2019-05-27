@@ -1,5 +1,8 @@
-﻿using MediatR;
+﻿using AutoMapper;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Restmium.ERP.Services.Warehouse.API.Models.Application;
+using Restmium.ERP.Services.Warehouse.API.Models.Domain.Entities;
 using Restmium.ERP.Services.Warehouse.Application.Commands;
 using Restmium.ERP.Services.Warehouse.Application.Models;
 using Restmium.ERP.Services.Warehouse.Domain.Entities;
@@ -13,10 +16,12 @@ namespace Warehouse.API.Controllers
     [ApiController]
     public class IssueSlipItemsController : ControllerBase
     {
+        protected IMapper Mapper { get; }
         protected IMediator Mediator { get; }
 
-        public IssueSlipItemsController(IMediator mediator)
+        public IssueSlipItemsController(IMapper mapper, IMediator mediator)
         {
+            this.Mapper = mapper;
             this.Mediator = mediator;
         }
 
@@ -25,11 +30,12 @@ namespace Warehouse.API.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(500)]
-        public async Task<ActionResult<IssueSlip.Item>> GetIssueSlipItem(long issueSlipId, int wareId)
+        public async Task<ActionResult<IssueSlipDTO.ItemDTO>> GetIssueSlipItem(long issueSlipId, int wareId)
         {
             try
             {
-                return this.Ok(await this.Mediator.Send(new FindIssueSlipItemByIssueSlipIdAndWareIdCommand(issueSlipId, wareId)));
+                IssueSlip.Item item = await this.Mediator.Send(new FindIssueSlipItemByIssueSlipIdAndWareIdCommand(issueSlipId, wareId));
+                return this.Ok(this.Mapper.Map<IssueSlipDTO.ItemDTO>(item));
             }
             catch (EntityNotFoundException ex)
             {
@@ -45,11 +51,12 @@ namespace Warehouse.API.Controllers
         [HttpGet("All/{page}/{itemsPerPage}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(500)]
-        public async Task<ActionResult<PageDTO<IssueSlip.Item>>> GetAll(int page, int itemsPerPage)
+        public async Task<ActionResult<PageDTO<IssueSlipDTO.ItemDTO>>> GetAll(int page, int itemsPerPage)
         {
             try
             {
-                return this.Ok(await this.Mediator.Send(new FindIssueSlipItemsOnPageCommand(page, itemsPerPage)));
+                Page<IssueSlip.Item> entity = await this.Mediator.Send(new FindIssueSlipItemsOnPageCommand(page, itemsPerPage));
+                return this.Ok(this.Mapper.Map<PageDTO<IssueSlipDTO.ItemDTO>>(entity));
             }
             catch (Exception)
             {
@@ -63,7 +70,7 @@ namespace Warehouse.API.Controllers
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
         [ProducesResponseType(500)]
-        public async Task<ActionResult<IssueSlip.Item>> PutIssueSlipItem(long issueSlipId, int wareId, IssueSlip.Item item)
+        public async Task<IActionResult> PutIssueSlipItem(long issueSlipId, int wareId, IssueSlipDTO.ItemDTO item)
         {
             if (issueSlipId != item.IssueSlipId || wareId != item.WareId)
             {
@@ -72,7 +79,7 @@ namespace Warehouse.API.Controllers
 
             try
             {
-                item = await this.Mediator.Send(new UpdateIssueSlipItemCommand(item.WareId, item.IssueSlipId, item.PositionId, item.IssuedUnits));
+                await this.Mediator.Send(new UpdateIssueSlipItemCommand(item.WareId, item.IssueSlipId, item.PositionId, item.IssuedUnits));
                 return this.NoContent();
             }
             catch (EntityNotFoundException ex)

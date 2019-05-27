@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
 {
-    public class FindPositionsForReceiptItemCommandHandler : IRequestHandler<FindPositionsForReceiptItemCommand, IEnumerable<PositionCountDTO>>
+    public class FindPositionsForReceiptItemCommandHandler : IRequestHandler<FindPositionsForReceiptItemCommand, IEnumerable<PositionCount>>
     {
         public FindPositionsForReceiptItemCommandHandler(DatabaseContext context, IMediator mediator)
         {
@@ -23,7 +23,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
         protected DatabaseContext DatabaseContext { get; }
         protected IMediator Mediator { get; }
 
-        public async Task<IEnumerable<PositionCountDTO>> Handle(FindPositionsForReceiptItemCommand request, CancellationToken cancellationToken)
+        public async Task<IEnumerable<PositionCount>> Handle(FindPositionsForReceiptItemCommand request, CancellationToken cancellationToken)
         {
             Receipt.Item item = await this.DatabaseContext.ReceiptItems.FindAsync(new object[] { request.ReceiptId, request.WareId }, cancellationToken);
             if (item == null)
@@ -37,7 +37,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
                 .ToList();
 
             int itemsToPlace = item.CountReceived;
-            List<PositionCountDTO> outputDTOs = new List<PositionCountDTO>();
+            List<PositionCount> positionCounts = new List<PositionCount>();
 
             foreach (Position position in positions)
             {
@@ -47,7 +47,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
                 {
                     possibleToPlace = (itemsToPlace < possibleToPlace) ? itemsToPlace : possibleToPlace;
 
-                    outputDTOs.Add(new PositionCountDTO(position, possibleToPlace));
+                    positionCounts.Add(new PositionCount(position, possibleToPlace));
                     itemsToPlace -= possibleToPlace;
 
                     // Update Receipt.Item (just PositionId)
@@ -65,7 +65,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
                 throw new WarehouseFullException(string.Format(Resources.Exceptions.Values["ReceiptItem_Create_WarehouseFullException"], request.ReceiptId, request.WareId));
             }
 
-            return outputDTOs;
+            return positionCounts;
         }
     }
 }

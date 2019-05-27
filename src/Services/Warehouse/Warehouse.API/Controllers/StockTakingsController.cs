@@ -2,9 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Restmium.ERP.Services.Warehouse.API.Models.Application;
+using Restmium.ERP.Services.Warehouse.API.Models.Domain.Entities;
 using Restmium.ERP.Services.Warehouse.Application.Commands;
 using Restmium.ERP.Services.Warehouse.Application.Models;
 using Restmium.ERP.Services.Warehouse.Domain.Entities;
@@ -16,10 +19,12 @@ namespace Warehouse.API.Controllers
     [ApiController]
     public class StockTakingsController : ControllerBase
     {
+        protected IMapper Mapper { get; }
         protected IMediator Mediator { get; }
 
-        public StockTakingsController(IMediator mediator)
+        public StockTakingsController(IMapper mapper, IMediator mediator)
         {
+            this.Mapper = mapper;
             this.Mediator = mediator;
         }
 
@@ -28,11 +33,12 @@ namespace Warehouse.API.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(500)]
-        public async Task<ActionResult<StockTaking>> Get(int id)
+        public async Task<ActionResult<StockTakingDTO>> Get(int id)
         {
             try
             {
-                return this.Ok(await this.Mediator.Send(new FindStockTakingByIdCommand(id)));
+                StockTaking stockTaking = await this.Mediator.Send(new FindStockTakingByIdCommand(id));
+                return this.Ok(this.Mapper.Map<StockTakingDTO>(stockTaking));
             }
             catch (EntityNotFoundException ex)
             {
@@ -48,11 +54,12 @@ namespace Warehouse.API.Controllers
         [HttpGet("All/{page}/{itemsPerPage}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(500)]
-        public async Task<ActionResult<PageDTO<StockTaking>>> GetAll(int page, int itemsPerPage)
+        public async Task<ActionResult<PageDTO<StockTakingDTO>>> GetAll(int page, int itemsPerPage)
         {
             try
             {
-                return this.Ok(await this.Mediator.Send(new FindStockTakingsOnPageCommand(page, itemsPerPage)));
+                Page<StockTaking> entity = await this.Mediator.Send(new FindStockTakingsOnPageCommand(page, itemsPerPage));
+                return this.Ok(this.Mapper.Map<PageDTO<StockTakingDTO>>(entity));
             }
             catch (Exception)
             {
@@ -65,11 +72,12 @@ namespace Warehouse.API.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(500)]
-        public async Task<ActionResult<StockTaking>> CreateForWarehouse(int id)
+        public async Task<ActionResult<StockTakingDTO>> CreateForWarehouse(int id)
         {
             try
             {
-                return this.Ok(await this.Mediator.Send(new CreateStockTakingForWarehouseCommand(id)));
+                StockTaking stockTaking = await this.Mediator.Send(new CreateStockTakingForWarehouseCommand(id));
+                return this.Ok(this.Mapper.Map<StockTakingDTO>(stockTaking));
             }
             catch (EntityNotFoundException ex)
             {
@@ -86,11 +94,12 @@ namespace Warehouse.API.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(500)]
-        public async Task<ActionResult<StockTaking>> CreateForSection(int id)
+        public async Task<ActionResult<StockTakingDTO>> CreateForSection(int id)
         {
             try
             {
-                return this.Ok(await this.Mediator.Send(new CreateStockTakingForSectionCommand(id)));
+                StockTaking stockTaking = await this.Mediator.Send(new CreateStockTakingForSectionCommand(id));
+                return this.Ok(this.Mapper.Map<StockTakingDTO>(stockTaking));
             }
             catch (EntityNotFoundException ex)
             {
@@ -107,11 +116,12 @@ namespace Warehouse.API.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(500)]
-        public async Task<ActionResult<StockTaking>> Delete(int id)
+        public async Task<ActionResult<StockTakingDTO>> Delete(int id)
         {
             try
             {
-                return this.Ok(await this.Mediator.Send(new DeleteStockTakingCommand(id)));
+                StockTaking stockTaking = await this.Mediator.Send(new DeleteStockTakingCommand(id));
+                return this.Ok(this.Mapper.Map<StockTakingDTO>(stockTaking));
             }
             catch (EntityNotFoundException ex)
             {

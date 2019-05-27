@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Restmium.ERP.Services.Warehouse.Application.Commands
 {
-    public class FindPositionsForReceiptItemCommand : IRequest<IEnumerable<PositionCountDTO>>
+    public class FindPositionsForReceiptItemCommand : IRequest<IEnumerable<PositionCount>>
     {
         public FindPositionsForReceiptItemCommand(long receiptId, int wareId)
         {

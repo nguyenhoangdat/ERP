@@ -3,7 +3,7 @@ using Restmium.ERP.Services.Warehouse.Application.Models;
 
 namespace Restmium.ERP.Services.Warehouse.Application.Commands
 {
-    public class FindIssueSlipItemsOnPageCommand : IRequest<PageDTO<Domain.Entities.IssueSlip.Item>>
+    public class FindIssueSlipItemsOnPageCommand : IRequest<Page<Domain.Entities.IssueSlip.Item>>
     {
         public FindIssueSlipItemsOnPageCommand(int page, int itemsPerPage)
         {

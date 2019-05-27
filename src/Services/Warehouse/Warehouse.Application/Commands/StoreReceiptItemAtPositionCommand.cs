@@ -6,7 +6,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Commands
 {
     public class StoreReceiptItemAtPositionCommand : IRequest<Position>
     {
-        public StoreReceiptItemAtPositionCommand(long receiptId, int wareId, PositionCountDTO positionCount)
+        public StoreReceiptItemAtPositionCommand(long receiptId, int wareId, PositionCount positionCount)
         {
             this.ReceiptId = receiptId;
             this.WareId = wareId;
@@ -15,6 +15,6 @@ namespace Restmium.ERP.Services.Warehouse.Application.Commands
 
         public long ReceiptId { get; }
         public int WareId { get; }
-        public PositionCountDTO PositionCount { get; }
+        public PositionCount PositionCount { get; }
     }
 }

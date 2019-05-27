@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
 {
-    public class GetWarehouseCurrentCapacityCommandHandler : IRequestHandler<GetWarehouseCurrentCapacityCommand, WarehouseCapacityDTO>
+    public class GetWarehouseCurrentCapacityCommandHandler : IRequestHandler<GetWarehouseCurrentCapacityCommand, WarehouseCapacity>
     {
         public GetWarehouseCurrentCapacityCommandHandler(DatabaseContext context)
         {
@@ -19,7 +19,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
 
         protected DatabaseContext DatabaseContext { get; }
 
-        public async Task<WarehouseCapacityDTO> Handle(GetWarehouseCurrentCapacityCommand request, CancellationToken cancellationToken)
+        public async Task<WarehouseCapacity> Handle(GetWarehouseCurrentCapacityCommand request, CancellationToken cancellationToken)
         {
             Warehouse.Domain.Entities.Warehouse warehouse = await this.DatabaseContext.Warehouses.FindAsync(new object[] { request.WarehouseId }, cancellationToken);
             if (warehouse == null)
@@ -27,7 +27,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
                 throw new EntityNotFoundException(string.Format(Resources.Exceptions.Values["Warehouse_EntityNotFoundException"], request.WarehouseId));
             }
 
-            return new WarehouseCapacityDTO()
+            return new WarehouseCapacity()
             {
                 UsedPositions = this.DatabaseContext.Positions.Where(x => x.Section.WarehouseId == warehouse.Id && x.CountWare() > 0).LongCount(),
                 FreePositions = this.DatabaseContext.Positions.Where(x => x.Section.WarehouseId == warehouse.Id && x.CountWare() == 0).LongCount(),

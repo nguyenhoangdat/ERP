@@ -1,14 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using AutoMapper;
 using MediatR;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Restmium.ERP.Services.Warehouse.API.Models.Application;
+using Restmium.ERP.Services.Warehouse.API.Models.Domain.Entities;
 using Restmium.ERP.Services.Warehouse.Application.Commands;
 using Restmium.ERP.Services.Warehouse.Application.Models;
 using Restmium.ERP.Services.Warehouse.Domain.Entities;
 using Restmium.ERP.Services.Warehouse.Domain.Exceptions;
+using System;
+using System.Threading.Tasks;
 
 namespace Warehouse.API.Controllers
 {
@@ -16,10 +16,12 @@ namespace Warehouse.API.Controllers
     [ApiController]
     public class StockTakingItemsController : ControllerBase
     {
+        protected IMapper Mapper { get; }
         protected IMediator Mediator { get; }
 
-        public StockTakingItemsController(IMediator mediator)
+        public StockTakingItemsController(IMapper mapper, IMediator mediator)
         {
+            this.Mapper = mapper;
             this.Mediator = mediator;
         }
 
@@ -27,11 +29,12 @@ namespace Warehouse.API.Controllers
         [HttpGet("All/{page}/{itemsPerPage}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(500)]
-        public async Task<ActionResult<PageDTO<StockTaking.Item>>> GetAll(int page, int itemsPerPage)
+        public async Task<ActionResult<PageDTO<StockTakingDTO.ItemDTO>>> GetAll(int page, int itemsPerPage)
         {
             try
             {
-                return this.Ok(await this.Mediator.Send(new FindStockTakingItemsOnPageCommand(page, itemsPerPage)));
+                Page<StockTaking.Item> entity = await this.Mediator.Send(new FindStockTakingItemsOnPageCommand(page, itemsPerPage));
+                return this.Ok(this.Mapper.Map<PageDTO<StockTakingDTO.ItemDTO>>(entity));
             }
             catch (Exception)
             {
@@ -45,7 +48,7 @@ namespace Warehouse.API.Controllers
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
         [ProducesResponseType(500)]
-        public async Task<ActionResult<StockTaking.Item>> PutStockTakingItem(int stockTakingId, long positionId, StockTaking.Item item)
+        public async Task<ActionResult<StockTakingDTO.ItemDTO>> PutStockTakingItem(int stockTakingId, long positionId, StockTakingDTO.ItemDTO item)
         {
             if (stockTakingId != item.StockTakingId || positionId != item.PositionId)
             {
@@ -54,7 +57,8 @@ namespace Warehouse.API.Controllers
 
             try
             {
-                return this.Ok(await this.Mediator.Send(new UpdateStockTakingItemCommand(item.StockTakingId, item.WareId, item.PositionId, item.CurrentStock, item.CountedStock, item.UtcCounted)));
+                StockTaking.Item entity = await this.Mediator.Send(new UpdateStockTakingItemCommand(item.StockTakingId, item.WareId, item.PositionId, item.CurrentStock, item.CountedStock, item.UtcCounted));
+                return this.Ok(this.Mapper.Map<StockTakingDTO.ItemDTO>(entity));
             }
             catch (EntityNotFoundException ex)
             {

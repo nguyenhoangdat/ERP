@@ -4,7 +4,7 @@ using Restmium.ERP.Services.Warehouse.Domain.Entities;
 
 namespace Restmium.ERP.Services.Warehouse.Application.Commands
 {
-    public class FindPositionsOnPageCommand : IRequest<PageDTO<Position>>
+    public class FindPositionsOnPageCommand : IRequest<Page<Position>>
     {
         public FindPositionsOnPageCommand(int page, int itemsPerPage)
         {

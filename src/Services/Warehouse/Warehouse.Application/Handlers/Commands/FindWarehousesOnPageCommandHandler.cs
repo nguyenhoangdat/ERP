@@ -9,7 +9,7 @@ using Entities = Restmium.ERP.Services.Warehouse.Domain.Entities;
 
 namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
 {
-    public class FindWarehousesOnPageCommandHandler : IRequestHandler<FindWarehousesOnPageCommand, PageDTO<Entities.Warehouse>>
+    public class FindWarehousesOnPageCommandHandler : IRequestHandler<FindWarehousesOnPageCommand, Page<Entities.Warehouse>>
     {
         protected DatabaseContext DatabaseContext { get; set; }
 
@@ -18,11 +18,11 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
             this.DatabaseContext = context;
         }
 
-        public async Task<PageDTO<Entities.Warehouse>> Handle(FindWarehousesOnPageCommand request, CancellationToken cancellationToken)
+        public async Task<Page<Entities.Warehouse>> Handle(FindWarehousesOnPageCommand request, CancellationToken cancellationToken)
         {
             IQueryable<Entities.Warehouse> warehouses = this.DatabaseContext.Warehouses.Where(x => x.UtcMovedToBin == null);
 
-            return new PageDTO<Entities.Warehouse>(
+            return new Page<Entities.Warehouse>(
                 request.Page,
                 request.ItemsPerPage,
                 warehouses.Count(),

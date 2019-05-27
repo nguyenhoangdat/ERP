@@ -1,5 +1,9 @@
-﻿using MediatR;
+﻿using AutoMapper;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Restmium.ERP.Services.Warehouse.API.Models;
+using Restmium.ERP.Services.Warehouse.API.Models.Application;
+using Restmium.ERP.Services.Warehouse.API.Models.Domain.Entities;
 using Restmium.ERP.Services.Warehouse.Application.Commands;
 using Restmium.ERP.Services.Warehouse.Application.Models;
 using Restmium.ERP.Services.Warehouse.Domain.Exceptions;
@@ -15,11 +19,13 @@ namespace Warehouse.API.Controllers
     [ApiController]
     public class WarehousesController : ControllerBase
     {
+        protected IMapper Mapper { get; }
         protected IMediator Mediator { get; }
         protected DatabaseContext DatabaseContext { get; } //TODO: Remove as soon as the problem with multiple warehouses is solved
 
-        public WarehousesController(IMediator mediator, DatabaseContext context)
+        public WarehousesController(IMapper mapper, IMediator mediator, DatabaseContext context)
         {
+            this.Mapper = mapper;
             this.Mediator = mediator;
             this.DatabaseContext = context;
         }
@@ -29,11 +35,12 @@ namespace Warehouse.API.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(500)]
-        public async Task<ActionResult<Entities.Warehouse>> GetWarehouse(int id)
+        public async Task<ActionResult<WarehouseDTO>> GetWarehouse(int id)
         {
             try
             {
-                return this.Ok(await this.Mediator.Send(new FindWarehouseByIdCommand(id)));
+                Entities.Warehouse warehouse = await this.Mediator.Send(new FindWarehouseByIdCommand(id));
+                return this.Ok(this.Mapper.Map<WarehouseDTO>(warehouse));
             }
             catch (EntityNotFoundException ex)
             {
@@ -49,11 +56,12 @@ namespace Warehouse.API.Controllers
         [HttpGet("All/{page}/{itemsPerPage}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(500)]
-        public async Task<ActionResult<PageDTO<Entities.Warehouse>>> GetAll(int page, int itemsPerPage)
+        public async Task<ActionResult<PageDTO<WarehouseDTO>>> GetAll(int page, int itemsPerPage)
         {
             try
             {
-                return this.Ok(await this.Mediator.Send(new FindWarehousesOnPageCommand(page, itemsPerPage)));
+                Page<Entities.Warehouse> entity = await this.Mediator.Send(new FindWarehousesOnPageCommand(page, itemsPerPage));
+                return this.Ok(this.Mapper.Map<PageDTO<WarehouseDTO>>(entity));
             }
             catch (Exception)
             {
@@ -67,13 +75,11 @@ namespace Warehouse.API.Controllers
         [ProducesResponseType(400)]
         [ProducesResponseType(403)] //TODO: Warehouse RESTRICTION
         [ProducesResponseType(500)]
-        public async Task<ActionResult<Entities.Warehouse>> PostWarehouse(Entities.Warehouse warehouse)
+        public async Task<ActionResult<WarehouseDTO>> PostWarehouse(WarehouseDTO warehouse)
         {
-            //TODO: Warehouse RESTRICTION
-
             if (this.DatabaseContext.Warehouses.Count() > 0)
             {
-                return this.StatusCode(403);
+                return this.StatusCode(403); //TODO: Warehouse RESTRICTION
             }
 
             this.ModelState.Remove("Id");
@@ -84,7 +90,10 @@ namespace Warehouse.API.Controllers
 
             try
             {
-                warehouse = await this.Mediator.Send(new CreateWarehouseCommand(warehouse));
+                Entities.Warehouse warehouseEntity = this.Mapper.Map<WarehouseDTO, Entities.Warehouse>(warehouse);
+                warehouseEntity = await this.Mediator.Send(new CreateWarehouseCommand(warehouseEntity));
+
+                warehouse = this.Mapper.Map<Entities.Warehouse, WarehouseDTO>(warehouseEntity);
                 return this.CreatedAtAction("GetWarehouse", new { id = warehouse.Id }, warehouse);
             }
             catch (Exception)
@@ -99,7 +108,7 @@ namespace Warehouse.API.Controllers
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
         [ProducesResponseType(500)]
-        public async Task<ActionResult<Entities.Warehouse>> PutWarehouse(int id, Entities.Warehouse warehouse)
+        public async Task<IActionResult> PutWarehouse(int id, WarehouseDTO warehouse)
         {
             if (id != warehouse.Id)
             {
@@ -108,7 +117,8 @@ namespace Warehouse.API.Controllers
 
             try
             {
-                warehouse = await this.Mediator.Send(new UpdateWarehouseCommand(warehouse));
+                Entities.Warehouse warehouseEntity = this.Mapper.Map<WarehouseDTO, Entities.Warehouse>(warehouse);
+                await this.Mediator.Send(new UpdateWarehouseCommand(warehouseEntity));
                 return this.NoContent();
             }
             catch (EntityNotFoundException ex)
@@ -126,11 +136,12 @@ namespace Warehouse.API.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(500)]
-        public async Task<ActionResult<Entities.Warehouse>> DeleteWarehouse(int id)
+        public async Task<ActionResult<WarehouseDTO>> DeleteWarehouse(int id)
         {
             try
             {
-                return this.Ok(await this.Mediator.Send(new DeleteWarehouseCommand(id)));
+                Entities.Warehouse warehouse = await this.Mediator.Send(new DeleteWarehouseCommand(id));
+                return this.Ok(this.Mapper.Map<WarehouseDTO>(warehouse));
             }
             catch (EntityNotFoundException ex)
             {
@@ -151,7 +162,8 @@ namespace Warehouse.API.Controllers
         {
             try
             {
-                return this.Ok(await this.Mediator.Send(new GetWarehouseCurrentCapacityCommand(warehouseId)));
+                WarehouseCapacity capacity = await this.Mediator.Send(new GetWarehouseCurrentCapacityCommand(warehouseId));
+                return this.Ok(this.Mapper.Map<WarehouseCapacityDTO>(capacity));
             }
             catch (EntityNotFoundException ex)
             {
@@ -168,11 +180,13 @@ namespace Warehouse.API.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(500)]
-        public async Task<ActionResult<Entities.Warehouse>> GetByPositionId(long positionId)
+        public async Task<ActionResult<WarehouseDTO>> GetByPositionId(long positionId)
         {
             try
             {
-                return this.Ok(await this.Mediator.Send(new FindWarehouseByPositionIdCommand(positionId)));
+                Entities.Warehouse warehouse = await this.Mediator.Send(new FindWarehouseByPositionIdCommand(positionId));
+
+                return this.Ok(this.Mapper.Map<WarehouseDTO>(warehouse));
             }
             catch (EntityNotFoundException ex)
             {

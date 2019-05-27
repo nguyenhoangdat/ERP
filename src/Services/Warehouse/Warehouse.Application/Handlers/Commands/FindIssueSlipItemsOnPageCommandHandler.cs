@@ -6,11 +6,10 @@ using Restmium.ERP.Services.Warehouse.Infrastructure.Database;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Entities = Restmium.ERP.Services.Warehouse.Domain.Entities;
 
 namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
 {
-    public class FindIssueSlipItemsOnPageCommandHandler : IRequestHandler<FindIssueSlipItemsOnPageCommand, PageDTO<Entities.IssueSlip.Item>>
+    public class FindIssueSlipItemsOnPageCommandHandler : IRequestHandler<FindIssueSlipItemsOnPageCommand, Page<IssueSlip.Item>>
     {
         protected DatabaseContext DatabaseContext { get; set; }
 
@@ -19,11 +18,11 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
             this.DatabaseContext = context;
         }
 
-        public async Task<PageDTO<IssueSlip.Item>> Handle(FindIssueSlipItemsOnPageCommand request, CancellationToken cancellationToken)
+        public async Task<Page<IssueSlip.Item>> Handle(FindIssueSlipItemsOnPageCommand request, CancellationToken cancellationToken)
         {
             IQueryable<IssueSlip.Item> items = this.DatabaseContext.IssueSlipItems.Where(x => x.UtcMovedToBin == null);
 
-            return new PageDTO<IssueSlip.Item>(
+            return new Page<IssueSlip.Item>(
                 request.Page,
                 request.ItemsPerPage,
                 items.Count(),

@@ -1,10 +1,14 @@
-﻿using MediatR;
+﻿using AutoMapper;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Restmium.ERP.Services.Warehouse.API.Models.Application;
+using Restmium.ERP.Services.Warehouse.API.Models.Domain.Entities;
 using Restmium.ERP.Services.Warehouse.Application.Commands;
 using Restmium.ERP.Services.Warehouse.Application.Models;
 using Restmium.ERP.Services.Warehouse.Domain.Entities;
 using Restmium.ERP.Services.Warehouse.Domain.Exceptions;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Warehouse.API.Controllers
@@ -13,10 +17,12 @@ namespace Warehouse.API.Controllers
     [ApiController]
     public class SectionsController : ControllerBase
     {
+        protected IMapper Mapper { get; }
         protected IMediator Mediator { get; }
 
-        public SectionsController(IMediator mediator)
+        public SectionsController(IMapper mapper, IMediator mediator)
         {
+            this.Mapper = mapper;
             this.Mediator = mediator;
         }
 
@@ -25,11 +31,12 @@ namespace Warehouse.API.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(500)]
-        public async Task<ActionResult<Section>> GetSection(int id)
+        public async Task<ActionResult<SectionDTO>> GetSection(int id)
         {
             try
             {
-                return this.Ok(await this.Mediator.Send(new FindSectionByIdCommand(id)));
+                Section section = await this.Mediator.Send(new FindSectionByIdCommand(id));
+                return this.Ok(this.Mapper.Map<SectionDTO>(section));
             }
             catch (EntityNotFoundException ex)
             {
@@ -45,11 +52,12 @@ namespace Warehouse.API.Controllers
         [HttpGet("All/{page}/{itemsPerPage}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(500)]
-        public async Task<ActionResult<PageDTO<Section>>> GetAll(int page, int itemsPerPage)
+        public async Task<ActionResult<PageDTO<SectionDTO>>> GetAll(int page, int itemsPerPage)
         {
             try
             {
-                return this.Ok(await this.Mediator.Send(new FindSectionsOnPageCommand(page, itemsPerPage)));
+                Page<Section> entity = await this.Mediator.Send(new FindSectionsOnPageCommand(page, itemsPerPage));
+                return this.Ok(this.Mapper.Map<PageDTO<SectionDTO>>(entity));
             }
             catch (Exception)
             {
@@ -62,7 +70,7 @@ namespace Warehouse.API.Controllers
         [ProducesResponseType(201)]
         [ProducesResponseType(400)]
         [ProducesResponseType(500)]
-        public async Task<ActionResult<Section>> PostSection(Section section)
+        public async Task<ActionResult<SectionDTO>> PostSection(SectionDTO section)
         {
             this.ModelState.Remove("Id");
             if (!this.ModelState.IsValid)
@@ -72,8 +80,8 @@ namespace Warehouse.API.Controllers
 
             try
             {
-                section = await this.Mediator.Send(new CreateSectionCommand(section.Name, section.WarehouseId));
-                return this.CreatedAtAction("GetSection", new { id = section.Id }, section);
+                Section entity = await this.Mediator.Send(new CreateSectionCommand(section.Name, section.WarehouseId));
+                return this.CreatedAtAction("GetSection", new { id = section.Id }, this.Mapper.Map<SectionDTO>(entity));
             }
             catch (Exception)
             {
@@ -87,7 +95,7 @@ namespace Warehouse.API.Controllers
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
         [ProducesResponseType(500)]
-        public async Task<ActionResult<Section>> PutSection(int id, Section section)
+        public async Task<IActionResult> PutSection(int id, SectionDTO section)
         {
             if (id != section.Id)
             {
@@ -96,7 +104,7 @@ namespace Warehouse.API.Controllers
 
             try
             {
-                section = await this.Mediator.Send(new UpdateSectionCommand(section.Id, section.Name));
+                await this.Mediator.Send(new UpdateSectionCommand(section.Id, section.Name));
                 return this.NoContent();
             }
             catch (EntityNotFoundException ex)
@@ -114,12 +122,12 @@ namespace Warehouse.API.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(500)]
-        public async Task<ActionResult<Section>> DeleteSection(int id)
+        public async Task<ActionResult<SectionDTO>> DeleteSection(int id)
         {
             try
             {
                 Section section = await this.Mediator.Send(new DeleteSectionCommand(id));
-                return this.Ok(section);
+                return this.Ok(this.Mapper.Map<SectionDTO>(section));
             }
             catch (EntityNotFoundException ex)
             {
@@ -136,11 +144,12 @@ namespace Warehouse.API.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(500)]
-        public async Task<ActionResult<Section>> GetSectionsInWarehouse(int warehouseId)
+        public async Task<ActionResult<IEnumerable<SectionDTO>>> GetSectionsInWarehouse(int warehouseId)
         {
             try
             {
-                return this.Ok(await this.Mediator.Send(new FindSectionsInWarehouseCommand(warehouseId)));
+                IEnumerable<Section> sections = await this.Mediator.Send(new FindSectionsInWarehouseCommand(warehouseId));
+                return this.Ok(this.Mapper.Map<IEnumerable<Section>, IEnumerable<SectionDTO>>(sections));
             }
             catch (EntityNotFoundException ex)
             {
@@ -156,11 +165,12 @@ namespace Warehouse.API.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(500)]
-        public async Task<ActionResult<Section>> GetByPositionId(long positionId)
+        public async Task<ActionResult<SectionDTO>> GetByPositionId(long positionId)
         {
             try
             {
-                return this.Ok(await this.Mediator.Send(new FindSectionByPositionIdCommand(positionId)));
+                Section section = await this.Mediator.Send(new FindSectionByPositionIdCommand(positionId));
+                return this.Ok(this.Mapper.Map<SectionDTO>(section));
             }
             catch (EntityNotFoundException ex)
             {

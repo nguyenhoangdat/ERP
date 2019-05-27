@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
 {
-    public class FindIssueSlipsOnPageCommandHandler : IRequestHandler<FindIssueSlipsOnPageCommand, PageDTO<IssueSlip>>
+    public class FindIssueSlipsOnPageCommandHandler : IRequestHandler<FindIssueSlipsOnPageCommand, Page<IssueSlip>>
     {
         protected DatabaseContext DatabaseContext { get; set; }
 
@@ -18,11 +18,11 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
             this.DatabaseContext = context;
         }
 
-        public async Task<PageDTO<IssueSlip>> Handle(FindIssueSlipsOnPageCommand request, CancellationToken cancellationToken)
+        public async Task<Page<IssueSlip>> Handle(FindIssueSlipsOnPageCommand request, CancellationToken cancellationToken)
         {
             IQueryable<IssueSlip> issueSlips = this.DatabaseContext.IssueSlips.Where(x => x.UtcMovedToBin == null);
 
-            return new PageDTO<IssueSlip>(
+            return new Page<IssueSlip>(
                 request.Page,
                 request.ItemsPerPage,
                 issueSlips.Count(),

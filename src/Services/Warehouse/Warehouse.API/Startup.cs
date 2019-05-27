@@ -17,7 +17,8 @@ using Restmium.Messaging;
 using Restmium.Messaging.Azure.ServiceBus;
 using System.Reflection;
 using AutoMapper;
-using Restmium.ERP.Services.Warehouse.Application.Models.Mapping;
+using Restmium.ERP.Services.Warehouse.API.Models.Domain.Entities.Mapping;
+using Restmium.ERP.Services.Warehouse.API.Models.Application.Mapping;
 
 namespace Restmium.ERP.Services.Warehouse.API
 {
@@ -52,6 +53,7 @@ namespace Restmium.ERP.Services.Warehouse.API
             });
 
             services.AddMediatR(typeof(CreateWareCommand).GetTypeInfo().Assembly);
+            services.AddAutoMapper(typeof(AddressMappingProfile).Assembly, typeof(PageMappingProfile).Assembly);
 
             #region EventBus
             bool isServiceBusEnabled = this.Configuration.GetSection("Azure").GetSection("ServiceBus").GetValue("Enabled", false);
@@ -77,7 +79,6 @@ namespace Restmium.ERP.Services.Warehouse.API
                     });
                 swagger.CustomSchemaIds(x => x.FullName);
             });
-            services.AddAutoMapper(typeof(AddressMappingProfile).Assembly);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

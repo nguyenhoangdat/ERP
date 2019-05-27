@@ -1,14 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using AutoMapper;
 using MediatR;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Restmium.ERP.Services.Warehouse.API.Models.Application;
+using Restmium.ERP.Services.Warehouse.API.Models.Domain.Entities;
 using Restmium.ERP.Services.Warehouse.Application.Commands;
 using Restmium.ERP.Services.Warehouse.Application.Models;
 using Restmium.ERP.Services.Warehouse.Domain.Entities;
 using Restmium.ERP.Services.Warehouse.Domain.Exceptions;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Warehouse.API.Controllers
 {
@@ -16,10 +17,12 @@ namespace Warehouse.API.Controllers
     [ApiController]
     public class ReceiptsController : ControllerBase
     {
+        protected IMapper Mapper { get; }
         protected IMediator Mediator { get; }
 
-        public ReceiptsController(IMediator mediator)
+        public ReceiptsController(IMapper mapper, IMediator mediator)
         {
+            this.Mapper = mapper;
             this.Mediator = mediator;
         }
 
@@ -28,11 +31,12 @@ namespace Warehouse.API.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(500)]
-        public async Task<ActionResult<Receipt>> GetReceipt(long id)
+        public async Task<ActionResult<ReceiptDTO>> GetReceipt(long id)
         {
             try
             {
-                return this.Ok(await this.Mediator.Send(new FindReceiptByIdCommand(id)));
+                Receipt receipt = await this.Mediator.Send(new FindReceiptByIdCommand(id));
+                return this.Ok(this.Mapper.Map<ReceiptDTO>(receipt));
             }
             catch (EntityNotFoundException ex)
             {
@@ -48,11 +52,12 @@ namespace Warehouse.API.Controllers
         [HttpGet("All/{page}/{itemsPerPage}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(500)]
-        public async Task<ActionResult<PageDTO<Receipt>>> GetAll(int page, int itemsPerPage)
+        public async Task<ActionResult<PageDTO<ReceiptDTO>>> GetAll(int page, int itemsPerPage)
         {
             try
             {
-                return this.Ok(await this.Mediator.Send(new FindReceiptsOnPageCommand(page, itemsPerPage)));
+                Page<Receipt> entity = await this.Mediator.Send(new FindReceiptsOnPageCommand(page, itemsPerPage));
+                return this.Ok(this.Mapper.Map<PageDTO<ReceiptDTO>>(entity));
             }
             catch (Exception)
             {
@@ -66,7 +71,7 @@ namespace Warehouse.API.Controllers
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
         [ProducesResponseType(500)]
-        public async Task<ActionResult<Section>> PutReceipt(long id, Receipt receipt)
+        public async Task<IActionResult> PutReceipt(long id, ReceiptDTO receipt)
         {
             if (id != receipt.Id)
             {
@@ -75,13 +80,7 @@ namespace Warehouse.API.Controllers
 
             try
             {
-                List<UpdateReceiptCommand.Item> items = new List<UpdateReceiptCommand.Item>();
-                foreach (Receipt.Item item in receipt.Items)
-                {
-                    items.Add(new UpdateReceiptCommand.Item(item.WareId, item.PositionId, item.ReceiptId, item.CountOrdered, item.CountReceived, item.UtcProcessed));
-                }
-
-                receipt = await this.Mediator.Send(new UpdateReceiptCommand(receipt.Id, receipt.UtcExpected, receipt.UtcReceived, items));
+                await this.Mediator.Send(new UpdateReceiptCommand(receipt.Id, receipt.UtcExpected, receipt.UtcReceived));
                 return this.NoContent();
             }
             catch (EntityNotFoundException ex)
@@ -99,11 +98,12 @@ namespace Warehouse.API.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(500)]
-        public async Task<ActionResult<Receipt>> DeleteReceipt(long id)
+        public async Task<ActionResult<ReceiptDTO>> DeleteReceipt(long id)
         {
             try
             {
-                return this.Ok(await this.Mediator.Send(new DeleteReceiptCommand(id)));
+                Receipt receipt = await this.Mediator.Send(new DeleteReceiptCommand(id));
+                return this.Ok(this.Mapper.Map<ReceiptDTO>(receipt));
             }
             catch (EntityNotFoundException ex)
             {

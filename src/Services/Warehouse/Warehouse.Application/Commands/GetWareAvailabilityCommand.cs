@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Restmium.ERP.Services.Warehouse.Application.Commands
 {
-    public class GetWareAvailabilityCommand : IRequest<IEnumerable<WareAvailabilityDTO>>
+    public class GetWareAvailabilityCommand : IRequest<IEnumerable<WareAvailability>>
     {
         public GetWareAvailabilityCommand(int wareId)
         {

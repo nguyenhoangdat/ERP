@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
 {
-    public class FindStockTakingItemsOnPageCommandHandler : IRequestHandler<FindStockTakingItemsOnPageCommand, PageDTO<StockTaking.Item>>
+    public class FindStockTakingItemsOnPageCommandHandler : IRequestHandler<FindStockTakingItemsOnPageCommand, Page<StockTaking.Item>>
     {
         protected DatabaseContext DatabaseContext { get; }
 
@@ -18,11 +18,11 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
             this.DatabaseContext = context;
         }
 
-        public async Task<PageDTO<StockTaking.Item>> Handle(FindStockTakingItemsOnPageCommand request, CancellationToken cancellationToken)
+        public async Task<Page<StockTaking.Item>> Handle(FindStockTakingItemsOnPageCommand request, CancellationToken cancellationToken)
         {
             IQueryable<StockTaking.Item> items = this.DatabaseContext.StockTakingItems.Where(x => x.UtcMovedToBin == null);
 
-            return new PageDTO<StockTaking.Item>(
+            return new Page<StockTaking.Item>(
                 request.Page,
                 request.ItemsPerPage,
                 items.Count(),

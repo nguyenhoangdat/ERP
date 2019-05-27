@@ -1,14 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using AutoMapper;
 using MediatR;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Restmium.ERP.Services.Warehouse.API.Models.Application;
+using Restmium.ERP.Services.Warehouse.API.Models.Domain.Entities;
 using Restmium.ERP.Services.Warehouse.Application.Commands;
 using Restmium.ERP.Services.Warehouse.Application.Models;
 using Restmium.ERP.Services.Warehouse.Domain.Entities;
 using Restmium.ERP.Services.Warehouse.Domain.Exceptions;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Warehouse.API.Controllers
 {
@@ -16,10 +17,12 @@ namespace Warehouse.API.Controllers
     [ApiController]
     public class IssueSlipsController : ControllerBase
     {
+        protected IMapper Mapper { get; }
         protected IMediator Mediator { get; }
 
-        public IssueSlipsController(IMediator mediator)
+        public IssueSlipsController(IMapper mapper, IMediator mediator)
         {
+            this.Mapper = mapper;
             this.Mediator = mediator;
         }
 
@@ -28,11 +31,12 @@ namespace Warehouse.API.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(500)]
-        public async Task<ActionResult<IssueSlip>> GetIssueSlip(long id)
+        public async Task<ActionResult<IssueSlipDTO>> GetIssueSlip(long id)
         {
             try
             {
-                return this.Ok(await this.Mediator.Send(new FindIssueSlipByIdCommand(id)));
+                IssueSlip issueSlip = await this.Mediator.Send(new FindIssueSlipByIdCommand(id));
+                return this.Ok(this.Mapper.Map<IssueSlipDTO>(issueSlip));
             }
             catch (EntityNotFoundException ex)
             {
@@ -48,11 +52,12 @@ namespace Warehouse.API.Controllers
         [HttpGet("All/{page}/{itemsPerPage}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(500)]
-        public async Task<ActionResult<PageDTO<IssueSlip>>> GetAll(int page, int itemsPerPage)
+        public async Task<ActionResult<PageDTO<IssueSlipDTO>>> GetAll(int page, int itemsPerPage)
         {
             try
             {
-                return this.Ok(await this.Mediator.Send(new FindIssueSlipsOnPageCommand(page, itemsPerPage)));
+                Page<IssueSlip> entity = await this.Mediator.Send(new FindIssueSlipsOnPageCommand(page, itemsPerPage));
+                return this.Ok(this.Mapper.Map<PageDTO<IssueSlipDTO>>(entity));
             }
             catch (Exception)
             {
@@ -66,7 +71,7 @@ namespace Warehouse.API.Controllers
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
         [ProducesResponseType(500)]
-        public async Task<ActionResult<Section>> PutIssueSlip(long id, IssueSlip issueSlip)
+        public async Task<IActionResult> PutIssueSlip(long id, IssueSlipDTO issueSlip)
         {
             if (id != issueSlip.Id)
             {
@@ -75,13 +80,7 @@ namespace Warehouse.API.Controllers
 
             try
             {
-                List<UpdateIssueSlipCommand.Item> items = new List<UpdateIssueSlipCommand.Item>();
-                foreach (IssueSlip.Item item in issueSlip.Items)
-                {
-                    items.Add(new UpdateIssueSlipCommand.Item(item.IssueSlipId, item.WareId, item.PositionId, item.RequestedUnits, item.IssuedUnits));
-                }
-
-                issueSlip = await this.Mediator.Send(new UpdateIssueSlipCommand(issueSlip.Id, issueSlip.OrderId, issueSlip.UtcDispatchDate, issueSlip.UtcDeliveryDate, items));
+                await this.Mediator.Send(new UpdateIssueSlipCommand(issueSlip.Id, issueSlip.UtcDispatchDate, issueSlip.UtcDeliveryDate));
                 return this.NoContent();
             }
             catch (EntityNotFoundException ex)
@@ -99,11 +98,12 @@ namespace Warehouse.API.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(500)]
-        public async Task<ActionResult<IssueSlip>> DeleteIssueSlip(long id)
+        public async Task<ActionResult<IssueSlipDTO>> DeleteIssueSlip(long id)
         {
             try
             {
-                return this.Ok(await this.Mediator.Send(new DeleteIssueSlipCommand(id)));
+                IssueSlip issueSlip = await this.Mediator.Send(new DeleteIssueSlipCommand(id));
+                return this.Ok(this.Mapper.Map<IssueSlipDTO>(issueSlip));
             }
             catch (EntityNotFoundException ex)
             {
@@ -120,11 +120,12 @@ namespace Warehouse.API.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(500)]
-        public async Task<ActionResult<IssueSlip>> GetNextToBeProcessedInSection(int id)
+        public async Task<ActionResult<IssueSlipDTO>> GetNextToBeProcessedInSection(int id)
         {
             try
             {
-                return this.Ok(await this.Mediator.Send(new FindIssueSlipToProcessInSectionCommand(id)));
+                IssueSlip issueSlip = await this.Mediator.Send(new FindIssueSlipToProcessInSectionCommand(id));
+                return this.Ok(this.Mapper.Map<IssueSlipDTO>(issueSlip));
             }
             catch (EntityNotFoundException ex)
             {
@@ -140,11 +141,12 @@ namespace Warehouse.API.Controllers
         [HttpGet("IssueSlipsForOrderWithId/{id}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(500)]
-        public async Task<ActionResult<IEnumerable<IssueSlip>>> GetIssueSlipsForOrderWithId(long id)
+        public async Task<ActionResult<IEnumerable<IssueSlipDTO>>> GetIssueSlipsForOrderWithId(long id)
         {
             try
             {
-                return this.Ok(await this.Mediator.Send(new FindIssueSlipsByOrderIdCommand(id)));
+                IEnumerable<IssueSlip> issueSlips = await this.Mediator.Send(new FindIssueSlipsByOrderIdCommand(id));
+                return this.Ok(this.Mapper.Map<IEnumerable<IssueSlip>, IEnumerable<IssueSlipDTO>>(issueSlips));
             }
             catch (Exception)
             {
@@ -156,11 +158,12 @@ namespace Warehouse.API.Controllers
         [HttpGet("IssueSlipsForOrderWithIdInWarehouse/{id}/{warehouseId}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(500)]
-        public async Task<ActionResult<IEnumerable<IssueSlip>>> GetIssueSlipsForOrderWithIdInWarehouse(long id, int warehouseId)
+        public async Task<ActionResult<IEnumerable<IssueSlipDTO>>> GetIssueSlipsForOrderWithIdInWarehouse(long id, int warehouseId)
         {
             try
             {
-                return this.Ok(await this.Mediator.Send(new FindIssueSlipsByOrderIdAndWarehouseIdCommand(id, warehouseId)));
+                IEnumerable<IssueSlip> issueSlips = await this.Mediator.Send(new FindIssueSlipsByOrderIdAndWarehouseIdCommand(id, warehouseId));
+                return this.Ok(this.Mapper.Map<IEnumerable<IssueSlip>, IEnumerable<IssueSlipDTO>>(issueSlips));
             }
             catch (Exception)
             {
