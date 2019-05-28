@@ -116,6 +116,23 @@ namespace Warehouse.API.Controllers
             }
         }
 
+        // GET: api/Positions/Deleted/1/20
+        [HttpGet("Deleted/{page}/{itemsPerPage}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(500)]
+        public async Task<ActionResult<PageDTO<PositionDTO>>> GetDeleted(int page, int itemsPerPage)
+        {
+            try
+            {
+                Page<Position> entity = await this.Mediator.Send(new FindDeletedPositionsOnPageCommand(page, itemsPerPage));
+                return this.Ok(this.Mapper.Map<PageDTO<PositionDTO>>(entity));
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
         // DELETE: api/Positions/5
         [HttpDelete("{id}")]
         [ProducesResponseType(200)]

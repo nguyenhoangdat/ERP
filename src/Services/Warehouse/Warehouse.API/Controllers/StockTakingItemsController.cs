@@ -48,7 +48,7 @@ namespace Warehouse.API.Controllers
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
         [ProducesResponseType(500)]
-        public async Task<ActionResult<StockTakingDTO.ItemDTO>> PutStockTakingItem(int stockTakingId, long positionId, StockTakingDTO.ItemDTO item)
+        public async Task<IActionResult> PutStockTakingItem(int stockTakingId, long positionId, StockTakingDTO.ItemDTO item)
         {
             if (stockTakingId != item.StockTakingId || positionId != item.PositionId)
             {
@@ -57,12 +57,29 @@ namespace Warehouse.API.Controllers
 
             try
             {
-                StockTaking.Item entity = await this.Mediator.Send(new UpdateStockTakingItemCommand(item.StockTakingId, item.WareId, item.PositionId, item.CurrentStock, item.CountedStock, item.UtcCounted));
-                return this.Ok(this.Mapper.Map<StockTakingDTO.ItemDTO>(entity));
+                await this.Mediator.Send(new UpdateStockTakingItemCommand(item.StockTakingId, item.WareId, item.PositionId, item.CurrentStock, item.CountedStock, item.UtcCounted));
+                return this.NoContent();
             }
             catch (EntityNotFoundException ex)
             {
                 return this.NotFound(ex.Message);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        // GET: api/StockTakingItems/Deleted/1/20
+        [HttpGet("Deleted/{page}/{itemsPerPage}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(500)]
+        public async Task<ActionResult<PageDTO<StockTakingDTO.ItemDTO>>> GetDeleted(int page, int itemsPerPage)
+        {
+            try
+            {
+                Page<StockTaking.Item> entity = await this.Mediator.Send(new FindDeletedStockTakingItemsOnPageCommand(page, itemsPerPage));
+                return this.Ok(this.Mapper.Map<PageDTO<StockTakingDTO.ItemDTO>>(entity));
             }
             catch (Exception)
             {

@@ -17,7 +17,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
             this.DatabaseContext = context;
         }
 
-        public DatabaseContext DatabaseContext { get; }
+        protected DatabaseContext DatabaseContext { get; }
 
         public async Task<IssueSlip> Handle(FindIssueSlipToProcessInSectionCommand request, CancellationToken cancellationToken)
         {
@@ -30,7 +30,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
 
             // Return IssueSlip that need to be processed ASAP
             return this.DatabaseContext.IssueSlips
-                .Where(x => x.GetSection().Id == request.SectionId)
+                .Where(x => x.GetSection().Id == request.SectionId && x.UtcMovedToBin == null)
                 .OrderBy(x => x.UtcDeliveryDate)
                 .FirstOrDefault();
         }

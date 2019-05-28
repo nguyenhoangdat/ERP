@@ -47,7 +47,7 @@ namespace Warehouse.API.Controllers
             }
         }
 
-        // GET: api/IssueSlipItems/1/20
+        // GET: api/IssueSlipItems/All/1/20
         [HttpGet("All/{page}/{itemsPerPage}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(500)]
@@ -85,6 +85,23 @@ namespace Warehouse.API.Controllers
             catch (EntityNotFoundException ex)
             {
                 return this.NotFound(ex.Message);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        // GET: api/IssueSlipItems/Deleted/1/20
+        [HttpGet("Deleted/{page}/{itemsPerPage}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(500)]
+        public async Task<ActionResult<PageDTO<IssueSlipDTO.ItemDTO>>> GetDeleted(int page, int itemsPerPage)
+        {
+            try
+            {
+                Page<IssueSlip.Item> entity = await this.Mediator.Send(new FindDeletedIssueSlipItemsOnPageCommand(page, itemsPerPage));
+                return this.Ok(this.Mapper.Map<PageDTO<IssueSlipDTO.ItemDTO>>(entity));
             }
             catch (Exception)
             {
