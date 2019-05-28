@@ -12,3 +12,4 @@ Modular ERP application based on Microservices and ASP.NET Core
 - Azure Service Bus (Messaging)
 - MediatR (CQRS)
 - Ocelot (ApiGateway/BFF)
+- AutoMapper
