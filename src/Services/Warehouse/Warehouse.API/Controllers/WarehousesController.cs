@@ -131,6 +131,28 @@ namespace Warehouse.API.Controllers
             }
         }
 
+        // GET: api/Warehouses/MoveToBin/1
+        [HttpGet("MoveToBin/{id}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
+        public async Task<ActionResult<WarehouseDTO>> GetMoveToBin(int id)
+        {
+            try
+            {
+                Entities.Warehouse entity = await this.Mediator.Send(new MoveWarehouseToBinCommand(id));
+                return this.Ok(this.Mapper.Map<WarehouseDTO>(entity));
+            }
+            catch (EntityNotFoundException ex)
+            {
+                return this.NotFound(ex.Message);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
         // GET: api/Warehouses/Deleted/1/20
         [HttpGet("Deleted/{page}/{itemsPerPage}")]
         [ProducesResponseType(200)]
