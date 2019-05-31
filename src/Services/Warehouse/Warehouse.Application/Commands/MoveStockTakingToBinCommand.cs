@@ -10,6 +10,6 @@ namespace Restmium.ERP.Services.Warehouse.Application.Commands
             this.StockTakingId = stockTakingId;
         }
 
-        public int StockTakingId { get; set; }
+        public int StockTakingId { get; }
     }
 }
