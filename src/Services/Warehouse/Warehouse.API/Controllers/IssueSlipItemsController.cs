@@ -130,5 +130,27 @@ namespace Warehouse.API.Controllers
                 throw;
             }
         }
+
+        // GET: api/IssueSlipItems/Restore/1/20
+        [HttpGet("Restore/{issueSlipId}/{wareId}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
+        public async Task<ActionResult<IssueSlipDTO.ItemDTO>> GetRestore(long issueSlipId, int wareId)
+        {
+            try
+            {
+                IssueSlip.Item entity = await this.Mediator.Send(new RestoreIssueSlipItemFromBinCommand(wareId, issueSlipId));
+                return this.Ok(this.Mapper.Map<IssueSlipDTO.ItemDTO>(entity));
+            }
+            catch (EntityNotFoundException ex)
+            {
+                return this.NotFound(ex.Message);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
     }
 }

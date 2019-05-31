@@ -139,6 +139,28 @@ namespace Warehouse.API.Controllers
             }
         }
 
+        // GET: api/Wares/Restore/1
+        [HttpGet("Restore/{id}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
+        public async Task<ActionResult<WareDTO>> GetRestore(int id)
+        {
+            try
+            {
+                Ware entity = await this.Mediator.Send(new RestoreWareFromBinCommand(id));
+                return this.Ok(this.Mapper.Map<WareDTO>(entity));
+            }
+            catch (EntityNotFoundException ex)
+            {
+                return this.NotFound(ex.Message);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
         // GET: api/Wares/Deleted/1/20
         [HttpGet("Deleted/{page}/{itemsPerPage}")]
         [ProducesResponseType(200)]

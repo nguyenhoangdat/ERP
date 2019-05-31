@@ -133,6 +133,28 @@ namespace Warehouse.API.Controllers
             }
         }
 
+        // GET: api/StockTakings/Restore/1
+        [HttpGet("Restore/{id}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
+        public async Task<ActionResult<StockTakingDTO>> GetRestore(int id)
+        {
+            try
+            {
+                StockTaking entity = await this.Mediator.Send(new RestoreStockTakingFromBinCommand(id));
+                return this.Ok(this.Mapper.Map<StockTakingDTO>(entity));
+            }
+            catch (EntityNotFoundException ex)
+            {
+                return this.NotFound(ex.Message);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
         // GET: api/StockTakings/Deleted/1/20
         [HttpGet("Deleted/{page}/{itemsPerPage}")]
         [ProducesResponseType(200)]
