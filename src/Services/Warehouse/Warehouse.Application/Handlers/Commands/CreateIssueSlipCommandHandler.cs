@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using Restmium.ERP.Services.Warehouse.Application.Commands;
+using Restmium.ERP.Services.Warehouse.Application.DependencyInjection.Handlers.IssueSlips;
 using Restmium.ERP.Services.Warehouse.Domain.Entities;
-using Restmium.ERP.Services.Warehouse.Domain.Entities.Extensions;
 using Restmium.ERP.Services.Warehouse.Domain.Events;
 using Restmium.ERP.Services.Warehouse.Infrastructure.Database;
 using System.Collections.Generic;
@@ -13,30 +13,20 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
 {
     public class CreateIssueSlipCommandHandler : IRequestHandler<CreateIssueSlipCommand, IssueSlip>
     {
-        public CreateIssueSlipCommandHandler(DatabaseContext context, IMediator mediator)
+        public CreateIssueSlipCommandHandler(DatabaseContext context, IMediator mediator, IIssueSlipHandler issueSlipHandler)
         {
             this.DatabaseContext = context;
             this.Mediator = mediator;
+            this.IssueSlipHandler = issueSlipHandler;
         }
 
         protected DatabaseContext DatabaseContext { get; }
         protected IMediator Mediator { get; }
+        protected IIssueSlipHandler IssueSlipHandler { get; }
 
         public async Task<IssueSlip> Handle(CreateIssueSlipCommand request, CancellationToken cancellationToken)
         {
-            // Find positions for IssueSlip.Items and create them
-            LinkedList<IssueSlip.Item> items = new LinkedList<IssueSlip.Item>();
-            foreach (CreateIssueSlipCommand.Item item in request.Items)
-            {
-                foreach (KeyValuePair<Position, int> valuePair in await this.FindPositions(item.Ware, item.RequstedUnits, cancellationToken))
-                {
-                    items.AddLast(new IssueSlip.Item(0, item.Ware.Id, valuePair.Key.Id, valuePair.Value, 0));
-                }
-            }
-
-            // Create IssueSlip and save it to database
-            IssueSlip issueSlip = this.DatabaseContext.IssueSlips.Add(new IssueSlip(request.OrderId, request.UtcDispatchDate, request.UtcDeliveryDate, items)).Entity;
-            await this.DatabaseContext.SaveChangesAsync(cancellationToken);
+            IssueSlip issueSlip = await this.IssueSlipHandler.HandleAsync(this.ConvertToIssueSlip(request), cancellationToken);
 
             // Publish DomainEvent that the IssueSlip has been created
             await this.Mediator.Publish(new IssueSlipCreatedDomainEvent(issueSlip), cancellationToken);
@@ -44,37 +34,16 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
             return issueSlip;
         }
 
-        //TODO: Reimplement - if it's possible to take if just from one position, then take it from one
-        protected async Task<Dictionary<Position, int>> FindPositions(Ware ware, int units, CancellationToken cancellationToken)
+        protected IssueSlip ConvertToIssueSlip(CreateIssueSlipCommand request)
         {
-            Dictionary<Position, int> pairs = new Dictionary<Position, int>();
-
-            // Get all positions where Ware is stored
-            IEnumerable<Position> positions = this.DatabaseContext.Positions
-                .Where(x => x.GetWare() == ware)
-                .OrderBy(x => x.CountWare())
-                .ToList();
-
-            // Issue units from positions + create reservations
-            foreach (Position position in positions)
+            // Convert IssueSlipCommand.Items to IssueSlip.Items with no position assigned
+            List<IssueSlip.Item> items = new List<IssueSlip.Item>(request.Items.Count());
+            foreach (CreateIssueSlipCommand.Item item in request.Items)
             {
-                int unitsAtPosition = position.CountWare();
-
-                if (unitsAtPosition < units)
-                {
-                    await this.Mediator.Send(new CreateIssueSlipReservationCommand(position.Id, unitsAtPosition), cancellationToken);
-                    pairs.Add(position, unitsAtPosition);
-                    units -= unitsAtPosition;
-                }
-                else
-                {
-                    await this.Mediator.Send(new CreateIssueSlipReservationCommand(position.Id, units), cancellationToken);
-                    pairs.Add(position, units);
-                    break;
-                }
+                items.Add(new IssueSlip.Item(0, item.Ware.Id, null, item.RequstedUnits, 0));
             }
 
-            return pairs;
+            return new IssueSlip(request.OrderId, request.UtcDispatchDate, request.UtcDeliveryDate, items);
         }
     }
 }
