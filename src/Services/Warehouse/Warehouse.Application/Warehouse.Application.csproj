@@ -11,6 +11,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\BuildingBlocks\Restmium.ERP.Integration\Restmium.ERP.Integration.csproj" />
+    <ProjectReference Include="..\Warehouse.Application.DependencyInjection\Warehouse.Application.DependencyInjection.csproj" />
     <ProjectReference Include="..\Warehouse.Integration\Warehouse.Integration.csproj" />
   </ItemGroup>
 
