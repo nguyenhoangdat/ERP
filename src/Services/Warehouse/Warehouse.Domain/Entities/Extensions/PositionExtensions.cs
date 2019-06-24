@@ -56,7 +56,7 @@ namespace Restmium.ERP.Services.Warehouse.Domain.Entities.Extensions
                 throw new ArgumentOutOfRangeException(nameof(unitsTotal));
             }
 
-            return true; //TODO: Implement
+            return true; //TODO: Implement HasSpaceCapacity
         }
     }
 }

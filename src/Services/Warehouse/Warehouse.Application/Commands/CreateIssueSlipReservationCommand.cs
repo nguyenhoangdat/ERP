@@ -5,6 +5,10 @@ namespace Restmium.ERP.Services.Warehouse.Application.Commands
 {
     public class CreateIssueSlipReservationCommand : IRequest<Position>
     {
+        /*
+         * TODO: Review this code
+         */
+
         public CreateIssueSlipReservationCommand(long positionId, int reservedUnits)
         {
             this.PositionId = positionId;
