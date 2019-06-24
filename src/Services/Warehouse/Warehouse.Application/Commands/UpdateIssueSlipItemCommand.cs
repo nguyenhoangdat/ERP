@@ -5,7 +5,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Commands
 {
     public class UpdateIssueSlipItemCommand : IRequest<IssueSlip.Item>
     {
-        public UpdateIssueSlipItemCommand(int wareId, long issueSlipId, long positionId, int issuedUnits)
+        public UpdateIssueSlipItemCommand(int wareId, long issueSlipId, long? positionId, int issuedUnits)
         {
             this.WareId = wareId;
             this.IssueSlipId = issueSlipId;
