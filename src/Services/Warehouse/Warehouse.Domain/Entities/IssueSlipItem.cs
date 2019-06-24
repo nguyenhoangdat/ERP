@@ -16,7 +16,7 @@ namespace Restmium.ERP.Services.Warehouse.Domain.Entities
                 this.RequestedUnits = requestedUnits;
                 this.IssuedUnits = issuedUnits;
             }
-            public Item(long issueSlipId, int wareId, long positionId, int requestedUnits, int issuedUnits) : this(requestedUnits, issuedUnits)
+            public Item(long issueSlipId, int wareId, long? positionId, int requestedUnits, int issuedUnits) : this(requestedUnits, issuedUnits)
             {
                 this.IssueSlipId = issueSlipId;
                 this.WareId = wareId;
@@ -33,8 +33,7 @@ namespace Restmium.ERP.Services.Warehouse.Domain.Entities
             public int WareId { get; set; }
             public virtual Ware Ware { get; set; }
 
-            [Required]
-            public long PositionId { get; set; }
+            public long? PositionId { get; set; }
             public virtual Position Position { get; set; }
 
             [Required]

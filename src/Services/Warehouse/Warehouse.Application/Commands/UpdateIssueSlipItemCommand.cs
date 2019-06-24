@@ -16,7 +16,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Commands
         public int WareId { get; }
         public long IssueSlipId { get; }
 
-        public long PositionId { get; }
+        public long? PositionId { get; }
         public int IssuedUnits { get; }
     }
 }
