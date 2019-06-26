@@ -32,10 +32,10 @@ namespace Restmium.ERP.Services.Warehouse.Application.DependencyInjection.Factor
         /// <returns></returns>
         public async Task<Receipt> HandleAsync(Receipt receipt, CancellationToken cancellationToken = default)
         {
-            receipt = this.DatabaseContext.Receipts.AddAsync(receipt).Result.Entity;
+            Receipt entity = (await this.DatabaseContext.Receipts.AddAsync(receipt, cancellationToken)).Entity;
             await this.DatabaseContext.SaveChangesAsync(cancellationToken);
 
-            return receipt;
+            return entity;
         }
     }
 }
