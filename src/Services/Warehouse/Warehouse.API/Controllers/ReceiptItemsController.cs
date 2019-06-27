@@ -66,7 +66,7 @@ namespace Warehouse.API.Controllers
             }
         }
 
-        // PUT: api/ReceiptItems/5
+        // PUT: api/ReceiptItems/5/2
         [HttpPut("{receiptId}/{wareId}")]
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]

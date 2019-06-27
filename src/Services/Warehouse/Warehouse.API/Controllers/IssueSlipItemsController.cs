@@ -25,7 +25,7 @@ namespace Warehouse.API.Controllers
             this.Mediator = mediator;
         }
 
-        // GET: api/IssueSlipItems/5
+        // GET: api/IssueSlipItems/5/1
         [HttpGet("{issueSlipId}/{wareId}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]

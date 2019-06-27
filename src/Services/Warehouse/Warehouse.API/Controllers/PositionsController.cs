@@ -199,14 +199,14 @@ namespace Warehouse.API.Controllers
             }
         }
 
-        // GET: api/Positions/
+        // GET: api/Positions/1/2
         [HttpGet("Relocate/{fromId}/{toId}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
         [ProducesResponseType(409)]
         [ProducesResponseType(500)]
-        public async Task<ActionResult<PositionDTO>> Relocate(long fromId, long toId)
+        public async Task<ActionResult<PositionDTO>> GetRelocate(long fromId, long toId)
         {
             try
             {

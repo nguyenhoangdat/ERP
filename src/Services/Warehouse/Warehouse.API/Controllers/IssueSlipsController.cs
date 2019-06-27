@@ -177,15 +177,15 @@ namespace Warehouse.API.Controllers
         }
 
         // GET: api/IssueSlips/NextIssueSlipToProcessInSection/1
-        [HttpGet("NextIssueSlipToProcessInSection/{id}")]
+        [HttpGet("NextIssueSlipToProcessInSection/{sectionId}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(500)]
-        public async Task<ActionResult<IssueSlipDTO>> GetNextToBeProcessedInSection(int id)
+        public async Task<ActionResult<IssueSlipDTO>> GetNextToBeProcessedInSection(int sectionId)
         {
             try
             {
-                IssueSlip issueSlip = await this.Mediator.Send(new FindIssueSlipToProcessInSectionCommand(id));
+                IssueSlip issueSlip = await this.Mediator.Send(new FindIssueSlipToProcessInSectionCommand(sectionId));
                 return this.Ok(this.Mapper.Map<IssueSlipDTO>(issueSlip));
             }
             catch (EntityNotFoundException ex)
@@ -199,14 +199,14 @@ namespace Warehouse.API.Controllers
         }
 
         // GET: api/IssueSlips/IssueSlipsForOrderWithId/5
-        [HttpGet("IssueSlipsForOrderWithId/{id}")]
+        [HttpGet("IssueSlipsForOrderWithId/{orderId}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(500)]
-        public async Task<ActionResult<IEnumerable<IssueSlipDTO>>> GetIssueSlipsForOrderWithId(long id)
+        public async Task<ActionResult<IEnumerable<IssueSlipDTO>>> GetIssueSlipsForOrderWithId(long orderId)
         {
             try
             {
-                IEnumerable<IssueSlip> issueSlips = await this.Mediator.Send(new FindIssueSlipsByOrderIdCommand(id));
+                IEnumerable<IssueSlip> issueSlips = await this.Mediator.Send(new FindIssueSlipsByOrderIdCommand(orderId));
                 return this.Ok(this.Mapper.Map<IEnumerable<IssueSlip>, IEnumerable<IssueSlipDTO>>(issueSlips));
             }
             catch (Exception)
@@ -216,14 +216,14 @@ namespace Warehouse.API.Controllers
         }
 
         // GET: api/IssueSlips/IssueSlipsForOrderWithIdInWarehouse/5
-        [HttpGet("IssueSlipsForOrderWithIdInWarehouse/{id}/{warehouseId}")]
+        [HttpGet("IssueSlipsForOrderWithIdInWarehouse/{orderId}/{warehouseId}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(500)]
-        public async Task<ActionResult<IEnumerable<IssueSlipDTO>>> GetIssueSlipsForOrderWithIdInWarehouse(long id, int warehouseId)
+        public async Task<ActionResult<IEnumerable<IssueSlipDTO>>> GetIssueSlipsForOrderWithIdInWarehouse(long orderId, int warehouseId)
         {
             try
             {
-                IEnumerable<IssueSlip> issueSlips = await this.Mediator.Send(new FindIssueSlipsByOrderIdAndWarehouseIdCommand(id, warehouseId));
+                IEnumerable<IssueSlip> issueSlips = await this.Mediator.Send(new FindIssueSlipsByOrderIdAndWarehouseIdCommand(orderId, warehouseId));
                 return this.Ok(this.Mapper.Map<IEnumerable<IssueSlip>, IEnumerable<IssueSlipDTO>>(issueSlips));
             }
             catch (Exception)
