@@ -30,7 +30,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
 
             // Return IssueSlip that need to be processed ASAP
             return this.DatabaseContext.IssueSlips
-                .Where(x => x.GetSection().Id == request.SectionId && x.UtcMovedToBin == null)
+                .Where(x => x.GetSection().Id == request.SectionId && x.UtcDispatchDate == null && x.UtcMovedToBin == null)
                 .OrderBy(x => x.UtcDeliveryDate)
                 .FirstOrDefault();
         }
