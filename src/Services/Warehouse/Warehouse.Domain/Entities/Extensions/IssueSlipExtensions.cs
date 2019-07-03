@@ -5,9 +5,9 @@ namespace Restmium.ERP.Services.Warehouse.Domain.Entities.Extensions
 {
     public static class IssueSlipExtensions
     {
-        public static Section GetSection(this IssueSlip issueSlip)
+        public static bool HasSectionWithId(this IssueSlip issueSlip, int sectionId)
         {
-            return issueSlip.Items.FirstOrDefault().Position.Section;
+            return issueSlip.Items.FirstOrDefault(x => x.Position.SectionId == sectionId) != null;
         }
 
         /// <summary>
