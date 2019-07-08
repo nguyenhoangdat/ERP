@@ -48,15 +48,6 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
             };
 
             return wareAvailability;
-
-            //return positions
-            //    .GroupBy(e => e.Section.WarehouseId)
-            //    .Select(eg => new WareAvailabilityInWarehouse()
-            //    {
-            //        Warehouse = eg.First().Section.Warehouse,
-            //        Ware = eg.First().GetWare(),
-            //        UnitsAvailable = eg.Sum(e => e.CountWare())
-            //    }).FirstOrDefault();
         }
     }
 }

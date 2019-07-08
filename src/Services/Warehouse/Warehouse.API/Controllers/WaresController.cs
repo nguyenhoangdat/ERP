@@ -265,6 +265,27 @@ namespace Warehouse.API.Controllers
             }
         }
 
+        [HttpGet("GetWareAvailabilityInWarehouses/{wareId}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
+        public async Task<ActionResult<WareAvailabilityInWarehouseDTO>> GetWareAvailabilityInWarehouses(int wareId)
+        {
+            try
+            {
+                IEnumerable<WareAvailabilityInWarehouse> availabilityInWarehouses = await this.Mediator.Send(new GetWareAvailabilityInWarehousesCommand(wareId));
+                return this.Ok(this.Mapper.Map<IEnumerable<WareAvailabilityInWarehouse>, IEnumerable<WareAvailabilityInWarehouseDTO>>(availabilityInWarehouses));
+            }
+            catch (EntityNotFoundException ex)
+            {
+                return this.NotFound(ex.Message);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
         [HttpGet("GetWareAvailabilityInSection/{wareId}/{sectionId}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
