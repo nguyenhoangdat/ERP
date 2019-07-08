@@ -7,7 +7,7 @@ namespace Restmium.ERP.Services.Warehouse.API.Models.Application.Mapping
     {
         public WarehouseCapacityProfileMapping()
         {
-            this.CreateMap<WarehouseCapacity, WarehouseCapacityDTO>().ReverseMap();
+            this.CreateMap<WarehouseCapacity, WarehouseCapacityDTO>();
         }
     }
 }

@@ -2,7 +2,7 @@
 
 namespace Restmium.ERP.Services.Warehouse.Application.Models
 {
-    public class WareAvailability
+    public class WareAvailabilityInWarehouse
     {
         public Ware Ware { get; set; }
         public Domain.Entities.Warehouse Warehouse { get; set; }

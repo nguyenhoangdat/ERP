@@ -2,10 +2,10 @@
 
 namespace Restmium.ERP.Services.Warehouse.API.Models.Application
 {
-    public class WareAvailabilityDTO
+    public class WareAvailabilityInSectionDTO
     {
         public WareDTO Ware { get; set; }
-        public WarehouseDTO Warehouse { get; set; }
+        public SectionDTO Section { get; set; }
         public int UnitsAvailable { get; set; }
     }
 }

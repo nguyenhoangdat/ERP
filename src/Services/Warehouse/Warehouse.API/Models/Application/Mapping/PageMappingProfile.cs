@@ -7,7 +7,7 @@ namespace Restmium.ERP.Services.Warehouse.API.Models.Application.Mapping
     {
         public PageMappingProfile()
         {
-            this.CreateMap(typeof(Page<>), typeof(PageDTO<>)).ReverseMap();
+            this.CreateMap(typeof(Page<>), typeof(PageDTO<>));
         }
     }
 }

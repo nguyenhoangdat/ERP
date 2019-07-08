@@ -244,16 +244,37 @@ namespace Warehouse.API.Controllers
             }
         }
 
-        [HttpGet("GetWareAvailability/{wareId}")]
+        [HttpGet("GetWareAvailabilityInWarehouse/{wareId}/{warehouseId}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(500)]
-        public async Task<ActionResult<IEnumerable<WareAvailabilityDTO>>> GetWareAvailability(int wareId)
+        public async Task<ActionResult<WareAvailabilityInWarehouseDTO>> GetWareAvailabilityInWarehouse(int wareId, int warehouseId)
         {
             try
             {
-                IEnumerable<WareAvailability> wareAvailabilities = await this.Mediator.Send(new GetWareAvailabilityCommand(wareId));
-                return this.Ok(this.Mapper.Map<IEnumerable<WareAvailability>, IEnumerable<WareAvailabilityDTO>>(wareAvailabilities));
+                WareAvailabilityInWarehouse availabilityInWarehouse = await this.Mediator.Send(new GetWareAvailabilityInWarehouseCommand(wareId, warehouseId));
+                return this.Ok(this.Mapper.Map<WareAvailabilityInWarehouse, WareAvailabilityInWarehouseDTO>(availabilityInWarehouse));
+            }
+            catch (EntityNotFoundException ex)
+            {
+                return this.NotFound(ex.Message);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        [HttpGet("GetWareAvailabilityInSection/{wareId}/{sectionId}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
+        public async Task<ActionResult<WareAvailabilityInSectionDTO>> GetWareAvailabilityInSection(int wareId, int sectionId)
+        {
+            try
+            {
+                WareAvailabilityInSection wareAvailabilityInSection = await this.Mediator.Send(new GetWareAvailabilityInSectionCommand(wareId, sectionId));
+                return this.Ok(this.Mapper.Map<WareAvailabilityInSection, WareAvailabilityInSectionDTO>(wareAvailabilityInSection));
             }
             catch (EntityNotFoundException ex)
             {

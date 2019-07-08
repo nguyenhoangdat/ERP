@@ -7,7 +7,7 @@ namespace Restmium.ERP.Services.Warehouse.API.Models.Application.Mapping
     {
         public PositionCountMappingProfile()
         {
-            this.CreateMap<PositionCount, PositionCountDTO>().ReverseMap();
+            this.CreateMap<PositionCount, PositionCountDTO>();
         }
     }
 }
