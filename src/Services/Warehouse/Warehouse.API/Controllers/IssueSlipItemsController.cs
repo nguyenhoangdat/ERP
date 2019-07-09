@@ -8,6 +8,7 @@ using Restmium.ERP.Services.Warehouse.Application.Models;
 using Restmium.ERP.Services.Warehouse.Domain.Entities;
 using Restmium.ERP.Services.Warehouse.Domain.Exceptions;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Warehouse.API.Controllers
@@ -141,6 +142,27 @@ namespace Warehouse.API.Controllers
             try
             {
                 IssueSlip.Item entity = await this.Mediator.Send(new RestoreIssueSlipItemFromBinCommand(wareId, issueSlipId));
+                return this.Ok(this.Mapper.Map<IssueSlipDTO.ItemDTO>(entity));
+            }
+            catch (EntityNotFoundException ex)
+            {
+                return this.NotFound(ex.Message);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        [HttpGet("GetNextToBeProcessedInSectionByIssueSlipId/{sectionId}/{issueSlipId}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
+        public async Task<ActionResult<IssueSlipDTO.ItemDTO>> GetNextToBeProcessedInSectionByIssueSlipId(int sectionId, long issueSlipId)
+        {
+            try
+            {
+                IssueSlip.Item entity = await this.Mediator.Send(new FindIssueSlipItemToProcessInSectionByIssueSlipIdCommand(sectionId, issueSlipId));
                 return this.Ok(this.Mapper.Map<IssueSlipDTO.ItemDTO>(entity));
             }
             catch (EntityNotFoundException ex)
