@@ -5,9 +5,21 @@ namespace Restmium.ERP.Services.Warehouse.Domain.Entities.Extensions
 {
     public static class IssueSlipExtensions
     {
-        public static bool HasSectionWithId(this IssueSlip issueSlip, int sectionId)
+        public static bool HasSectionId(this IssueSlip issueSlip, int sectionId)
         {
             return issueSlip.Items.FirstOrDefault(x => x.Position.SectionId == sectionId) != null;
+        }
+
+        public static bool HasSectionIdWithAvailableUnits(this IssueSlip issueSlip, int sectionId)
+        {
+             return GetFirstItemInSectionWithAvailableUnits(issueSlip, sectionId) != null;
+        }
+
+        public static IssueSlip.Item GetFirstItemInSectionWithAvailableUnits(this IssueSlip issueSlip, int sectionId)
+        {
+            return issueSlip.Items.FirstOrDefault(x =>
+                x.Position.SectionId == sectionId &&
+                x.RequestedUnits <= x.Position.CountWare());
         }
 
         /// <summary>
