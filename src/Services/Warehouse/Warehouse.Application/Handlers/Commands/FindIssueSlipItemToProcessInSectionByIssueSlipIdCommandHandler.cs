@@ -12,14 +12,12 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
 {
     public class FindIssueSlipItemToProcessInSectionByIssueSlipIdCommandHandler : IRequestHandler<FindIssueSlipItemToProcessInSectionByIssueSlipIdCommand, IssueSlip.Item>
     {
-        public FindIssueSlipItemToProcessInSectionByIssueSlipIdCommandHandler(DatabaseContext databaseContext, IMediator mediator)
+        public FindIssueSlipItemToProcessInSectionByIssueSlipIdCommandHandler(DatabaseContext databaseContext)
         {
             this.DatabaseContext = databaseContext;
-            this.Mediator = mediator;
         }
 
         protected DatabaseContext DatabaseContext { get; }
-        protected IMediator Mediator { get; }
 
         public async Task<IssueSlip.Item> Handle(FindIssueSlipItemToProcessInSectionByIssueSlipIdCommand request, CancellationToken cancellationToken)
         {
@@ -37,7 +35,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
                     x.IssueSlipId == request.IssueSlipId &&
                     x.Position.SectionId == request.SectionId &&
                     x.IssuedUnits < x.RequestedUnits &&
-                    this.Mediator.Send(new GetWareAvailabilityInSectionCommand(x.WareId, x.Position.SectionId), cancellationToken).Result.UnitsAvailable > 0); 
+                    x.Position.Movements.OrderByDescending(e => e.UtcCreated).First().CountTotal > 0);
         }
     }
 }
