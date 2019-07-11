@@ -31,6 +31,8 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
             IssueSlip issueSlip = await this.DatabaseContext.IssueSlips.FindAsync(new object[] { request.Id }, cancellationToken);
             issueSlip.UtcDeliveryDate = request.UtcDeliveryDate;
             issueSlip.UtcDispatchDate = request.UtcDispatchDate;
+            issueSlip.UtcProcessed = request.UtcProcessed;
+            issueSlip.UtcDispatched = request.UtcDispatched;
 
             await this.DatabaseContext.SaveChangesAsync(cancellationToken);
 
