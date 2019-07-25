@@ -52,7 +52,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
             // Check capacity (space)
             if (!position.HasSpaceCapacity(ware, newCount))
             {
-                throw new NotImplementedException();
+                throw new NotImplementedException(); //TODO: Check Space Capacity
             }
             // Check load capacity (weight)
             if (!position.HasLoadCapacity(ware, newCount))
