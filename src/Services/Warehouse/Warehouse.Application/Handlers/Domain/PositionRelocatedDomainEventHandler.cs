@@ -1,5 +1,7 @@
 ﻿using MediatR;
 using Restmium.ERP.Services.Warehouse.Application.Commands;
+using Restmium.ERP.Services.Warehouse.Domain.Entities;
+using Restmium.ERP.Services.Warehouse.Domain.Entities.Extensions;
 using Restmium.ERP.Services.Warehouse.Domain.Events;
 using Restmium.ERP.Services.Warehouse.Infrastructure.Database;
 using System.Linq;
@@ -22,21 +24,22 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Domain
 
         public async Task Handle(PositionRelocatedDomainEvent notification, CancellationToken cancellationToken)
         {
-            /*
-             * TODO: Review this code
-             * 
-             * When relocation is done, we need to update entities of IssueSlip.Item and Receipt.Item that were not processed and are related to the position
-             */
+            // Update ReservedUnits
+            Position positionFrom = await this.Mediator.Send(new RemoveIssueSlipReservationCommand(notification.PositionFrom, notification.RelocatedUnits), cancellationToken);
+            Position positionTo = await this.Mediator.Send(new CreateIssueSlipReservationCommand(notification.PositionTo.Id, notification.RelocatedUnits), cancellationToken);
 
-            // Find all IssueSlip.Items which were not processed and are related to Position from which was the relocation done
-            foreach (Entities.IssueSlip.Item item in this.DatabaseContext.IssueSlipItems.Where(x => x.PositionId == notification.PositionFrom.Id && x.IssuedUnits == 0))
+            if (!positionFrom.HasAllIssueSlipItemsProcessed())
             {
-                await this.Mediator.Send(new UpdateIssueSlipItemCommand(item.WareId, item.IssueSlipId, notification.PositionTo.Id, item.IssuedUnits), cancellationToken);
+                await this.Mediator.Send(new SplitAndMoveUnprocessedIssueSlipItemsBetweenPositionsCommand(positionFrom.Id, positionTo.Id), cancellationToken);
             }
-
-            throw new System.NotImplementedException("Update entities of Receipt.Item where necessary"); //TODO: Implement: Update entities of Receipt.Item where necessary
-
-            // DomainEvent is already published by the UpdateIssueSlipItemCommandHandler!!!
+            if (!positionFrom.HasAllReceiptItemsProcessed())
+            {
+                await this.Mediator.Send(new SplitAndMoveUnprocessedReceiptItemsBetweenPositionsCommand(positionFrom.Id, positionTo.Id), cancellationToken);
+            }
+            if (!positionFrom.HasAllStockTakingItemsProcessed())
+            {
+                await this.Mediator.Send(new MoveUnprocessedStockTakingItemsBetweenPositionsCommand(positionFrom.Id, positionTo.Id), cancellationToken);
+            }
         }
     }
 }

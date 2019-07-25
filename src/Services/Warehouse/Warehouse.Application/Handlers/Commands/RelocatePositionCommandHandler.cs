@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
 {
     public class RelocatePositionCommandHandler : IRequestHandler<RelocatePositionCommand, Position>
-    {        
+    {
         public RelocatePositionCommandHandler(DatabaseContext context, IMediator mediator)
         {
             this.DatabaseContext = context;
@@ -23,7 +23,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
         protected IMediator Mediator { get; }
 
         /// <summary>
-        /// Relocates all Wares at one position to the second position and return Position to which were Wares relocated.
+        /// Relocates all Wares at one position to the second position and return <see cref="Position"/> to which were Wares relocated.
         /// 
         /// Throws an exception when:
         ///     One, or both positions are null
@@ -36,8 +36,8 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
         /// <returns>Position to which were the Wares transfered</returns>
         public async Task<Position> Handle(RelocatePositionCommand request, CancellationToken cancellationToken)
         {
-            Position positionFrom = this.DatabaseContext.Positions.Find(request.FromPositionWithId);
-            Position positionTo = this.DatabaseContext.Positions.Find(request.ToPositionWithId);
+            Position positionFrom = await this.DatabaseContext.Positions.FindAsync(new object[] { request.FromPositionWithId }, cancellationToken);
+            Position positionTo = await this.DatabaseContext.Positions.FindAsync(new object[] { request.ToPositionWithId }, cancellationToken);
 
             // Throw exceptions when Position is not found
             if (positionFrom == null)
@@ -61,29 +61,16 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
                 throw new PositionWareConflictException(string.Format(Resources.Exceptions.Values["Relocation_PositionWareConflictException"], positionFrom.Id, positionTo.Id));
             }
 
-            // Throw an exception if Position cannot hold the ammount of Wares that user want to relocate
-            int countTotal = positionTo.CountWare() + positionFrom.CountWare();
-            if (!positionTo.HasLoadCapacity(positionFrom.GetWare(), countTotal))
-            {
-                throw new PositionLoadCapacityException(string.Format(Resources.Exceptions.Values["Relocation_PositionLoadCapacityException"], positionFrom.Id, positionTo.Id));
-            }
-            if (!positionTo.HasSpaceCapacity(positionFrom.GetWare(), countTotal))
-            {
-                throw new NotImplementedException(); //TODO: Implement - HasSpaceCapacity
-            }
-
             // Relocate Wares between Positions - create movements
             Ware ware = positionFrom.GetWare();
             int unitsToRelocate = positionFrom.CountWare();
-            await this.Mediator.Send(new CreateMovementCommand(ware.Id, positionFrom.Id, Movement.Direction.Out, unitsToRelocate), cancellationToken);
             await this.Mediator.Send(new CreateMovementCommand(ware.Id, positionTo.Id, Movement.Direction.In, unitsToRelocate), cancellationToken);
+            await this.Mediator.Send(new CreateMovementCommand(ware.Id, positionFrom.Id, Movement.Direction.Out, unitsToRelocate), cancellationToken);
 
-            // Update ReservedUnits
-            positionFrom = await this.Mediator.Send(new RemoveIssueSlipReservationCommand(positionFrom, unitsToRelocate), cancellationToken);
-            positionTo = await this.Mediator.Send(new CreateIssueSlipReservationCommand(positionTo.Id, unitsToRelocate), cancellationToken);
+            await this.DatabaseContext.SaveChangesAsync(cancellationToken);
 
             // Update IssueSlips through DomainEvent (PositionRelocatedDomainEvent)
-            await this.Mediator.Publish(new PositionRelocatedDomainEvent(positionFrom, positionTo), cancellationToken);
+            await this.Mediator.Publish(new PositionRelocatedDomainEvent(positionFrom, positionTo, unitsToRelocate), cancellationToken);
 
             return positionTo;
         }

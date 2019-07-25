@@ -58,5 +58,18 @@ namespace Restmium.ERP.Services.Warehouse.Domain.Entities.Extensions
 
             return true; //TODO: Implement HasSpaceCapacity
         }
+
+        public static bool HasAllIssueSlipItemsProcessed(this Position position)
+        {
+            return position.IssueSlipItems.Count(x => x.IssuedUnits < x.RequestedUnits) == 0;
+        }
+        public static bool HasAllReceiptItemsProcessed(this Position position)
+        {
+            return position.ReceiptItems.Count(x => x.CountReceived < x.CountOrdered) == 0;
+        }
+        public static bool HasAllStockTakingItemsProcessed(this Position position)
+        {
+            return position.StockTakingItems.Count(x => x.UtcCounted == null) == 0;
+        }
     }
 }

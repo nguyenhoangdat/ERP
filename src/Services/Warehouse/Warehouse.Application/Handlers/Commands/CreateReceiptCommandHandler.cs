@@ -31,7 +31,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
             Receipt receipt = this.DatabaseContext.Receipts.Add(new Receipt(0, request.UtcExpected, items)).Entity;
             await this.DatabaseContext.SaveChangesAsync(cancellationToken);
 
-            await this.Mediator.Publish(new ReceiptCreateDomainEvent(receipt), cancellationToken);
+            await this.Mediator.Publish(new ReceiptCreatedDomainEvent(receipt), cancellationToken);
 
             return receipt;
         }
