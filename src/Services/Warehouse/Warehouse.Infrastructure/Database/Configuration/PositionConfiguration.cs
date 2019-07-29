@@ -15,7 +15,8 @@ namespace Restmium.ERP.Services.Warehouse.Infrastructure.Database.Configuration
 
             builder.HasOne(p => p.Section)
                 .WithMany(s => s.Positions)
-                .HasForeignKey(p => p.SectionId);
+                .HasForeignKey(p => p.SectionId)
+                .OnDelete(DeleteBehavior.Cascade);
 
             builder.Property(x => x.UtcCreated)
                 .HasDefaultValue(DateTime.UtcNow);

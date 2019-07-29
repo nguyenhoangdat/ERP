@@ -13,7 +13,8 @@ namespace Restmium.ERP.Services.Warehouse.Infrastructure.Database.Configuration
 
             builder.HasOne(i => i.StockTaking)
                 .WithMany(s => s.Items)
-                .HasForeignKey(i => i.StockTakingId);
+                .HasForeignKey(i => i.StockTakingId)
+                .OnDelete(DeleteBehavior.Cascade);
 
             builder.HasOne(i => i.Ware)
                 .WithMany(s => s.StockTakingItems)
