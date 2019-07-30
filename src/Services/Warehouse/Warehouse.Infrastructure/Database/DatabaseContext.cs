@@ -6,10 +6,10 @@ namespace Restmium.ERP.Services.Warehouse.Infrastructure.Database
 {
     public class DatabaseContext : DbContext
     {
-        public DatabaseContext(DbContextOptions options) : base(options)
+        protected DatabaseContext() : base()
         {
         }
-        protected DatabaseContext() : base()
+        public DatabaseContext(DbContextOptions options) : base(options)
         {
         }
 
@@ -32,17 +32,7 @@ namespace Restmium.ERP.Services.Warehouse.Infrastructure.Database
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.ApplyConfiguration(new IssueSlipConfiguration());
-            modelBuilder.ApplyConfiguration(new IssueSlipItemConfiguration());
-            modelBuilder.ApplyConfiguration(new MovementConfiguration());
-            modelBuilder.ApplyConfiguration(new PositionConfiguration());
-            modelBuilder.ApplyConfiguration(new ReceiptConfiguration());
-            modelBuilder.ApplyConfiguration(new ReceiptItemConfiguration());
-            modelBuilder.ApplyConfiguration(new SectionConfiguration());
-            modelBuilder.ApplyConfiguration(new StockTakingConfiguration());
-            modelBuilder.ApplyConfiguration(new StockTakingItemConfiguration());
-            modelBuilder.ApplyConfiguration(new WareConfiguration());
-            modelBuilder.ApplyConfiguration(new WarehouseConfiguration());
+            modelBuilder.ApplyConfigurationsFromAssembly(typeof(WarehouseConfiguration).Assembly);
         }
     }
 }
