@@ -2,7 +2,6 @@
 
 namespace Restmium.ERP.Services.Warehouse.API.Models.Application
 {
-    //TODO: Replace with more reasonable DTO
     public class PositionCountDTO
     {
         public PositionCountDTO()
