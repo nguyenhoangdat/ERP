@@ -3,10 +3,7 @@ using Restmium.ERP.Services.Warehouse.Application.Commands;
 using Restmium.ERP.Services.Warehouse.Domain.Entities;
 using Restmium.ERP.Services.Warehouse.Domain.Events;
 using Restmium.ERP.Services.Warehouse.Infrastructure.Database;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -29,9 +26,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
 
             if (ware == null)
             {
-                //TODO: Log Critical
-
-                //TODO: Publish RenameWareFailedDomainEvent
+                await this.Mediator.Publish(new WareRenameFailedDomainEvent(request.ProductId));
             }
             else
             {
