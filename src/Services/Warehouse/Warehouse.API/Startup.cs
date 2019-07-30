@@ -88,11 +88,17 @@ namespace Restmium.ERP.Services.Warehouse.API
             {
                 app.UseDeveloperExceptionPage();
                 app.UseDatabaseErrorPage();
+
+                // Applies any pending migration to the context
+                // app.ApplicationServices.GetRequiredService<DatabaseContext>().Database.Migrate(); // Use when the port 1433 is blocked
             }
             else
             {
                 app.UseExceptionHandler("/error");
                 app.UseHsts();
+
+                // Database and all its schema is created
+                app.ApplicationServices.GetRequiredService<DatabaseContext>().Database.EnsureCreated();
             }
 
             app.UseHttpsRedirection();
