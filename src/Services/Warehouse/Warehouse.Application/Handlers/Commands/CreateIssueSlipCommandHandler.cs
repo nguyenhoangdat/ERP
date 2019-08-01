@@ -13,20 +13,19 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
 {
     public class CreateIssueSlipCommandHandler : IRequestHandler<CreateIssueSlipCommand, IssueSlip>
     {
-        public CreateIssueSlipCommandHandler(DatabaseContext context, IMediator mediator, IIssueSlipHandler issueSlipHandler)
+        public CreateIssueSlipCommandHandler(DatabaseContext context, IMediator mediator)
         {
             this.DatabaseContext = context;
             this.Mediator = mediator;
-            this.IssueSlipHandler = issueSlipHandler;
         }
 
         protected DatabaseContext DatabaseContext { get; }
         protected IMediator Mediator { get; }
-        protected IIssueSlipHandler IssueSlipHandler { get; }
 
         public async Task<IssueSlip> Handle(CreateIssueSlipCommand request, CancellationToken cancellationToken)
         {
-            IssueSlip issueSlip = await this.IssueSlipHandler.HandleAsync(this.ConvertToIssueSlip(request), cancellationToken);
+            IssueSlip issueSlip = (await this.DatabaseContext.IssueSlips.AddAsync(this.ConvertToIssueSlip(request), cancellationToken)).Entity;
+            await this.DatabaseContext.SaveChangesAsync(cancellationToken);
 
             // Publish DomainEvent that the IssueSlip has been created
             await this.Mediator.Publish(new IssueSlipCreatedDomainEvent(issueSlip), cancellationToken);
@@ -40,7 +39,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
             List<IssueSlip.Item> items = new List<IssueSlip.Item>(request.Items.Count());
             foreach (CreateIssueSlipCommand.Item item in request.Items)
             {
-                items.Add(new IssueSlip.Item(0, item.Ware.Id, null, item.RequstedUnits, 0));
+                items.Add(new IssueSlip.Item(0, item.Ware.Id, item.PositionId, item.RequstedUnits, 0));
             }
 
             return new IssueSlip(request.OrderId, request.UtcDispatchDate, request.UtcDeliveryDate, items);

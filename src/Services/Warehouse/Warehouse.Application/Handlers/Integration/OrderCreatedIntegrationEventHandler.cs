@@ -1,6 +1,9 @@
 ﻿using MediatR;
 using Restmium.ERP.Integration.Ordering;
 using Restmium.ERP.Services.Warehouse.Application.Commands;
+using Restmium.ERP.Services.Warehouse.Application.DependencyInjection.Selectors;
+using Restmium.ERP.Services.Warehouse.Application.DependencyInjection.Selectors.Models;
+using Restmium.ERP.Services.Warehouse.Application.DependencyInjection.Validators;
 using Restmium.ERP.Services.Warehouse.Domain.Entities;
 using Restmium.ERP.Services.Warehouse.Domain.Exceptions;
 using Restmium.ERP.Services.Warehouse.Infrastructure.Database;
@@ -14,16 +17,15 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Integration
 {
     public class OrderCreatedIntegrationEventHandler : IIntegrationEventHandler<OrderCreatedIntegrationEvent>
     {
-        //TODO: Move to RESOURCES
-        private const string OrderCreatedIntegrationEventHandler_InvalidOrderException = "Unable to create Issue Slip from Order (id={0}). Products were not found!";
-
         protected DatabaseContext DatabaseContext { get; }
         protected IMediator Mediator { get; }
+        protected IIssueSlipPositionSelector PositionSelector { get; }
 
-        public OrderCreatedIntegrationEventHandler(DatabaseContext context, IMediator mediator)
+        public OrderCreatedIntegrationEventHandler(DatabaseContext context, IMediator mediator, IIssueSlipPositionSelector positionSelector)
         {
-            this.DatabaseContext = context;   
+            this.DatabaseContext = context;
             this.Mediator = mediator;
+            this.PositionSelector = positionSelector;
         }
 
         /// <summary>
@@ -31,41 +33,52 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Integration
         /// </summary>
         /// <param name="event">The instance of OrderCreatedIntegrationEvent</param>
         /// <returns></returns>
-        public async Task Handle(OrderCreatedIntegrationEvent @event) //TODO: 2019.2 - Do better (include Warehouses, ...) 
+        public async Task Handle(OrderCreatedIntegrationEvent @event)
         {
-            // Validate Order
-            if (!this.IsOrderValid(@event.OrderItems))
-            {
-                throw new InvalidOrderException(string.Format(OrderCreatedIntegrationEventHandler_InvalidOrderException, @event.OrderId));
-            }
+            bool isOrderValid = await this.Mediator.Send(new ValidateOrderCommand(this.ConvertToProductCounts(@event.OrderItems)));
 
-            // Create Model.Items
-            LinkedList<CreateIssueSlipCommand.Item> modelItems = new LinkedList<CreateIssueSlipCommand.Item>();
-            foreach (OrderCreatedIntegrationEvent.OrderItem item in @event.OrderItems)
+            if (isOrderValid)
             {
-                Ware ware = this.DatabaseContext.Wares.Where(x => x.ProductId == item.ProductId).FirstOrDefault();
-                modelItems.AddLast(new CreateIssueSlipCommand.Item(ware, item.Units));
+                await this.Mediator.Send(new CreateIssueSlipCommand(@event.OrderId, @event.UtcDispatchDate, @event.UtcDeliveryDate, this.GetItems(@event.OrderItems)));
             }
-
-            // Create IssueSlip
-            IssueSlip issueSlip = await this.Mediator.Send(new CreateIssueSlipCommand(@event.OrderId, @event.UtcDispatchDate, @event.UtcDeliveryDate, modelItems));
+            else
+            {
+                await this.Mediator.Send(new RejectOrderCommand(@event.OrderId));
+            }
         }
 
-        protected bool IsOrderValid(IEnumerable<OrderCreatedIntegrationEvent.OrderItem> items)
+        protected IEnumerable<ValidateOrderCommand.ProductCount> ConvertToProductCounts(IEnumerable<OrderCreatedIntegrationEvent.OrderItem> orderItems)
         {
-            bool valid = true;
-
-            foreach (OrderCreatedIntegrationEvent.OrderItem item in items)
+            List<ValidateOrderCommand.ProductCount> productCounts = new List<ValidateOrderCommand.ProductCount>(orderItems.Count());
+            foreach (OrderCreatedIntegrationEvent.OrderItem item in orderItems)
+            {
+                productCounts.Add(new ValidateOrderCommand.ProductCount(item.ProductId, item.Units));
+            }
+            return productCounts;
+        }
+        protected IEnumerable<CreateIssueSlipCommand.Item> GetItems(IEnumerable<OrderCreatedIntegrationEvent.OrderItem> orderItems)
+        {
+            LinkedList<CreateIssueSlipCommand.Item> modelItems = new LinkedList<CreateIssueSlipCommand.Item>();
+            foreach (OrderCreatedIntegrationEvent.OrderItem item in orderItems)
             {
                 Ware ware = this.DatabaseContext.Wares.Where(x => x.ProductId == item.ProductId).FirstOrDefault();
+                IEnumerable<PositionCount> positionCounts = this.PositionSelector?.GetPositions(ware.Id, item.Units);
 
-                if (ware == null || this.DatabaseContext.Wares.Count(ware) < item.Units)
+                // Positions will be selected manually
+                if (positionCounts == null)
                 {
-                    valid = false;
-                }                
+                    modelItems.AddLast(new CreateIssueSlipCommand.Item(ware, null, item.Units));
+                }
+                else
+                {
+                    foreach (PositionCount positionCount in positionCounts)
+                    {
+                        modelItems.AddLast(new CreateIssueSlipCommand.Item(ware, positionCount.Position.Id, positionCount.Count));
+                    }
+                }
             }
 
-            return valid;
+            return modelItems;
         }
     }
 }
