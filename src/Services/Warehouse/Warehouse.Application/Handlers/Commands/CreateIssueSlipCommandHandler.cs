@@ -1,6 +1,5 @@
 ﻿using MediatR;
 using Restmium.ERP.Services.Warehouse.Application.Commands;
-using Restmium.ERP.Services.Warehouse.Application.DependencyInjection.Handlers.IssueSlips;
 using Restmium.ERP.Services.Warehouse.Domain.Entities;
 using Restmium.ERP.Services.Warehouse.Domain.Events;
 using Restmium.ERP.Services.Warehouse.Infrastructure.Database;
@@ -27,6 +26,8 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
             IssueSlip issueSlip = (await this.DatabaseContext.IssueSlips.AddAsync(this.ConvertToIssueSlip(request), cancellationToken)).Entity;
             await this.DatabaseContext.SaveChangesAsync(cancellationToken);
 
+            await this.CreateItemsReservationsAsync(issueSlip.Items, cancellationToken);
+
             // Publish DomainEvent that the IssueSlip has been created
             await this.Mediator.Publish(new IssueSlipCreatedDomainEvent(issueSlip), cancellationToken);
 
@@ -35,7 +36,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
 
         protected IssueSlip ConvertToIssueSlip(CreateIssueSlipCommand request)
         {
-            // Convert IssueSlipCommand.Items to IssueSlip.Items with no position assigned
+            // Convert IssueSlipCommand.Items to IssueSlip.Items
             List<IssueSlip.Item> items = new List<IssueSlip.Item>(request.Items.Count());
             foreach (CreateIssueSlipCommand.Item item in request.Items)
             {
@@ -43,6 +44,17 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
             }
 
             return new IssueSlip(request.OrderId, request.UtcDispatchDate, request.UtcDeliveryDate, items);
+        }
+
+        public async Task CreateItemsReservationsAsync(IEnumerable<IssueSlip.Item> items, CancellationToken cancellationToken)
+        {
+            foreach (IssueSlip.Item item in items)
+            {
+                if (item.PositionId != null)
+                {
+                    await this.Mediator.Send(new CreateIssueSlipReservationCommand(item.PositionId.Value, item.RequestedUnits), cancellationToken);
+                }
+            }
         }
     }
 }
