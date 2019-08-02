@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using Restmium.ERP.Integration.Warehouse;
+using Restmium.ERP.Services.Warehouse.Application.Commands;
 using Restmium.ERP.Services.Warehouse.Domain.Entities;
 using Restmium.ERP.Services.Warehouse.Domain.Events;
 using Restmium.Messaging;
@@ -22,14 +23,19 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Domain
         {
             IssueSlip issueSlip = notification.IssueSlip;
 
-            List<IssueSlipCreatedIntegrationEvent.IssueSlipItem> items = new List<IssueSlipCreatedIntegrationEvent.IssueSlipItem>();
+            this.EventBus.Publish(new IssueSlipCreatedIntegrationEvent(issueSlip.OrderId, issueSlip.UtcDispatchDate, issueSlip.UtcDeliveryDate, this.GetItems(notification.IssueSlip.Items)));
+        }
 
-            foreach (IssueSlip.Item item in notification.IssueSlip.Items)
+        public IEnumerable<IssueSlipCreatedIntegrationEvent.IssueSlipItem> GetItems(IEnumerable<IssueSlip.Item> items)
+        {
+            List<IssueSlipCreatedIntegrationEvent.IssueSlipItem> output = new List<IssueSlipCreatedIntegrationEvent.IssueSlipItem>();
+
+            foreach (IssueSlip.Item item in items)
             {
-                items.Add(new IssueSlipCreatedIntegrationEvent.IssueSlipItem(item.Ware.ProductId, item.RequestedUnits, item.Ware.Width, item.Ware.Height, item.Ware.Depth, item.Ware.Weight));
+                output.Add(new IssueSlipCreatedIntegrationEvent.IssueSlipItem(item.Ware.ProductId, item.RequestedUnits, item.Ware.Width, item.Ware.Height, item.Ware.Depth, item.Ware.Weight));
             }
 
-            this.EventBus.Publish(new IssueSlipCreatedIntegrationEvent(issueSlip.OrderId, issueSlip.UtcDispatchDate, issueSlip.UtcDeliveryDate, items));
+            return output;
         }
     }
 }
