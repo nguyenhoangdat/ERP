@@ -2,8 +2,8 @@
 using Restmium.ERP.Services.Warehouse.Application.Commands;
 using Restmium.ERP.Services.Warehouse.Domain.Entities;
 using Restmium.ERP.Services.Warehouse.Domain.Events;
+using Restmium.ERP.Services.Warehouse.Domain.Exceptions;
 using Restmium.ERP.Services.Warehouse.Infrastructure.Database;
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -22,13 +22,15 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
 
         public async Task<StockTaking> Handle(UpdateStockTakingCommand request, CancellationToken cancellationToken)
         {
-            List<StockTaking.Item> items = new List<StockTaking.Item>(request.Items.Count);
-            foreach (UpdateStockTakingCommand.Item item in request.Items)
+            StockTaking stockTaking = await this.DatabaseContext.StockTakings.FindAsync(new object[] { request.Id }, cancellationToken);
+
+            if (stockTaking == null)
             {
-                items.Add(new StockTaking.Item(item.StockTakingId, item.WareId, item.PositionId, item.CurrentStock, item.CountedStock, item.UtcCounted));
+                throw new EntityNotFoundException(string.Format(Resources.Exceptions.Values["StockTaking_EntityNotFoundException"], request.Id));
             }
 
-            StockTaking stockTaking = this.DatabaseContext.StockTakings.Update(new StockTaking(request.Name, items)).Entity;
+            stockTaking.Name = request.Name;
+
             await this.DatabaseContext.SaveChangesAsync(cancellationToken);
 
             await this.Mediator.Publish(new StockTakingUpdatedDomainEvent(stockTaking), cancellationToken);
