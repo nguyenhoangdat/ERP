@@ -11,12 +11,14 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
 {
     public class MoveIssueSlipToBinCommandHandler : IRequestHandler<MoveIssueSlipToBinCommand, IssueSlip>
     {
-        public MoveIssueSlipToBinCommandHandler(DatabaseContext databaseContext)
+        public MoveIssueSlipToBinCommandHandler(DatabaseContext databaseContext, IMediator mediator)
         {
             this.DatabaseContext = databaseContext;
+            this.Mediator = mediator;
         }
 
         protected DatabaseContext DatabaseContext { get; }
+        protected IMediator Mediator { get; }
 
         public async Task<IssueSlip> Handle(MoveIssueSlipToBinCommand request, CancellationToken cancellationToken)
         {
@@ -30,6 +32,11 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
             issueSlip.UtcMovedToBin = DateTime.UtcNow;
 
             await this.DatabaseContext.SaveChangesAsync(cancellationToken);
+
+            foreach (IssueSlip.Item item in issueSlip.Items)
+            {
+                await this.Mediator.Send(new MoveIssueSlipItemToBinCommand(item.WareId, item.IssueSlipId), cancellationToken);
+            }
 
             return issueSlip;
         }

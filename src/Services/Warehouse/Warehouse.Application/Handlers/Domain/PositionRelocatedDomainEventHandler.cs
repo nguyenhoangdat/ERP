@@ -24,9 +24,8 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Domain
 
         public async Task Handle(PositionRelocatedDomainEvent notification, CancellationToken cancellationToken)
         {
-            // Update ReservedUnits
-            Position positionFrom = await this.Mediator.Send(new RemoveIssueSlipReservationCommand(notification.PositionFrom, notification.RelocatedUnits), cancellationToken);
-            Position positionTo = await this.Mediator.Send(new CreateIssueSlipReservationCommand(notification.PositionTo.Id, notification.RelocatedUnits), cancellationToken);
+            Position positionFrom = await this.DatabaseContext.Positions.FindAsync(new object[] { notification.PositionFrom }, cancellationToken);
+            Position positionTo = await this.DatabaseContext.Positions.FindAsync(new object[] { notification.PositionTo }, cancellationToken);
 
             if (!positionFrom.HasAllIssueSlipItemsProcessed())
             {

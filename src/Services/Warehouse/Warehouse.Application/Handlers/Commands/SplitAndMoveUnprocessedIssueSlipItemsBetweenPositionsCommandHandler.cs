@@ -29,7 +29,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
             {
                 int diff = item.RequestedUnits - item.IssuedUnits;
 
-                output.Add(await this.Mediator.Send(new UpdateIssueSlipItemRequestedUnitsCommand(item.IssueSlipId, item.WareId, item.RequestedUnits - diff), cancellationToken));
+                output.Add(await this.Mediator.Send(new UpdateIssueSlipItemRequestedUnitsCommand(item.IssueSlipId, item.WareId, item.IssuedUnits), cancellationToken));
                 output.Add(await this.Mediator.Send(new CreateIssueSlipItemCommand(item.IssueSlipId, item.WareId, request.ToPositionId, diff, 0)));
             }
 

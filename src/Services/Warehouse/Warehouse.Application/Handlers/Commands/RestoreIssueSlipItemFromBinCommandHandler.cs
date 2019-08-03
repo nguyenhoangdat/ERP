@@ -3,7 +3,6 @@ using Restmium.ERP.Services.Warehouse.Application.Commands;
 using Restmium.ERP.Services.Warehouse.Domain.Entities;
 using Restmium.ERP.Services.Warehouse.Domain.Exceptions;
 using Restmium.ERP.Services.Warehouse.Infrastructure.Database;
-using System;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -11,12 +10,14 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
 {
     public class RestoreIssueSlipItemFromBinCommandHandler : IRequestHandler<RestoreIssueSlipItemFromBinCommand, IssueSlip.Item>
     {
-        public RestoreIssueSlipItemFromBinCommandHandler(DatabaseContext databaseContext)
+        public RestoreIssueSlipItemFromBinCommandHandler(DatabaseContext databaseContext, IMediator mediator)
         {
             this.DatabaseContext = databaseContext;
+            this.Mediator = mediator;
         }
 
         protected DatabaseContext DatabaseContext { get; }
+        protected IMediator Mediator { get; }
 
         public async Task<IssueSlip.Item> Handle(RestoreIssueSlipItemFromBinCommand request, CancellationToken cancellationToken)
         {
@@ -28,6 +29,11 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
             }
 
             item.UtcMovedToBin = null;
+
+            if (item.IssuedUnits < item.RequestedUnits)
+            {
+                await this.Mediator.Publish(new CreateIssueSlipReservationCommand(item.PositionId.Value, item.RequestedUnits - item.IssuedUnits), cancellationToken);
+            }
 
             await this.DatabaseContext.SaveChangesAsync(cancellationToken);
 

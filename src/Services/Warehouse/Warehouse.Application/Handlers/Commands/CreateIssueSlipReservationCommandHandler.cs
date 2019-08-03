@@ -21,10 +21,9 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
 
         public async Task<Position> Handle(CreateIssueSlipReservationCommand request, CancellationToken cancellationToken)
         {
-            Position position = this.DatabaseContext.Positions.Find(request.PositionId);
+            Position position = await this.DatabaseContext.Positions.FindAsync(new object[] { request.PositionId }, cancellationToken);
             position.ReservedUnits += request.ReservedUnits;
 
-            position = this.DatabaseContext.Positions.Update(position).Entity;
             await this.DatabaseContext.SaveChangesAsync(cancellationToken);
 
             await this.Mediator.Publish(new IssueSlipReservationCreatedDomainEvent(position), cancellationToken);

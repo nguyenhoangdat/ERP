@@ -22,6 +22,16 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
         public async Task<IssueSlip.Item> Handle(UpdateIssueSlipItemRequestedUnitsCommand request, CancellationToken cancellationToken)
         {
             IssueSlip.Item item = await this.DatabaseContext.IssueSlipItems.FindAsync(new object[] { request.IssueSlipId, request.WareId }, cancellationToken);
+
+            if (item.RequestedUnits < request.RequestedUnits)
+            {
+                await this.Mediator.Send(new CreateIssueSlipReservationCommand(item.PositionId.Value, request.RequestedUnits - item.RequestedUnits), cancellationToken);
+            }
+            else
+            {
+                await this.Mediator.Send(new RemoveIssueSlipReservationCommand(item.Position, item.RequestedUnits - request.RequestedUnits), cancellationToken);
+            }
+
             item.RequestedUnits = request.RequestedUnits;
 
             await this.DatabaseContext.SaveChangesAsync(cancellationToken);
