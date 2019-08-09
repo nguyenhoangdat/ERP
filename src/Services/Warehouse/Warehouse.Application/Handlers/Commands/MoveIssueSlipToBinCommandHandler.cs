@@ -35,7 +35,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
 
             foreach (IssueSlip.Item item in issueSlip.Items)
             {
-                await this.Mediator.Send(new MoveIssueSlipItemToBinCommand(item.WareId, item.IssueSlipId), cancellationToken);
+                await this.Mediator.Send(new MoveIssueSlipItemToBinCommand(item.IssueSlipId, item.PositionId.Value, item.WareId), cancellationToken);
             }
 
             return issueSlip;

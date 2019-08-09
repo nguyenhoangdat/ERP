@@ -65,16 +65,16 @@ namespace Warehouse.API.Controllers
             }
         }
 
-        // GET: api/IssueSlipItems/MoveToBin/1/20
-        [HttpGet("MoveToBin/{issueSlipId}/{wareId}")]
+        // GET: api/IssueSlipItems/MoveToBin/1/7/20
+        [HttpGet("MoveToBin/{issueSlipId}/{positionId}/{wareId}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(500)]
-        public async Task<ActionResult<IssueSlipDTO.ItemDTO>> GetMoveToBin(long issueSlipId, int wareId)
+        public async Task<ActionResult<IssueSlipDTO.ItemDTO>> GetMoveToBin(long issueSlipId, long positionId, int wareId)
         {
             try
             {
-                IssueSlip.Item entity = await this.Mediator.Send(new MoveIssueSlipItemToBinCommand(wareId, issueSlipId));
+                IssueSlip.Item entity = await this.Mediator.Send(new MoveIssueSlipItemToBinCommand(issueSlipId, positionId, wareId));
                 return this.Ok(this.Mapper.Map<IssueSlipDTO.ItemDTO>(entity));
             }
             catch (EntityNotFoundException ex)

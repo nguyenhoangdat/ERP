@@ -5,13 +5,15 @@ namespace Restmium.ERP.Services.Warehouse.Application.Commands
 {
     public class MoveIssueSlipItemToBinCommand : IRequest<IssueSlip.Item>
     {
-        public MoveIssueSlipItemToBinCommand(int wareId, long issueSlipId)
+        public MoveIssueSlipItemToBinCommand(long issueSlipId, long positionId, int wareId)
         {
-            this.WareId = wareId;
             this.IssueSlipId = issueSlipId;
+            this.PositionId = positionId;
+            this.WareId = wareId;
         }
 
         public int WareId { get; set; }
         public long IssueSlipId { get; set; }
+        public long PositionId { get; }
     }
 }
