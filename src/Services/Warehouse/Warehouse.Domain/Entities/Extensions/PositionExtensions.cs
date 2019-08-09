@@ -22,6 +22,10 @@ namespace Restmium.ERP.Services.Warehouse.Domain.Entities.Extensions
 
             return movement == null ? 0 : movement.CountTotal;
         }
+        public static int CountAvailableWare(this Position position) // TODO: Use this method insted of CountWare for some commands
+        {
+            return CountWare(position) - position.ReservedUnits;
+        }
 
         public static bool HasLoadCapacity(this Position position, int unitsTotal) => HasLoadCapacity(position, position.GetWare(), unitsTotal);
         public static bool HasLoadCapacity(this Position position, Ware ware, int unitsTotal)
