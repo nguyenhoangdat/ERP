@@ -12,7 +12,12 @@ namespace Restmium.ERP.Services.Warehouse.Application
                 Values.Add("IssueSlip_EntityNotFoundException", "IssueSlip(Id={0}) not found!");
                 Values.Add("IssueSlip_Update_EntityNotFoundException", "Unable to update IssueSlip(Id={0}). IssueSlip not found!");
 
-                Values.Add("IssueSlipItem_EntityNotFoundException", "IssueSlip.Item(IssueSlipId={0}, WareId={1}) not found!");
+                Values.Add("IssueSlipItem_EntityNotFoundException", "IssueSlip.Item(IssueSlipId={0}, PositionId={1}, WareId={2}) not found!");
+                Values.Add("IssueSlipItem_FullyAssignedException", "IssueSlip.Item(IssueSlipId={0}, WareId={1}) has been fully assigned!");
+                Values.Add("IssueSlipItem_PositionAlreadyAssignedException", "IssueSlip.Item(IssueSlipId={0}, WareId={2}) is already assigned to Position(Id={1})!");
+                Values.Add("IssueSlipItem_PositionAvailableUnitsException", "Cannot issue units for IssueSlip.Item(IssueSlipId={0}, PositionId={1}, WareId={2}). Position doesn't hold enough units!");
+                Values.Add("IssueSlipItem_PositionWareConflictException", "IssueSlip.Item(IssueSlipId={0}, WareId={2}) cannot be assigned to Position(Id={1})! Position holds different Ware!");
+                Values.Add("IssueSlipItem_RequestedUnitsExceededException", "Cannot issue units for IssueSlip.Item(IssueSlipId={0}, PositionId={1}, WareId={2}). Requested units exceeded!");
 
                 Values.Add("Movement_Create_PositionEmptyException", "Unable to create Movement to retrieve Ware with Id={1} at Position with Id={2}. Position doesn't hold enough units!");
                 Values.Add("Movement_Create_PositionLoadCapacityException", "Unable to store Ware ({0}) at Position ({1}) in amount of {2} units. Load capacity exceeded.");
