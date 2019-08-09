@@ -9,7 +9,7 @@ namespace Restmium.ERP.Services.Warehouse.Infrastructure.Database.Configuration
     {
         public void Configure(EntityTypeBuilder<IssueSlip.Item> builder)
         {
-            builder.HasKey(x => new { x.IssueSlipId, x.WareId });
+            builder.HasKey(x => new { x.IssueSlipId, x.PositionId, x.WareId });
 
             builder.HasOne(x => x.IssueSlip)
                 .WithMany(x => x.Items)
