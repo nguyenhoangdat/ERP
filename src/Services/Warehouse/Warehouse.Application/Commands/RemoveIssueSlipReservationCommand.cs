@@ -5,13 +5,13 @@ namespace Restmium.ERP.Services.Warehouse.Application.Commands
 {
     public class RemoveIssueSlipReservationCommand : IRequest<Position>
     {
-        public RemoveIssueSlipReservationCommand(Position position, int reservedUnitsToRemove)
+        public RemoveIssueSlipReservationCommand(long positionId, int reservedUnitsToRemove)
         {
-            this.Position = position;
+            this.PositionId = positionId;
             this.ReservedUnitsToRemove = reservedUnitsToRemove;
         }
 
-        public Position Position { get; }
+        public long PositionId { get; }
         public int ReservedUnitsToRemove { get; }
     }
 }

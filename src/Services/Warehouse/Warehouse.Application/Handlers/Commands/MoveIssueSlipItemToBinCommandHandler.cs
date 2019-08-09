@@ -35,7 +35,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
 
             if (item.IssuedUnits < item.RequestedUnits)
             {
-                await this.Mediator.Send(new RemoveIssueSlipReservationCommand(item.Position, item.RequestedUnits - item.IssuedUnits), cancellationToken);
+                await this.Mediator.Send(new RemoveIssueSlipReservationCommand(item.PositionId.Value, item.RequestedUnits - item.IssuedUnits), cancellationToken);
             }
 
             return item;
