@@ -45,7 +45,12 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
 
             Position position = this.DatabaseContext.Positions.FirstOrDefault(x => x.Id == request.PositionId);
 
-            if (item.Ware != position.GetWare())
+            if (position == null)
+            {
+                throw new EntityNotFoundException(string.Format(Resources.Exceptions.Values["Position_EntityNotFoundException"], request.PositionId));
+            }
+
+            if (item.Ware != position.GetWare() && position.GetWare() != null)
             {
                 throw new PositionWareConflictException(string.Format(Resources.Exceptions.Values["IssueSlipItem_PositionWareConflictException"], request.IssueSlipId, request.PositionId, request.WareId));
             }
