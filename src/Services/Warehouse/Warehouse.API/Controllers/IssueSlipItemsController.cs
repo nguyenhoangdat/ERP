@@ -27,7 +27,7 @@ namespace Warehouse.API.Controllers
         }
 
         // GET: api/IssueSlipItems/5/1
-        [HttpGet("{issueSlipId}/{wareId}")]
+        [HttpGet("{issueSlipId}/{positionId}/{wareId}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(500)]
@@ -105,15 +105,15 @@ namespace Warehouse.API.Controllers
         }
 
         // GET: api/IssueSlipItems/Restore/1/20
-        [HttpGet("Restore/{issueSlipId}/{wareId}")]
+        [HttpGet("Restore/{issueSlipId}/{positionId}/{wareId}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(500)]
-        public async Task<ActionResult<IssueSlipDTO.ItemDTO>> GetRestore(long issueSlipId, int wareId)
+        public async Task<ActionResult<IssueSlipDTO.ItemDTO>> GetRestore(long issueSlipId, long positionId, int wareId)
         {
             try
             {
-                IssueSlip.Item entity = await this.Mediator.Send(new RestoreIssueSlipItemFromBinCommand(wareId, issueSlipId));
+                IssueSlip.Item entity = await this.Mediator.Send(new RestoreIssueSlipItemFromBinCommand(issueSlipId, positionId, wareId));
                 return this.Ok(this.Mapper.Map<IssueSlipDTO.ItemDTO>(entity));
             }
             catch (EntityNotFoundException ex)
@@ -126,6 +126,7 @@ namespace Warehouse.API.Controllers
             }
         }
 
+        // GET: api/IssueSlipItems/GetNextToBeProcessedInSectionByIssueSlipId/1/40
         [HttpGet("GetNextToBeProcessedInSectionByIssueSlipId/{sectionId}/{issueSlipId}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
@@ -140,6 +141,72 @@ namespace Warehouse.API.Controllers
             catch (EntityNotFoundException ex)
             {
                 return this.NotFound(ex.Message);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        // GET: api/IssueSlipItems/AssignIssueSlipItemToPosition/1/7/20
+        [HttpGet("AssignIssueSlipItemToPosition/{issueSlipId}/{positionId}/{wareId}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(409)]
+        [ProducesResponseType(500)]
+        public async Task<ActionResult<IssueSlipDTO.ItemDTO>> GetAssignIssueSlipItemToPosition(long issueSlipId, long positionId, int wareId)
+        {
+            try
+            {
+                IssueSlip.Item entity = await this.Mediator.Send(new AssignIssueSlipItemToPositionCommand(issueSlipId, positionId, wareId));
+                return this.Ok(this.Mapper.Map<IssueSlipDTO.ItemDTO>(entity));
+            }
+            catch (EntityNotFoundException ex)
+            {
+                return this.NotFound(ex.Message);
+            }
+            catch (IssueSlipItemPositionAlreadyAssignedException ex)
+            {
+                return this.Conflict(ex.Message);
+            }
+            catch (IssueSlipItemFullyAssignedException ex)
+            {
+                return this.Conflict(ex.Message);
+            }
+            catch (PositionWareConflictException ex)
+            {
+                return this.Conflict(ex.Message);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        // GET: api/IssueSlipItems/IssueUnitsForIssueSlipItem/1/7/20/3
+        [HttpGet("IssueUnitsForIssueSlipItem/{issueSlipId}/{positionId}/{wareId}/{count}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(409)]
+        [ProducesResponseType(500)]
+        public async Task<ActionResult<IssueSlipDTO.ItemDTO>> GetIssueUnitsForIssueSlipItem(long issueSlipId, long positionId, int wareId, int count)
+        {
+            try
+            {
+                IssueSlip.Item entity = await this.Mediator.Send(new IssueUnitsForIssueSlipItemCommand(issueSlipId, wareId, positionId, count));
+                return this.Ok(this.Mapper.Map<IssueSlipDTO.ItemDTO>(entity));
+            }
+            catch (EntityNotFoundException ex)
+            {
+                return this.NotFound(ex.Message);
+            }
+            catch (IssueSlipItemPositionAvailableUnitsException ex)
+            {
+                return this.Conflict(ex.Message);
+            }
+            catch (IssueSlipItemRequestedUnitsExceededException ex)
+            {
+                return this.Conflict(ex.Message);
             }
             catch (Exception)
             {

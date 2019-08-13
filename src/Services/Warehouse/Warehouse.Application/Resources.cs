@@ -13,6 +13,8 @@ namespace Restmium.ERP.Services.Warehouse.Application
                 Values.Add("IssueSlip_Update_EntityNotFoundException", "Unable to update IssueSlip(Id={0}). IssueSlip not found!");
 
                 Values.Add("IssueSlipItem_EntityNotFoundException", "IssueSlip.Item(IssueSlipId={0}, PositionId={1}, WareId={2}) not found!");
+                Values.Add("IssueSlipItem_EntitiesNotFoundException", "Unable to find entities for IssueSlip.Item(IssueSlipId={0}, WareId={1})!");
+
                 Values.Add("IssueSlipItem_FullyAssignedException", "IssueSlip.Item(IssueSlipId={0}, WareId={1}) has been fully assigned!");
                 Values.Add("IssueSlipItem_PositionAlreadyAssignedException", "IssueSlip.Item(IssueSlipId={0}, WareId={2}) is already assigned to Position(Id={1})!");
                 Values.Add("IssueSlipItem_PositionAvailableUnitsException", "Cannot issue units for IssueSlip.Item(IssueSlipId={0}, PositionId={1}, WareId={2}). Position doesn't hold enough units!");

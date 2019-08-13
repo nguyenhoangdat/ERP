@@ -26,6 +26,11 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
                     x.IssueSlipId == request.IssueSlipId &&
                     x.WareId == request.WareId);
 
+            if (items.Count() == 0)
+            {
+                throw new EntityNotFoundException(string.Format(Resources.Exceptions.Values["IssueSlipItem_EntitiesNotFoundException"], request.IssueSlipId, request.WareId));
+            }
+
             if (items.Any(x => x.PositionId == request.PositionId))
             {
                 throw new IssueSlipItemPositionAlreadyAssignedException(string.Format(Resources.Exceptions.Values["IssueSlipItem_PositionAlreadyAssignedException"], request.IssueSlipId, request.PositionId, request.WareId));

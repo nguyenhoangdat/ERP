@@ -5,7 +5,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Commands
 {
     public class AssignIssueSlipItemToPositionCommand : IRequest<IssueSlip.Item>
     {
-        public AssignIssueSlipItemToPositionCommand(long issueSlipId, int wareId, long positionId)
+        public AssignIssueSlipItemToPositionCommand(long issueSlipId, long positionId, int wareId)
         {
             this.IssueSlipId = issueSlipId;
             this.WareId = wareId;
