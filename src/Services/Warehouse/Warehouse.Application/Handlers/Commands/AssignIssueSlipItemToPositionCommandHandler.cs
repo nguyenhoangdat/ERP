@@ -33,14 +33,14 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
 
             if (items.Any(x => x.PositionId == request.PositionId))
             {
-                throw new IssueSlipItemPositionAlreadyAssignedException(string.Format(Resources.Exceptions.Values["IssueSlipItem_PositionAlreadyAssignedException"], request.IssueSlipId, request.PositionId, request.WareId));
+                throw new PositionAlreadyAssignedException(string.Format(Resources.Exceptions.Values["IssueSlipItem_PositionAlreadyAssignedException"], request.IssueSlipId, request.PositionId, request.WareId));
             }
 
             IssueSlip.Item item = items.FirstOrDefault(x => x.PositionId == null);
 
             if (item == null)
             {
-                throw new IssueSlipItemFullyAssignedException(string.Format(Resources.Exceptions.Values["IssueSlipItem_FullyAssignedException"], request.IssueSlipId, request.WareId));
+                throw new FullyAssignedException(string.Format(Resources.Exceptions.Values["IssueSlipItem_FullyAssignedException"], request.IssueSlipId, request.WareId));
             }
 
             Position position = this.DatabaseContext.Positions.FirstOrDefault(x => x.Id == request.PositionId);

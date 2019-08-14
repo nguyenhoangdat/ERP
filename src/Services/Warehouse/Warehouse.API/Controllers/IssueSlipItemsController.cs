@@ -165,11 +165,11 @@ namespace Warehouse.API.Controllers
             {
                 return this.NotFound(ex.Message);
             }
-            catch (IssueSlipItemPositionAlreadyAssignedException ex)
+            catch (PositionAlreadyAssignedException ex)
             {
                 return this.Conflict(ex.Message);
             }
-            catch (IssueSlipItemFullyAssignedException ex)
+            catch (FullyAssignedException ex)
             {
                 return this.Conflict(ex.Message);
             }

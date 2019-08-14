@@ -18,7 +18,7 @@ namespace Restmium.ERP.Services.Warehouse.Application
                 Values.Add("IssueSlipItem_FullyAssignedException", "IssueSlip.Item(IssueSlipId={0}, WareId={1}) has been fully assigned!");
                 Values.Add("IssueSlipItem_PositionAlreadyAssignedException", "IssueSlip.Item(IssueSlipId={0}, WareId={2}) is already assigned to Position(Id={1})!");
                 Values.Add("IssueSlipItem_PositionAvailableUnitsException", "Cannot issue units for IssueSlip.Item(IssueSlipId={0}, PositionId={1}, WareId={2}). Position doesn't hold enough units!");
-                Values.Add("IssueSlipItem_PositionWareConflictException", "IssueSlip.Item(IssueSlipId={0}, WareId={2}) cannot be assigned to Position(Id={1})! Position holds different Ware!");
+                Values.Add("IssueSlipItem_PositionWareConflictException", "IssueSlip.Item(IssueSlipId={0}, WareId={2}) cannot be assigned to Position(Id={1})! Position holds a different Ware!");
                 Values.Add("IssueSlipItem_RequestedUnitsExceededException", "Cannot issue units for IssueSlip.Item(IssueSlipId={0}, PositionId={1}, WareId={2}). Requested units exceeded!");
 
                 Values.Add("Movement_Create_PositionEmptyException", "Unable to create Movement to retrieve Ware with Id={1} at Position with Id={2}. Position doesn't hold enough units!");
@@ -37,7 +37,11 @@ namespace Restmium.ERP.Services.Warehouse.Application
 
                 Values.Add("ReceiptItem_Create_Ware_EntityNotFoundException", "Unable to create Receipt.Item(Ware(ProductId={0}), Units={1}). Ware not found!");
                 Values.Add("ReceiptItem_Create_WarehouseFullException", "Unable to process Receipt.Item(ReceiptId={0}, WareId={1}). Warehouse is full!");
-                Values.Add("ReceiptItem_EntityNotFoundException", "Receipt.Item(ReceiptId={0}, WareId={1}) not found!");
+                Values.Add("ReceiptItem_EntitiesNotFoundException", "Unable to find entities of Receipt.Item(ReceiptId={0}, WareId={1})!");
+                Values.Add("ReceiptItem_EntityNotFoundException", "Receipt.Item(ReceiptId={0}, PositionId={1}, WareId={2}) not found!");
+                Values.Add("ReceiptItem_FullyAssignedException", "Receipt.Item(ReceiptId={0}, WareId={1}) has been fully assigned!");
+                Values.Add("ReceiptItem_PositionAlreadyAssignedException", "Receipt.Item(ReceiptId={0}, WareId={2}) is already assigned to Position(Id={1})!");
+                Values.Add("ReceiptItem_PositionWareConflictException", "Receipt.Item(ReceiptId={0}, WareId={2}) cannot be assigned to Position(Id={1})! Position holds a different Ware!");
                 Values.Add("ReceiptItem_Update_EntityNotFoundException", "Unable to update Receipt.Item(ReceiptId={0}, WareId={1}). Receipt.Item not found!");
 
                 Values.Add("Relocation_PositionEmptyException", "Unable to relocate Wares from Position(Id={0}). Position is empty!");
