@@ -215,15 +215,15 @@ namespace Warehouse.API.Controllers
         }
 
         // GET: api/Warehouses/WarehouseCurrentCapacity/3
-        [HttpGet("WarehouseCurrentCapacity/{warehouseId}")]
+        [HttpGet("WarehouseCurrentCapacity/{id}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(500)]
-        public async Task<ActionResult<WarehouseCapacityDTO>> GetWarehouseCurrentCapacity(int warehouseId)
+        public async Task<ActionResult<WarehouseCapacityDTO>> GetWarehouseCurrentCapacity(int id)
         {
             try
             {
-                WarehouseCapacity capacity = await this.Mediator.Send(new GetWarehouseCurrentCapacityCommand(warehouseId));
+                WarehouseCapacity capacity = await this.Mediator.Send(new GetWarehouseCurrentCapacityCommand(id));
                 return this.Ok(this.Mapper.Map<WarehouseCapacityDTO>(capacity));
             }
             catch (EntityNotFoundException ex)
