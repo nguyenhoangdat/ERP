@@ -68,15 +68,15 @@ namespace Warehouse.API.Controllers
         }
 
         // Get: api/StockTakings/CreateForWarehouse/5
-        [HttpGet("CreateForWarehouse/{id}")]
+        [HttpGet("CreateForWarehouse/{warehouseId}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(500)]
-        public async Task<ActionResult<StockTakingDTO>> CreateForWarehouse(int id)
+        public async Task<ActionResult<StockTakingDTO>> GetCreateForWarehouse(int warehouseId)
         {
             try
             {
-                StockTaking stockTaking = await this.Mediator.Send(new CreateStockTakingForWarehouseCommand(id));
+                StockTaking stockTaking = await this.Mediator.Send(new CreateStockTakingForWarehouseCommand(warehouseId));
                 return this.Ok(this.Mapper.Map<StockTakingDTO>(stockTaking));
             }
             catch (EntityNotFoundException ex)
@@ -90,15 +90,15 @@ namespace Warehouse.API.Controllers
         }
 
         // Get: api/StockTakings/CreateForSection/5
-        [HttpGet("CreateForSection/{id}")]
+        [HttpGet("CreateForSection/{sectionId}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(500)]
-        public async Task<ActionResult<StockTakingDTO>> CreateForSection(int id)
+        public async Task<ActionResult<StockTakingDTO>> GetCreateForSection(int sectionId)
         {
             try
             {
-                StockTaking stockTaking = await this.Mediator.Send(new CreateStockTakingForSectionCommand(id));
+                StockTaking stockTaking = await this.Mediator.Send(new CreateStockTakingForSectionCommand(sectionId));
                 return this.Ok(this.Mapper.Map<StockTakingDTO>(stockTaking));
             }
             catch (EntityNotFoundException ex)
