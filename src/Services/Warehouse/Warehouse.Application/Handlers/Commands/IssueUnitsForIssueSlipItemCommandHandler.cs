@@ -47,12 +47,19 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
                 }
                 else if (unassignedItem != null && extraUnits <= unassignedItem.RequestedUnits)
                 {
-                    item.IssuedUnits += request.Count; // Issue additional units
-                    await this.DatabaseContext.SaveChangesAsync(cancellationToken);
-
-                    await this.Mediator.Send(new RemoveIssueSlipReservationCommand(item.PositionId.Value, request.Count), cancellationToken);
+                    // Transfer requested units (extra units)
                     await this.Mediator.Send(new UpdateIssueSlipItemRequestedUnitsCommand(item.IssueSlipId, item.PositionId, item.WareId, item.RequestedUnits + extraUnits), cancellationToken);
                     await this.Mediator.Send(new UpdateIssueSlipItemRequestedUnitsCommand(unassignedItem.IssueSlipId, unassignedItem.PositionId, unassignedItem.WareId, unassignedItem.RequestedUnits - extraUnits), cancellationToken);
+
+                    // Issue additional units
+                    item.IssuedUnits += request.Count;
+                    await this.DatabaseContext.SaveChangesAsync(cancellationToken);
+
+                    // Remove reservation
+                    await this.Mediator.Send(new RemoveIssueSlipReservationCommand(item.PositionId.Value, request.Count), cancellationToken);
+
+                    // Create movement
+                    await this.Mediator.Send(new CreateMovementCommand(item.WareId, item.PositionId.Value, Movement.Direction.Out, request.Count), cancellationToken);
                 }
                 else
                 {
@@ -62,12 +69,29 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
             }
             else
             {
-                item.IssuedUnits = request.Count;
+                item.IssuedUnits += request.Count;
                 await this.DatabaseContext.SaveChangesAsync(cancellationToken);
 
-                await this.Mediator.Send(new RemoveIssueSlipReservationCommand(item.PositionId.Value, item.IssuedUnits), cancellationToken);
-                await this.Mediator.Send(new CreateIssueSlipItemCommand(item.IssueSlipId, item.WareId, null, item.RequestedUnits - item.IssuedUnits, 0), cancellationToken); // Units remaining to issue
-                await this.Mediator.Send(new UpdateIssueSlipItemRequestedUnitsCommand(item.IssueSlipId, item.PositionId, item.WareId, item.IssuedUnits), cancellationToken);
+                await this.Mediator.Send(new RemoveIssueSlipReservationCommand(item.PositionId.Value, request.Count), cancellationToken);
+
+                // Transfer unissued units (units remaining to issue)
+                if (item.IssuedUnits < item.RequestedUnits)
+                {
+                    unitsRemainingToIssue = item.RequestedUnits - item.IssuedUnits;
+                    
+                    if (unassignedItem == null)
+                    {
+                        await this.Mediator.Send(new CreateIssueSlipItemCommand(item.IssueSlipId, item.WareId, null, unitsRemainingToIssue, 0), cancellationToken);
+                    }
+                    else
+                    {
+                        await this.Mediator.Send(new UpdateIssueSlipItemRequestedUnitsCommand(unassignedItem.IssueSlipId, unassignedItem.PositionId, unassignedItem.WareId, unassignedItem.RequestedUnits + unitsRemainingToIssue), cancellationToken);
+                    }
+
+                    await this.Mediator.Send(new UpdateIssueSlipItemRequestedUnitsCommand(item.IssueSlipId, item.PositionId, item.WareId, item.IssuedUnits), cancellationToken);
+                }
+
+                await this.Mediator.Send(new CreateMovementCommand(item.WareId, item.PositionId.Value, Movement.Direction.Out, request.Count), cancellationToken);
             }
 
             return item;
