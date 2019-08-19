@@ -29,7 +29,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
             {
                 int diff = item.CountOrdered - item.CountReceived;
 
-                output.Add(await this.Mediator.Send(new UpdateReceiptItemCommand(item.WareId, item.PositionId, item.ReceiptId, item.CountReceived, item.CountReceived, item.UtcProcessed)));
+                output.Add(await this.Mediator.Send(new UpdateReceiptItemOrderedUnitsCommand(item.ReceiptId, item.PositionId, item.WareId, item.CountReceived), cancellationToken));
                 output.Add(await this.Mediator.Send(new CreateReceiptItemCommand(item.WareId, request.ToPositionId, item.ReceiptId, diff, 0)));
             }
 

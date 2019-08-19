@@ -50,8 +50,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
                     positionCounts.Add(new PositionCount(position, possibleToPlace));
                     itemsToPlace -= possibleToPlace;
 
-                    // Update Receipt.Item (just PositionId)
-                    await this.Mediator.Send(new UpdateReceiptItemCommand(item.WareId, position.Id, item.ReceiptId, item.CountOrdered, item.CountOrdered, item.UtcProcessed));
+                    await this.Mediator.Send(new AssignReceiptItemToPositionCommand(item.ReceiptId, position.Id, item.WareId), cancellationToken);
 
                     if (itemsToPlace == 0)
                     {
