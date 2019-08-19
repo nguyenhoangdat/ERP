@@ -4,6 +4,7 @@ using Restmium.ERP.Services.Warehouse.Domain.Entities;
 using Restmium.ERP.Services.Warehouse.Domain.Exceptions;
 using Restmium.ERP.Services.Warehouse.Infrastructure.Database;
 using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -20,11 +21,14 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
 
         public async Task<Receipt.Item> Handle(MoveReceiptItemToBinCommand request, CancellationToken cancellationToken)
         {
-            Receipt.Item item = await this.DatabaseContext.ReceiptItems.FindAsync(new object[] { request.ReceiptId, request.WareId }, cancellationToken);
+            Receipt.Item item = this.DatabaseContext.ReceiptItems.FirstOrDefault(x =>
+                x.ReceiptId == request.ReceiptId &&
+                x.PositionId == request.PositionId &&
+                x.WareId == request.WareId);
 
             if (item == null)
             {
-                throw new EntityNotFoundException(string.Format(Resources.Exceptions.Values["ReceiptItem_EntityNotFoundException"], request.ReceiptId, request.WareId));
+                throw new EntityNotFoundException(string.Format(Resources.Exceptions.Values["ReceiptItem_EntityNotFoundException"], request.ReceiptId, request.PositionId, request.WareId));
             }
 
             item.UtcMovedToBin = DateTime.UtcNow;
