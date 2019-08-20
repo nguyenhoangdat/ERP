@@ -28,9 +28,10 @@ namespace Restmium.ERP.Services.Warehouse.Application
                 Values.Add("Movement_Delete_EntityNotFoundException", "Unable to delete Movement(Id={0}). Movement not found!");
 
                 Values.Add("Position_Delete_EntityNotFoundException", "Unable to delete Position(Id={0}). Position not found!");
-                Values.Add("Position_EntityNotFoundException", "Position(Id={0}) not found!");
+                Values.Add("Position_EntityDeleteException", "Unable to delete Position(Id={0}). Position is not empty!");
+                Values.Add("Position_EntityNotFoundException", "Position(Id={0}) not found!");                
                 Values.Add("Position_Update_EntityNotFoundException", "Unable to update Position(Id={0}). Position not found!");
-
+                
                 Values.Add("Receipt_Delete_EntityNotFoundException", "Unable to delete Receipt(Id={0}). Receipt not found!");
                 Values.Add("Receipt_EntityNotFoundException", "Receipt(Id={0}) not found!");
                 Values.Add("Receipt_Update_EntityNotFoundException", "Unable to update Receipt(Id={0}). Receipt not found!");
