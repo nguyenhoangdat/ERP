@@ -25,6 +25,28 @@ namespace Warehouse.API.Controllers
             this.Mediator = mediator;
         }
 
+        // GET: api/StockTakingItems/5/2
+        [HttpGet("{receiptId}/{positionId}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
+        public async Task<ActionResult<StockTakingDTO.ItemDTO>> GetStockTakingItem(int receiptId, long positionId)
+        {
+            try
+            {
+                StockTaking.Item item = await this.Mediator.Send(new FindStockTakingItemByIdCommand(receiptId, positionId));
+                return this.Ok(this.Mapper.Map<StockTakingDTO.ItemDTO>(item));
+            }
+            catch (EntityNotFoundException ex)
+            {
+                return this.NotFound(ex.Message);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
         // GET: api/StockTakingItems/1/20
         [HttpGet("All/{page}/{itemsPerPage}")]
         [ProducesResponseType(200)]

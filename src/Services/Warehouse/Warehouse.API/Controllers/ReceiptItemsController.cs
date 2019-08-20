@@ -26,16 +26,16 @@ namespace Warehouse.API.Controllers
             this.Mediator = mediator;
         }
 
-        // GET: api/ReceiptItems/5/1
-        [HttpGet("{receiptId}/{wareId}")]
+        // GET: api/ReceiptItems/5/2/1
+        [HttpGet("{receiptId}/{positionId}/{wareId}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(500)]
-        public async Task<ActionResult<ReceiptDTO.ItemDTO>> GetReceiptItem(long receiptId, int wareId)
+        public async Task<ActionResult<ReceiptDTO.ItemDTO>> GetReceiptItem(long receiptId, long? positionId, int wareId)
         {
             try
             {
-                Receipt.Item item = await this.Mediator.Send(new FindReceiptItemByReceiptIdAndWareIdCommand(receiptId, wareId));
+                Receipt.Item item = await this.Mediator.Send(new FindReceiptItemByIdCommand(receiptId, positionId, wareId));
                 return this.Ok(this.Mapper.Map<ReceiptDTO.ItemDTO>(item));
             }
             catch (EntityNotFoundException ex)
@@ -44,7 +44,6 @@ namespace Warehouse.API.Controllers
             }
             catch (Exception)
             {
-
                 throw;
             }
         }
@@ -66,44 +65,16 @@ namespace Warehouse.API.Controllers
             }
         }
 
-        // PUT: api/ReceiptItems/5/2
-        [HttpPut("{receiptId}/{wareId}")]
-        [ProducesResponseType(204)]
-        [ProducesResponseType(400)]
-        [ProducesResponseType(404)]
-        [ProducesResponseType(500)]
-        public async Task<IActionResult> PutReceiptItem(long receiptId, int wareId, ReceiptDTO.ItemDTO item)
-        {
-            if (receiptId != item.ReceiptId || wareId != item.WareId)
-            {
-                return this.BadRequest();
-            }
-
-            try
-            {
-                await this.Mediator.Send(new UpdateReceiptItemCommand(item.WareId, item.PositionId, item.ReceiptId, item.CountOrdered, item.CountReceived, item.UtcProcessed));
-                return this.NoContent();
-            }
-            catch (EntityNotFoundException ex)
-            {
-                return this.NotFound(ex.Message);
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-        }
-
-        // GET: api/ReceiptItems/MoveToBin/1/20
-        [HttpGet("MoveToBin/{receiptId}/{wareId}")]
+        // GET: api/ReceiptItems/MoveToBin/1/3/20
+        [HttpGet("MoveToBin/{receiptId}/{positionId}/{wareId}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(500)]
-        public async Task<ActionResult<ReceiptDTO.ItemDTO>> GetMoveToBin(long receiptId, int wareId)
+        public async Task<ActionResult<ReceiptDTO.ItemDTO>> GetMoveToBin(long receiptId, long? positionId, int wareId)
         {
             try
             {
-                Receipt.Item entity = await this.Mediator.Send(new MoveReceiptItemToBinCommand(wareId, receiptId));
+                Receipt.Item entity = await this.Mediator.Send(new MoveReceiptItemToBinCommand(wareId, positionId, receiptId));
                 return this.Ok(this.Mapper.Map<ReceiptDTO.ItemDTO>(entity));
             }
             catch (EntityNotFoundException ex)
@@ -116,16 +87,16 @@ namespace Warehouse.API.Controllers
             }
         }
 
-        // GET: api/ReceiptItems/Restore/1/20
-        [HttpGet("Restore/{receiptId}/{wareId}")]
+        // GET: api/ReceiptItems/Restore/1/3/20
+        [HttpGet("Restore/{receiptId}/{positionId}/{wareId}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(500)]
-        public async Task<ActionResult<ReceiptDTO.ItemDTO>> GetRestore(long receiptId, int wareId)
+        public async Task<ActionResult<ReceiptDTO.ItemDTO>> GetRestore(long receiptId, long? positionId, int wareId)
         {
             try
             {
-                Receipt.Item entity = await this.Mediator.Send(new RestoreReceiptItemFromBinCommand(wareId, receiptId));
+                Receipt.Item entity = await this.Mediator.Send(new RestoreReceiptItemFromBinCommand(wareId, positionId, receiptId));
                 return this.Ok(this.Mapper.Map<ReceiptDTO.ItemDTO>(entity));
             }
             catch (EntityNotFoundException ex)
@@ -159,7 +130,7 @@ namespace Warehouse.API.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(500)]
-        public async Task<ActionResult<IEnumerable<PositionCountDTO>>> FindPositionsForReceiptItem(long receiptId, int wareId)
+        public async Task<ActionResult<IEnumerable<PositionCountDTO>>> GetFindPositionsForReceiptItem(long receiptId, int wareId)
         {
             try
             {
@@ -176,17 +147,37 @@ namespace Warehouse.API.Controllers
             }
         }
 
-        [HttpPost("PlaceReceiptItemAtPosition/{receiptId}/{wareId}")]
+        [HttpGet("AssignReceiptItemToPosition/{receiptId}/{positionId}/{wareId}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(500)]
-        public async Task<ActionResult<PositionDTO>> PlaceReceiptItemAtPosition(long receiptId, int wareId, PositionCountDTO positionCount)
+        public async Task<ActionResult<ReceiptDTO.ItemDTO>> GetAssignReceiptItemToPosition(long receiptId, long positionId, int wareId)
         {
             try
             {
-                PositionCount count = this.Mapper.Map<PositionCountDTO, PositionCount>(positionCount);
-                Position position = await this.Mediator.Send(new StoreReceiptItemAtPositionCommand(receiptId, wareId, count));
-                return this.Ok(this.Mapper.Map<PositionDTO>(position));
+                Receipt.Item entity = await this.Mediator.Send(new AssignReceiptItemToPositionCommand(receiptId, positionId, wareId));
+                return this.Ok(this.Mapper.Map<ReceiptDTO.ItemDTO>(entity));
+            }
+            catch (EntityNotFoundException ex)
+            {
+                return this.NotFound(ex.Message);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        [HttpGet("StoreUnitsForReceiptItemAtPosition/{receiptId}/{positionId}/{wareId}/{count}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
+        public async Task<ActionResult<ReceiptDTO.ItemDTO>> GetStoreUnitsForReceiptItemAtPosition(long receiptId, long positionId, int wareId, int count)
+        {
+            try
+            {
+                Receipt.Item entity = await this.Mediator.Send(new StoreUnitsForReceiptItemAtPositionCommand(receiptId, positionId, wareId, count));
+                return this.Ok(this.Mapper.Map<ReceiptDTO.ItemDTO>(entity));
             }
             catch (EntityNotFoundException ex)
             {
