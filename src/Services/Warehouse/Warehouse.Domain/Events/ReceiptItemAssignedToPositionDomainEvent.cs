@@ -3,9 +3,9 @@ using Restmium.ERP.Services.Warehouse.Domain.Entities;
 
 namespace Restmium.ERP.Services.Warehouse.Domain.Events
 {
-    public class ReceiptItemAssignedToPosition : INotification
+    public class ReceiptItemAssignedToPositionDomainEvent : INotification
     {
-        public ReceiptItemAssignedToPosition(Receipt.Item item)
+        public ReceiptItemAssignedToPositionDomainEvent(Receipt.Item item)
         {
             this.Item = item;
         }

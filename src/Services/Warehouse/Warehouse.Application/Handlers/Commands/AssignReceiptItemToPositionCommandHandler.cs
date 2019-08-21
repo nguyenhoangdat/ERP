@@ -62,7 +62,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
 
             await this.DatabaseContext.SaveChangesAsync(cancellationToken);
 
-            await this.Mediator.Publish(new ReceiptItemAssignedToPosition(item), cancellationToken);
+            await this.Mediator.Publish(new ReceiptItemAssignedToPositionDomainEvent(item), cancellationToken);
 
             return item;
         }
