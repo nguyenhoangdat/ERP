@@ -64,7 +64,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
                 else
                 {
                     // We don't need to issue more units. => Throw an exception
-                    throw new IssueSlipItemRequestedUnitsExceededException(string.Format(Resources.Exceptions.Values["IssueSlipItem_RequestedUnitsExceededException"], request.IssueSlipId, request.PositionId, request.WareId));
+                    throw new UnitsExceededException(string.Format(Resources.Exceptions.Values["IssueSlipItem_RequestedUnitsExceededException"], request.IssueSlipId, request.PositionId, request.WareId));
                 }
             }
             else

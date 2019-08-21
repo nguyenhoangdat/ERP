@@ -203,7 +203,7 @@ namespace Warehouse.API.Controllers
             {
                 return this.Conflict(ex.Message);
             }
-            catch (IssueSlipItemRequestedUnitsExceededException ex)
+            catch (UnitsExceededException ex)
             {
                 return this.Conflict(ex.Message);
             }
