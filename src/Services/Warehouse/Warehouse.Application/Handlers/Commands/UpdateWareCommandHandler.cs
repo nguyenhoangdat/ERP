@@ -28,7 +28,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
                 throw new EntityNotFoundException(string.Format(Resources.Exceptions.Values["Ware_Update_EntityNotFoundException"], request.WareId));
             }
 
-            Ware ware = this.DatabaseContext.Wares.Find(request.WareId);
+            Ware ware = this.DatabaseContext.Wares.FirstOrDefault(x => x.Id == request.WareId);
             ware.ProductName = request.ProductName;
             ware.Width = request.Width;
             ware.Height = request.Height;

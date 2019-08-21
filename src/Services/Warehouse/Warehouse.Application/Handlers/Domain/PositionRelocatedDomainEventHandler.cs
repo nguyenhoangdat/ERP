@@ -7,7 +7,6 @@ using Restmium.ERP.Services.Warehouse.Infrastructure.Database;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Entities = Restmium.ERP.Services.Warehouse.Domain.Entities;
 
 namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Domain
 {
@@ -24,8 +23,8 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Domain
 
         public async Task Handle(PositionRelocatedDomainEvent notification, CancellationToken cancellationToken)
         {
-            Position positionFrom = await this.DatabaseContext.Positions.FindAsync(new object[] { notification.PositionFrom }, cancellationToken);
-            Position positionTo = await this.DatabaseContext.Positions.FindAsync(new object[] { notification.PositionTo }, cancellationToken);
+            Position positionFrom = this.DatabaseContext.Positions.FirstOrDefault(x => x.Id == notification.PositionFrom.Id);
+            Position positionTo = this.DatabaseContext.Positions.FirstOrDefault(x => x.Id == notification.PositionTo.Id);
 
             if (!positionFrom.HasAllIssueSlipItemsProcessed())
             {

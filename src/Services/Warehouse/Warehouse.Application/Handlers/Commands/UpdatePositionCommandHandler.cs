@@ -28,7 +28,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
                 throw new EntityNotFoundException(string.Format(Resources.Exceptions.Values["Position_Update_EntityNotFoundException"], request.Id));
             }
 
-            Position position = this.DatabaseContext.Positions.Find(request.Id);
+            Position position = this.DatabaseContext.Positions.FirstOrDefault(x => x.Id == request.Id);
             position.Name = request.Name;
             position.Width = request.Width;
             position.Height = request.Height;

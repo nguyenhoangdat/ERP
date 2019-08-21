@@ -4,6 +4,7 @@ using Restmium.ERP.Services.Warehouse.Domain.Entities;
 using Restmium.ERP.Services.Warehouse.Domain.Exceptions;
 using Restmium.ERP.Services.Warehouse.Infrastructure.Database;
 using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -20,7 +21,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
 
         public async Task<Section> Handle(MoveSectionToBinCommand request, CancellationToken cancellationToken)
         {
-            Section section = await this.DatabaseContext.Sections.FindAsync(new object[] { request.SectionId }, cancellationToken);
+            Section section = this.DatabaseContext.Sections.FirstOrDefault(x => x.Id == request.SectionId);
 
             if (section == null)
             {

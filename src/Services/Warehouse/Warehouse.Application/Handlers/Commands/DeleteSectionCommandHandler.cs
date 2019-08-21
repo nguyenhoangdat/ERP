@@ -23,12 +23,13 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
 
         public async Task<Section> Handle(DeleteSectionCommand request, CancellationToken cancellationToken)
         {
+            Section section = this.DatabaseContext.Sections.FirstOrDefault(x => x.Id == request.Id);
             if (!this.DatabaseContext.Sections.Any(x => x.Id == request.Id))
             {
                 throw new EntityNotFoundException(string.Format(Resources.Exceptions.Values["Section_Delete_EntityNotFoundException"], request.Id));
             }
 
-            Section section = this.DatabaseContext.Sections.Remove(this.DatabaseContext.Sections.Find(request.Id)).Entity;
+            section = this.DatabaseContext.Sections.Remove(section).Entity;
             await this.DatabaseContext.SaveChangesAsync(cancellationToken);
 
             await this.Mediator.Publish(new SectionDeletedDomainEvent(section), cancellationToken);

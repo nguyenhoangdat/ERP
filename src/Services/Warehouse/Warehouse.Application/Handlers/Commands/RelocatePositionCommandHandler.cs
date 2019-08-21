@@ -6,6 +6,7 @@ using Restmium.ERP.Services.Warehouse.Domain.Events;
 using Restmium.ERP.Services.Warehouse.Domain.Exceptions;
 using Restmium.ERP.Services.Warehouse.Infrastructure.Database;
 using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -36,8 +37,8 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
         /// <returns>Position to which were the Wares transfered</returns>
         public async Task<Position> Handle(RelocatePositionCommand request, CancellationToken cancellationToken)
         {
-            Position positionFrom = await this.DatabaseContext.Positions.FindAsync(new object[] { request.FromPositionWithId }, cancellationToken);
-            Position positionTo = await this.DatabaseContext.Positions.FindAsync(new object[] { request.ToPositionWithId }, cancellationToken);
+            Position positionFrom = this.DatabaseContext.Positions.FirstOrDefault(x => x.Id == request.FromPositionWithId);
+            Position positionTo = this.DatabaseContext.Positions.FirstOrDefault(x => x.Id == request.ToPositionWithId);
 
             // Throw exceptions when Position is not found
             if (positionFrom == null)

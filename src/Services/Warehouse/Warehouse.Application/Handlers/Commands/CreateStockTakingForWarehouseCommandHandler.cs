@@ -26,7 +26,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
         public async Task<StockTaking> Handle(CreateStockTakingForWarehouseCommand request, CancellationToken cancellationToken)
         {
             // Ensure that Warehouse with specified Id exists
-            Warehouse.Domain.Entities.Warehouse warehouse = this.DatabaseContext.Warehouses.Find(request.WarehouseId);
+            Warehouse.Domain.Entities.Warehouse warehouse = this.DatabaseContext.Warehouses.FirstOrDefault(x => x.Id == request.WarehouseId);
             if (warehouse == null)
             {
                 throw new EntityNotFoundException(string.Format(Resources.Exceptions.Values["Warehouse_EntityNotFoundException"], request.WarehouseId));

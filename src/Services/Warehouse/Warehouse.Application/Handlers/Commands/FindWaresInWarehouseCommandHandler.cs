@@ -23,7 +23,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
 
         public async Task<IEnumerable<Ware>> Handle(FindWaresInWarehouseCommand request, CancellationToken cancellationToken)
         {
-            Entities.Warehouse warehouse = await this.DatabaseContext.Warehouses.FindAsync(new object[] { request.WarehouseId }, cancellationToken);
+            Entities.Warehouse warehouse = this.DatabaseContext.Warehouses.FirstOrDefault(x => x.Id == request.WarehouseId);
 
             if (warehouse == null)
             {

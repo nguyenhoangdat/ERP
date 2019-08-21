@@ -3,6 +3,7 @@ using Restmium.ERP.Services.Warehouse.Application.Commands;
 using Restmium.ERP.Services.Warehouse.Domain.Entities;
 using Restmium.ERP.Services.Warehouse.Domain.Events;
 using Restmium.ERP.Services.Warehouse.Infrastructure.Database;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -21,7 +22,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
 
         public async Task<Position> Handle(CreateIssueSlipReservationCommand request, CancellationToken cancellationToken)
         {
-            Position position = await this.DatabaseContext.Positions.FindAsync(new object[] { request.PositionId }, cancellationToken);
+            Position position = this.DatabaseContext.Positions.FirstOrDefault(x => x.Id == request.PositionId);
             position.ReservedUnits += request.ReservedUnits;
 
             await this.DatabaseContext.SaveChangesAsync(cancellationToken);

@@ -22,13 +22,13 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
 
         public async Task<WareAvailabilityInSection> Handle(GetWareAvailabilityInSectionCommand request, CancellationToken cancellationToken)
         {
-            Ware ware = await this.DatabaseContext.Wares.FindAsync(new object[] { request.WareId }, cancellationToken);
+            Ware ware = this.DatabaseContext.Wares.FirstOrDefault(x => x.Id == request.WareId);
             if (ware == null)
             {
                 throw new EntityNotFoundException(string.Format(Resources.Exceptions.Values["Ware_EntityNotFoundException"], request.WareId));
             }
 
-            Section section = await this.DatabaseContext.Sections.FindAsync(new object[] { request.SectionId }, cancellationToken);
+            Section section = this.DatabaseContext.Sections.FirstOrDefault(x => x.Id == request.SectionId);
             if (section == null)
             {
                 throw new EntityNotFoundException(string.Format(Resources.Exceptions.Values["Section_EntityNotFoundException"], request.SectionId));

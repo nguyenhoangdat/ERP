@@ -26,7 +26,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
         public async Task<StockTaking> Handle(CreateStockTakingForSectionCommand request, CancellationToken cancellationToken)
         {
             // Ensure that Position with specified Id exists
-            Section section = this.DatabaseContext.Sections.Find(request.SectionId);
+            Section section = this.DatabaseContext.Sections.FirstOrDefault(x => x.Id == request.SectionId);
             if (section == null)
             {
                 throw new EntityNotFoundException(string.Format(Resources.Exceptions.Values["Section_EntityNotFoundException"], request.SectionId));

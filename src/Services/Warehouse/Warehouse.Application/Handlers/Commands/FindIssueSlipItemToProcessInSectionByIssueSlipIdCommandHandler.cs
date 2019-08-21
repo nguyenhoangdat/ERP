@@ -21,11 +21,11 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
 
         public async Task<IssueSlip.Item> Handle(FindIssueSlipItemToProcessInSectionByIssueSlipIdCommand request, CancellationToken cancellationToken)
         {
-            if (await this.DatabaseContext.Sections.FindAsync(new object[] { request.SectionId }, cancellationToken) == null)
+            if (!this.DatabaseContext.Sections.Any(x => x.Id == request.SectionId))
             {
                 throw new EntityNotFoundException(string.Format(Resources.Exceptions.Values["Section_EntityNotFoundException"], request.SectionId));
             }
-            if (await this.DatabaseContext.IssueSlips.FindAsync(new object[] { request.IssueSlipId }, cancellationToken) == null)
+            if (!this.DatabaseContext.IssueSlips.Any(x => x.Id == request.IssueSlipId))
             {
                 throw new EntityNotFoundException(string.Format(Resources.Exceptions.Values["IssueSlip_EntityNotFoundException"], request.IssueSlipId));
             }

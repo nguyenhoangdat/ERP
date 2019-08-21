@@ -28,7 +28,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
                 throw new EntityNotFoundException(string.Format(Resources.Exceptions.Values["IssueSlip_Update_EntityNotFoundException"], request.Id));
             }
 
-            IssueSlip issueSlip = await this.DatabaseContext.IssueSlips.FindAsync(new object[] { request.Id }, cancellationToken);
+            IssueSlip issueSlip = this.DatabaseContext.IssueSlips.FirstOrDefault(x => x.Id == request.Id);
             issueSlip.UtcDeliveryDate = request.UtcDeliveryDate;
             issueSlip.UtcDispatchDate = request.UtcDispatchDate;
             issueSlip.UtcProcessed = request.UtcProcessed;

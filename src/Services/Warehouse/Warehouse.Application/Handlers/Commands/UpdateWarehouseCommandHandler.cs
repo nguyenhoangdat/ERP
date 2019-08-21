@@ -3,6 +3,7 @@ using Restmium.ERP.Services.Warehouse.Application.Commands;
 using Restmium.ERP.Services.Warehouse.Domain.Events;
 using Restmium.ERP.Services.Warehouse.Domain.Exceptions;
 using Restmium.ERP.Services.Warehouse.Infrastructure.Database;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Entities = Restmium.ERP.Services.Warehouse.Domain.Entities;
@@ -22,7 +23,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
 
         public async Task<Entities.Warehouse> Handle(UpdateWarehouseCommand request, CancellationToken cancellationToken)
         {
-            Entities.Warehouse warehouse = await this.DatabaseContext.Warehouses.FindAsync(new object[] { request.Id }, cancellationToken);
+            Entities.Warehouse warehouse = this.DatabaseContext.Warehouses.FirstOrDefault(x => x.Id == request.Id);
 
             if (warehouse == null)
             {

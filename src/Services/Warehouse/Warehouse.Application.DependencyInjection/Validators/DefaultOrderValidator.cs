@@ -16,7 +16,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.DependencyInjection.Valida
 
         public bool IsValid(int wareId, int count)
         {
-            Ware ware = this.DatabaseContext.Wares.Find(new object[] { wareId });
+            Ware ware = this.DatabaseContext.Wares.FirstOrDefault(x => x.Id == wareId);
 
             return ware == null ? false : this.DatabaseContext.Positions.Where(x => x.GetWare().Id == wareId).Sum(x => x.CountWare()) >= count;
         }

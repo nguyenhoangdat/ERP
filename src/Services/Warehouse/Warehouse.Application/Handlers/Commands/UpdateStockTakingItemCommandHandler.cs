@@ -4,6 +4,7 @@ using Restmium.ERP.Services.Warehouse.Domain.Entities;
 using Restmium.ERP.Services.Warehouse.Domain.Events;
 using Restmium.ERP.Services.Warehouse.Domain.Exceptions;
 using Restmium.ERP.Services.Warehouse.Infrastructure.Database;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -24,7 +25,9 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
         {
             // TODO: Split command between two
 
-            StockTaking.Item item = await this.DatabaseContext.StockTakingItems.FindAsync(new object[] { request.StockTakingId, request.PositionId }, cancellationToken);
+            StockTaking.Item item = this.DatabaseContext.StockTakingItems.FirstOrDefault(x =>
+                x.StockTakingId == request.StockTakingId &&
+                x.PositionId == request.PositionId);
             if (item == null)
             {
                 throw new EntityNotFoundException(string.Format(Resources.Exceptions.Values["StockTakingItem_EntityNotFoundException"], request.StockTakingId, request.PositionId));

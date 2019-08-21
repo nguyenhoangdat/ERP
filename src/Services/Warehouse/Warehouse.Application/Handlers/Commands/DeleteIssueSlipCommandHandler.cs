@@ -4,6 +4,7 @@ using Restmium.ERP.Services.Warehouse.Domain.Entities;
 using Restmium.ERP.Services.Warehouse.Domain.Events;
 using Restmium.ERP.Services.Warehouse.Domain.Exceptions;
 using Restmium.ERP.Services.Warehouse.Infrastructure.Database;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -23,7 +24,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
         public async Task<IssueSlip> Handle(DeleteIssueSlipCommand request, CancellationToken cancellationToken)
         {
             // Find IssueSlip and throw an Exception if it does not exist
-            IssueSlip issueSlip = await this.DatabaseContext.IssueSlips.FindAsync(new object[] { request.Id }, cancellationToken);
+            IssueSlip issueSlip = this.DatabaseContext.IssueSlips.FirstOrDefault(x => x.Id == request.Id);
             if (issueSlip == null)
             {
                 throw new EntityNotFoundException(string.Format(Resources.Exceptions.Values["IssueSlip_Delete_EntityNotFoundException"], request.Id));

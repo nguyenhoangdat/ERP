@@ -22,7 +22,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
 
         public async Task<IEnumerable<Ware>> Handle(FindWaresInSectionCommand request, CancellationToken cancellationToken)
         {
-            Section section = await this.DatabaseContext.Sections.FindAsync(new object[] { request.SectionId }, cancellationToken);
+            Section section = this.DatabaseContext.Sections.FirstOrDefault(x => x.Id == request.SectionId);
 
             if (section == null)
             {

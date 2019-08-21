@@ -29,7 +29,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
                 throw new EntityNotFoundException(string.Format(Resources.Exceptions.Values["Receipt_Update_EntityNotFoundException"], request.Id));
             }
 
-            Receipt receipt = await this.DatabaseContext.Receipts.FindAsync(new object[] { request.Id }, cancellationToken);
+            Receipt receipt = this.DatabaseContext.Receipts.FirstOrDefault(x => x.Id == request.Id);
             receipt.UtcExpected = request.UtcExpected;
             receipt.UtcReceived = request.UtcReceived;
             await this.DatabaseContext.SaveChangesAsync(cancellationToken);
