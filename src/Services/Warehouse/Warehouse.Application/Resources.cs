@@ -41,6 +41,7 @@ namespace Restmium.ERP.Services.Warehouse.Application
                 Values.Add("ReceiptItem_EntitiesNotFoundException", "Unable to find entities of Receipt.Item(ReceiptId={0}, WareId={1})!");
                 Values.Add("ReceiptItem_EntityNotFoundException", "Receipt.Item(ReceiptId={0}, PositionId={1}, WareId={2}) not found!");
                 Values.Add("ReceiptItem_FullyAssignedException", "Receipt.Item(ReceiptId={0}, WareId={1}) has been fully assigned!");
+                Values.Add("ReceiptItem_OrderedUnitsExceededException", "Unable to store units for Receipt.Item(ReceiptId={0}, PositionId={1}, WareId={2}). Ordered units exceeded!");
                 Values.Add("ReceiptItem_PositionAlreadyAssignedException", "Receipt.Item(ReceiptId={0}, WareId={2}) is already assigned to Position(Id={1})!");
                 Values.Add("ReceiptItem_PositionWareConflictException", "Receipt.Item(ReceiptId={0}, WareId={2}) cannot be assigned to Position(Id={1})! Position holds a different Ware!");
                 Values.Add("ReceiptItem_Update_EntityNotFoundException", "Unable to update Receipt.Item(ReceiptId={0}, WareId={1}). Receipt.Item not found!");

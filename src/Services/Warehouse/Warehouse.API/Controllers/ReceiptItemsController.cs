@@ -171,6 +171,7 @@ namespace Warehouse.API.Controllers
         [HttpGet("StoreUnitsForReceiptItemAtPosition/{receiptId}/{positionId}/{wareId}/{count}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
+        [ProducesResponseType(409)]
         [ProducesResponseType(500)]
         public async Task<ActionResult<ReceiptDTO.ItemDTO>> GetStoreUnitsForReceiptItemAtPosition(long receiptId, long positionId, int wareId, int count)
         {
@@ -182,6 +183,10 @@ namespace Warehouse.API.Controllers
             catch (EntityNotFoundException ex)
             {
                 return this.NotFound(ex.Message);
+            }
+            catch (UnitsExceededException ex)
+            {
+                return this.Conflict(ex.Message);
             }
             catch (Exception)
             {

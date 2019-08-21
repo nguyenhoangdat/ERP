@@ -26,19 +26,48 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
                 x.ReceiptId == request.ReceiptId &&
                 x.WareId == request.WareId);
 
+            if (items.Count() == 0)
+            {
+                throw new EntityNotFoundException(string.Format(Resources.Exceptions.Values["ReceiptItem_EntitiesNotFoundException"], request.ReceiptId, request.WareId));
+            }
+
             Receipt.Item item = items.FirstOrDefault(x => x.PositionId == request.PositionId);
+            Receipt.Item unassignedItem = items.FirstOrDefault(x => x.PositionId == null);
 
             if (item == null)
             {
-                throw new EntityNotFoundException(string.Format(Resources.Exceptions.Values["ReceiptItem_EntityNotFoundException"], request.ReceiptId, request.PositionId, request.WareId));
+                if (request.Count <= unassignedItem.CountOrdered - unassignedItem.CountReceived)
+                {
+                    item = await this.Mediator.Send(new AssignReceiptItemToPositionCommand(unassignedItem.ReceiptId, request.PositionId, unassignedItem.WareId), cancellationToken);
+                }
+                else
+                {
+                    throw new EntityNotFoundException(string.Format(Resources.Exceptions.Values["ReceiptItem_EntityNotFoundException"], request.ReceiptId, request.PositionId, request.WareId));
+                }
             }
 
-            // TODO: Assign position if there is some Receipt.Item with (x.PositionId=null && request.Count <= x.CountOrdered)
-
             int unitsRemainingToStore = item.CountOrdered - item.CountReceived;
-            if (item.CountOrdered < request.Count)
+            if (item.CountOrdered < request.Count) // Trying to store more units than ordered
             {
-                // Trying to store more units than ordered
+                int extraUnits = request.Count - (item.CountOrdered - item.CountReceived);
+                unassignedItem = items.FirstOrDefault(x => x.PositionId == null);
+
+                if (unassignedItem != null && extraUnits <= (unassignedItem.CountOrdered - unassignedItem.CountReceived))
+                {
+                    // Transfer units
+                    await this.Mediator.Send(new UpdateReceiptItemOrderedUnitsCommand(unassignedItem.ReceiptId, unassignedItem.PositionId, unassignedItem.WareId, unassignedItem.CountOrdered - extraUnits), cancellationToken);
+                    await this.Mediator.Send(new UpdateReceiptItemOrderedUnitsCommand(item.ReceiptId, item.PositionId, item.WareId, item.CountOrdered + extraUnits), cancellationToken);
+
+                    item.CountReceived += request.Count;
+                    await this.DatabaseContext.SaveChangesAsync(cancellationToken);
+
+                    await this.Mediator.Send(new CreateMovementCommand(item.WareId, request.PositionId, Movement.Direction.In, request.Count), cancellationToken);
+
+                }
+                else
+                {
+                    throw new UnitsExceededException(string.Format(Resources.Exceptions.Values["ReceiptItem_OrderedUnitsExceededException"], request.ReceiptId, request.PositionId, request.WareId));
+                }
             }
             else
             {
@@ -49,7 +78,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
                 {
                     unitsRemainingToStore = item.CountOrdered - item.CountReceived;
 
-                    Receipt.Item unassignedItem = items.FirstOrDefault(x => x.PositionId == null);
+                    unassignedItem = items.FirstOrDefault(x => x.PositionId == null);
                     if (unassignedItem == null)
                     {
                         await this.Mediator.Send(new CreateReceiptItemCommand(item.WareId, null, item.ReceiptId, unitsRemainingToStore, 0), cancellationToken);
