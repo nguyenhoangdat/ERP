@@ -10,16 +10,16 @@ namespace Restmium.ERP.Services.Warehouse.Domain.Entities.Extensions
             return issueSlip.Items.FirstOrDefault(x => x.Position.SectionId == sectionId) != null;
         }
 
-        public static bool HasSectionIdWithAvailableUnits(this IssueSlip issueSlip, int sectionId)
+        public static bool HasSectionIdWithUnissuedUnits(this IssueSlip issueSlip, int sectionId)
         {
-             return GetFirstItemInSectionWithAvailableUnits(issueSlip, sectionId) != null;
+             return GetFirstItemInSectionWithUnissuedUnits(issueSlip, sectionId) != null;
         }
 
-        public static IssueSlip.Item GetFirstItemInSectionWithAvailableUnits(this IssueSlip issueSlip, int sectionId)
+        public static IssueSlip.Item GetFirstItemInSectionWithUnissuedUnits(this IssueSlip issueSlip, int sectionId)
         {
             return issueSlip.Items.FirstOrDefault(x =>
                 x.Position.SectionId == sectionId &&
-                x.RequestedUnits <= x.Position.CountWare());
+                x.IssuedUnits < x.RequestedUnits);
         }
 
         /// <summary>
