@@ -37,7 +37,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
                 {
                     Warehouse = eg.First().Section.Warehouse,
                     Ware = eg.First().GetWare(),
-                    UnitsAvailable = eg.Sum(e => e.CountWare())
+                    UnitsAvailable = eg.Sum(e => e.CountAvailableWare())
                 }).ToList();
         }
     }

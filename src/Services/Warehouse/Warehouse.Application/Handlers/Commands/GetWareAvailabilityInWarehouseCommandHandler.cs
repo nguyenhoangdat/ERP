@@ -44,7 +44,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
             {
                 Ware = ware,
                 Warehouse = warehouse,
-                UnitsAvailable = positions.Aggregate(0, (total, next) => total + next.CountWare())
+                UnitsAvailable = positions.Aggregate(0, (total, next) => total + next.CountAvailableWare())
             };
 
             return wareAvailability;

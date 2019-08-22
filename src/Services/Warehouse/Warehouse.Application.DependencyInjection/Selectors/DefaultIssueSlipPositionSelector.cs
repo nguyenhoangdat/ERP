@@ -22,16 +22,17 @@ namespace Restmium.ERP.Services.Warehouse.Application.DependencyInjection.Select
 
             IQueryable<Position> positions = this.DatabaseContext.Positions.Where(x => x.GetWare().Id == wareId);
 
-            if (positions.Any(x => x.CountWare() >= count))
+            if (positions.Any(x => x.CountAvailableWare() >= count))
             {
-                Position position = positions.Where(x => x.CountWare() >= count).OrderBy(x => x.CountWare()).FirstOrDefault();
+                // Take the smallest position that can be used to issue the units ordered
+                Position position = positions.Where(x => x.CountAvailableWare() >= count).OrderBy(x => x.CountAvailableWare()).FirstOrDefault();
                 positionCounts.Add(new PositionCount(position, count));
             }
             else
             {
-                foreach (Position item in positions.OrderByDescending(x => x.CountWare()))
+                foreach (Position item in positions.OrderByDescending(x => x.CountAvailableWare()))
                 {
-                    int positionCount = item.CountWare();
+                    int positionCount = item.CountAvailableWare();
                     positionCounts.Add(new PositionCount(item, (count <= positionCount) ? count : positionCount));
                     count -= positionCount;
                 }

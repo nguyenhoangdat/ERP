@@ -22,7 +22,7 @@ namespace Restmium.ERP.Services.Warehouse.Domain.Entities.Extensions
 
             return movement == null ? 0 : movement.CountTotal;
         }
-        public static int CountAvailableWare(this Position position) // TODO: Use this method insted of CountWare for some commands
+        public static int CountAvailableWare(this Position position)
         {
             return CountWare(position) - position.ReservedUnits;
         }

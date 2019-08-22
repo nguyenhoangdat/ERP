@@ -18,7 +18,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.DependencyInjection.Valida
         {
             Ware ware = this.DatabaseContext.Wares.FirstOrDefault(x => x.Id == wareId);
 
-            return ware == null ? false : this.DatabaseContext.Positions.Where(x => x.GetWare().Id == wareId).Sum(x => x.CountWare()) >= count;
+            return ware == null ? false : this.DatabaseContext.Positions.Where(x => x.GetWare().Id == wareId).Sum(x => x.CountAvailableWare()) >= count;
         }
     }
 }
