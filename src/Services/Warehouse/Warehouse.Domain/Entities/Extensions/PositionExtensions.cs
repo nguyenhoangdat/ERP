@@ -27,7 +27,19 @@ namespace Restmium.ERP.Services.Warehouse.Domain.Entities.Extensions
             return CountWare(position) - position.ReservedUnits;
         }
 
-        public static bool HasLoadCapacity(this Position position, int unitsTotal) => HasLoadCapacity(position, position.GetWare(), unitsTotal);
+        public static bool HasCapacity(this Position position, Ware ware, int unitsTotal)
+        {
+            if (ware == null)
+            {
+                throw new ArgumentNullException(nameof(ware));
+            }
+            if (unitsTotal <= 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(unitsTotal));
+            }
+
+            return unitsTotal <= MaxCapacity(position, ware);
+        }
         public static bool HasLoadCapacity(this Position position, Ware ware, int unitsTotal)
         {
             if (ware == null)
@@ -39,20 +51,8 @@ namespace Restmium.ERP.Services.Warehouse.Domain.Entities.Extensions
                 throw new ArgumentOutOfRangeException(nameof(unitsTotal));
             }
 
-            return position.MaxWeight < ware.Weight * unitsTotal;
+            return ware.Weight * unitsTotal <= position.MaxWeight;
         }
-
-        public static int MaxLoadCapacity(this Position position, Ware ware)
-        {
-            if (ware == null)
-            {
-                throw new ArgumentNullException(nameof(ware));
-            }
-
-            return Convert.ToInt32(position.MaxWeight / ware.Weight);
-        }
-
-        public static bool HasSpaceCapacity(this Position position, int unitsTotal) => HasSpaceCapacity(position, position.GetWare(), unitsTotal);
         public static bool HasSpaceCapacity(this Position position, Ware ware, int unitsTotal)
         {
             if (ware == null)
@@ -64,9 +64,27 @@ namespace Restmium.ERP.Services.Warehouse.Domain.Entities.Extensions
                 throw new ArgumentOutOfRangeException(nameof(unitsTotal));
             }
 
-            return MaxSpaceCapacity(position, ware) <= unitsTotal;
+            return unitsTotal <= MaxSpaceCapacity(position, ware);
         }
 
+        public static int MaxCapacity(this Position position, Ware ware)
+        {
+            if (ware == null)
+            {
+                throw new ArgumentNullException(nameof(ware));
+            }
+
+            return Math.Min(MaxLoadCapacity(position, ware), MaxSpaceCapacity(position, ware));
+        }
+        public static int MaxLoadCapacity(this Position position, Ware ware)
+        {
+            if (ware == null)
+            {
+                throw new ArgumentNullException(nameof(ware));
+            }
+
+            return Convert.ToInt32(position.MaxWeight / ware.Weight);
+        }
         public static int MaxSpaceCapacity(this Position position, Ware ware)
         {
             if (ware == null)
@@ -76,6 +94,7 @@ namespace Restmium.ERP.Services.Warehouse.Domain.Entities.Extensions
 
             return MaxSpaceCapacity(position, ware, false); //HACK: Use property of Ware in 2020.1
         }
+
         private static int MaxSpaceCapacity(Position position, Ware ware, bool thisSideUp)
         {
             int max = 0;
@@ -101,17 +120,6 @@ namespace Restmium.ERP.Services.Warehouse.Domain.Entities.Extensions
 
             return maxWidth * maxDepth * maxHeight;
         }
-
-        public static bool HasCapacity(this Position position, Ware ware, int unitsTotal) => unitsTotal <= MaxCapacity(position, ware);
-        public static int MaxCapacity(this Position position, Ware ware)
-        {
-            if (ware == null)
-            {
-                throw new ArgumentNullException(nameof(ware));
-            }
-
-            return Math.Min(MaxLoadCapacity(position, ware), MaxSpaceCapacity(position, ware));
-        }        
 
         public static bool HasAllIssueSlipItemsProcessed(this Position position)
         {
