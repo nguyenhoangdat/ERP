@@ -27,7 +27,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
         {
             // Check possible conflict and throw exception if conflict is found
             Position position = this.DatabaseContext.Positions.FirstOrDefault(x => x.Id == request.PositionId);
-            Ware ware = position.GetWare();            
+            Ware ware = position.GetWare();
 
             // Throw an exception if position holds a different ware
             if (ware != null && ware.Id != request.WareId)
@@ -59,7 +59,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
                 {
                     throw new PositionLoadCapacityException(string.Format(Resources.Exceptions.Values["Movement_Create_PositionLoadCapacityException"], ware.Id, position.Id, request.CountChange));
                 }
-            }            
+            }
 
             // Create Movement
             Movement movement = this.DatabaseContext.Movements.Add(new Movement(request.WareId, request.PositionId, request.Direction, request.CountChange, newCount)).Entity;
