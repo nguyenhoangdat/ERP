@@ -44,11 +44,15 @@ namespace Restmium.ERP.Services.Warehouse.Domain.Entities.Extensions
 
         public static int MaxLoadCapacity(this Position position, Ware ware)
         {
-            return Convert.ToInt32(Math.Floor(position.MaxWeight / ware.Weight));
+            if (ware == null)
+            {
+                throw new ArgumentNullException(nameof(ware));
+            }
+
+            return Convert.ToInt32(position.MaxWeight / ware.Weight);
         }
 
         public static bool HasSpaceCapacity(this Position position, int unitsTotal) => HasSpaceCapacity(position, position.GetWare(), unitsTotal);
-
         public static bool HasSpaceCapacity(this Position position, Ware ware, int unitsTotal)
         {
             if (ware == null)
@@ -60,8 +64,54 @@ namespace Restmium.ERP.Services.Warehouse.Domain.Entities.Extensions
                 throw new ArgumentOutOfRangeException(nameof(unitsTotal));
             }
 
-            return true; //TODO: Implement HasSpaceCapacity
+            return MaxSpaceCapacity(position, ware) <= unitsTotal;
         }
+
+        public static int MaxSpaceCapacity(this Position position, Ware ware)
+        {
+            if (ware == null)
+            {
+                throw new ArgumentNullException(nameof(ware));
+            }
+
+            return MaxSpaceCapacity(position, ware, false); //HACK: Use property of Ware in 2020.1
+        }
+        private static int MaxSpaceCapacity(Position position, Ware ware, bool thisSideUp)
+        {
+            int max = 0;
+            max = Math.Max(max, MaxSpaceCapacity(position, ware.Width, ware.Depth, ware.Height));
+            max = Math.Max(max, MaxSpaceCapacity(position, ware.Depth, ware.Width, ware.Height));
+
+            if (!thisSideUp)
+            {
+                max = Math.Max(max, MaxSpaceCapacity(position, ware.Height, ware.Depth, ware.Width));
+                max = Math.Max(max, MaxSpaceCapacity(position, ware.Depth, ware.Height, ware.Width));
+
+                max = Math.Max(max, MaxSpaceCapacity(position, ware.Height, ware.Width, ware.Depth));
+                max = Math.Max(max, MaxSpaceCapacity(position, ware.Width, ware.Height, ware.Depth));
+            }
+
+            return max;
+        }
+        private static int MaxSpaceCapacity(Position position, double width, double depth, double height)
+        {
+            int maxWidth = Convert.ToInt32(position.Width / width);
+            int maxDepth = Convert.ToInt32(position.Depth / depth);
+            int maxHeight = Convert.ToInt32(position.Height / height);
+
+            return maxWidth * maxDepth * maxHeight;
+        }
+
+        public static bool HasCapacity(this Position position, Ware ware, int unitsTotal) => unitsTotal <= MaxCapacity(position, ware);
+        public static int MaxCapacity(this Position position, Ware ware)
+        {
+            if (ware == null)
+            {
+                throw new ArgumentNullException(nameof(ware));
+            }
+
+            return Math.Min(MaxLoadCapacity(position, ware), MaxSpaceCapacity(position, ware));
+        }        
 
         public static bool HasAllIssueSlipItemsProcessed(this Position position)
         {
