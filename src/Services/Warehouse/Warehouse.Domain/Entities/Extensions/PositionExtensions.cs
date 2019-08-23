@@ -12,19 +12,19 @@ namespace Restmium.ERP.Services.Warehouse.Domain.Entities.Extensions
 
         public static Ware GetWare(this Position position)
         {
-            Movement movement = GetLastMovement(position);
+            Movement movement = position.GetLastMovement();
 
             return movement == null || movement.CountTotal == 0 ? null : movement.Ware;
         }
         public static int CountWare(this Position position)
         {
-            Movement movement = GetLastMovement(position);
+            Movement movement = position.GetLastMovement();
 
             return movement == null ? 0 : movement.CountTotal;
         }
         public static int CountAvailableWare(this Position position)
         {
-            return CountWare(position) - position.ReservedUnits;
+            return position.CountWare() - position.ReservedUnits;
         }
 
         public static bool HasCapacity(this Position position, Ware ware, int unitsTotal)
@@ -38,7 +38,7 @@ namespace Restmium.ERP.Services.Warehouse.Domain.Entities.Extensions
                 throw new ArgumentOutOfRangeException(nameof(unitsTotal));
             }
 
-            return unitsTotal <= MaxCapacity(position, ware);
+            return unitsTotal <= position.MaxCapacity(ware);
         }
         public static bool HasLoadCapacity(this Position position, Ware ware, int unitsTotal)
         {
@@ -64,7 +64,7 @@ namespace Restmium.ERP.Services.Warehouse.Domain.Entities.Extensions
                 throw new ArgumentOutOfRangeException(nameof(unitsTotal));
             }
 
-            return unitsTotal <= MaxSpaceCapacity(position, ware);
+            return unitsTotal <= position.MaxSpaceCapacity(ware);
         }
 
         public static int MaxCapacity(this Position position, Ware ware)
@@ -74,7 +74,7 @@ namespace Restmium.ERP.Services.Warehouse.Domain.Entities.Extensions
                 throw new ArgumentNullException(nameof(ware));
             }
 
-            return Math.Min(MaxLoadCapacity(position, ware), MaxSpaceCapacity(position, ware));
+            return Math.Min(position.MaxLoadCapacity(ware), position.MaxSpaceCapacity(ware));
         }
         public static int MaxLoadCapacity(this Position position, Ware ware)
         {
@@ -92,27 +92,27 @@ namespace Restmium.ERP.Services.Warehouse.Domain.Entities.Extensions
                 throw new ArgumentNullException(nameof(ware));
             }
 
-            return MaxSpaceCapacity(position, ware, false); //HACK: Use property of Ware in 2020.1
+            return position.MaxSpaceCapacity(ware, false); //HACK: Use property of Ware in 2020.1
         }
 
-        private static int MaxSpaceCapacity(Position position, Ware ware, bool thisSideUp)
+        private static int MaxSpaceCapacity(this Position position, Ware ware, bool thisSideUp)
         {
             int max = 0;
-            max = Math.Max(max, MaxSpaceCapacity(position, ware.Width, ware.Depth, ware.Height));
-            max = Math.Max(max, MaxSpaceCapacity(position, ware.Depth, ware.Width, ware.Height));
+            max = Math.Max(max, position.MaxSpaceCapacity(ware.Width, ware.Depth, ware.Height));
+            max = Math.Max(max, position.MaxSpaceCapacity(ware.Depth, ware.Width, ware.Height));
 
             if (!thisSideUp)
             {
-                max = Math.Max(max, MaxSpaceCapacity(position, ware.Height, ware.Depth, ware.Width));
-                max = Math.Max(max, MaxSpaceCapacity(position, ware.Depth, ware.Height, ware.Width));
+                max = Math.Max(max, position.MaxSpaceCapacity(ware.Height, ware.Depth, ware.Width));
+                max = Math.Max(max, position.MaxSpaceCapacity(ware.Depth, ware.Height, ware.Width));
 
-                max = Math.Max(max, MaxSpaceCapacity(position, ware.Height, ware.Width, ware.Depth));
-                max = Math.Max(max, MaxSpaceCapacity(position, ware.Width, ware.Height, ware.Depth));
+                max = Math.Max(max, position.MaxSpaceCapacity(ware.Height, ware.Width, ware.Depth));
+                max = Math.Max(max, position.MaxSpaceCapacity(ware.Width, ware.Height, ware.Depth));
             }
 
             return max;
         }
-        private static int MaxSpaceCapacity(Position position, double width, double depth, double height)
+        private static int MaxSpaceCapacity(this Position position, double width, double depth, double height)
         {
             int maxWidth = Convert.ToInt32(position.Width / width);
             int maxDepth = Convert.ToInt32(position.Depth / depth);

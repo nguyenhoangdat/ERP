@@ -12,7 +12,7 @@ namespace Restmium.ERP.Services.Warehouse.Domain.Entities.Extensions
 
         public static bool HasSectionIdWithUnissuedUnits(this IssueSlip issueSlip, int sectionId)
         {
-             return GetFirstItemInSectionWithUnissuedUnits(issueSlip, sectionId) != null;
+             return issueSlip.GetFirstItemInSectionWithUnissuedUnits(sectionId) != null;
         }
 
         public static IssueSlip.Item GetFirstItemInSectionWithUnissuedUnits(this IssueSlip issueSlip, int sectionId)
