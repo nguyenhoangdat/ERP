@@ -12,7 +12,6 @@ using Restmium.ERP.Integration.Supply;
 using Restmium.ERP.Services.Warehouse.Application.Commands;
 using Restmium.ERP.Services.Warehouse.Application.Handlers.Integration;
 using Restmium.ERP.Services.Warehouse.Infrastructure.Database;
-using Restmium.ERP.Services.Warehouse.Integration.Events;
 using Restmium.Messaging;
 using Restmium.Messaging.Azure.ServiceBus;
 using System.Reflection;
