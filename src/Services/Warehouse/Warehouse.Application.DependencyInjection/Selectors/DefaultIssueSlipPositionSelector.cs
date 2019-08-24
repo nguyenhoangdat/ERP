@@ -16,11 +16,11 @@ namespace Restmium.ERP.Services.Warehouse.Application.DependencyInjection.Select
 
         protected DatabaseContext DatabaseContext { get; }
 
-        public IEnumerable<PositionCount> GetPositions(int wareId, int count)
+        public IEnumerable<PositionCount> GetPositions(Ware ware, int count)
         {
             List<PositionCount> positionCounts = new List<PositionCount>();
 
-            IQueryable<Position> positions = this.DatabaseContext.Positions.Where(x => x.GetWare().Id == wareId);
+            IQueryable<Position> positions = this.DatabaseContext.Positions.Where(x => x.GetWare().Id == ware.Id);
 
             if (positions.Any(x => x.CountAvailableWare() >= count))
             {

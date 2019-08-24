@@ -62,7 +62,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Integration
             foreach (OrderCreatedIntegrationEvent.OrderItem item in orderItems)
             {
                 Ware ware = this.DatabaseContext.Wares.Where(x => x.ProductId == item.ProductId).FirstOrDefault();
-                IEnumerable<PositionCount> positionCounts = this.PositionSelector?.GetPositions(ware.Id, item.Units);
+                IEnumerable<PositionCount> positionCounts = this.PositionSelector?.GetPositions(ware, item.Units);
 
                 // Positions will be selected manually
                 if (positionCounts == null)
