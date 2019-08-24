@@ -126,27 +126,6 @@ namespace Warehouse.API.Controllers
             }
         }
 
-        [HttpGet("FindPositionsForReceiptItem/{receiptId}/{wareId}")]
-        [ProducesResponseType(200)]
-        [ProducesResponseType(404)]
-        [ProducesResponseType(500)]
-        public async Task<ActionResult<IEnumerable<PositionCountDTO>>> GetFindPositionsForReceiptItem(long receiptId, int wareId)
-        {
-            try
-            {
-                IEnumerable<PositionCount> counts = await this.Mediator.Send(new FindPositionsForReceiptItemCommand(receiptId, wareId));
-                return this.Ok(this.Mapper.Map<IEnumerable<PositionCount>, IEnumerable<PositionCountDTO>>(counts));
-            }
-            catch (EntityNotFoundException ex)
-            {
-                return this.NotFound(ex.Message);
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-        }
-
         [HttpGet("AssignReceiptItemToPosition/{receiptId}/{positionId}/{wareId}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
