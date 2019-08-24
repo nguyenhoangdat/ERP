@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27703.2047
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29102.190
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Warehouse.API", "src\Services\Warehouse\Warehouse.API\Warehouse.API.csproj", "{E7AE9B67-E430-46CF-A71F-5101256A7400}"
 EndProject
@@ -34,8 +34,6 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Restmium.ERP.BuildingBlocks.Common", "src\BuildingBlocks\Restmium.ERP.BuildingBlocks.Common\Restmium.ERP.BuildingBlocks.Common.csproj", "{441366C4-735A-48D5-9FFA-571AC40937DA}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Warehouse.Infrastructure", "src\Services\Warehouse\Warehouse.Infrastructure\Warehouse.Infrastructure.csproj", "{8D6AA7AA-199E-4388-BDB4-CF3D9E19953D}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Warehouse.Integration", "src\Services\Warehouse\Warehouse.Integration\Warehouse.Integration.csproj", "{E60938EE-8030-4E6E-A275-BF6BCCFA88D5}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Warehouse.Tests.Common", "test\Services\Warehouse.Tests.Common\Warehouse.Tests.Common.csproj", "{69AF5C02-E59E-49CA-8A41-6F46E58EE893}"
 EndProject
@@ -97,10 +95,6 @@ Global
 		{8D6AA7AA-199E-4388-BDB4-CF3D9E19953D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8D6AA7AA-199E-4388-BDB4-CF3D9E19953D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8D6AA7AA-199E-4388-BDB4-CF3D9E19953D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E60938EE-8030-4E6E-A275-BF6BCCFA88D5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E60938EE-8030-4E6E-A275-BF6BCCFA88D5}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E60938EE-8030-4E6E-A275-BF6BCCFA88D5}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E60938EE-8030-4E6E-A275-BF6BCCFA88D5}.Release|Any CPU.Build.0 = Release|Any CPU
 		{69AF5C02-E59E-49CA-8A41-6F46E58EE893}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{69AF5C02-E59E-49CA-8A41-6F46E58EE893}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{69AF5C02-E59E-49CA-8A41-6F46E58EE893}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -156,7 +150,6 @@ Global
 		{15ADC23F-3039-422B-A61C-B57B899D9A5E} = {1E4387E5-6610-40B2-B6C5-073E12B7FB30}
 		{441366C4-735A-48D5-9FFA-571AC40937DA} = {70866098-2614-4369-A475-EF00F9178EA9}
 		{8D6AA7AA-199E-4388-BDB4-CF3D9E19953D} = {1E4387E5-6610-40B2-B6C5-073E12B7FB30}
-		{E60938EE-8030-4E6E-A275-BF6BCCFA88D5} = {1E4387E5-6610-40B2-B6C5-073E12B7FB30}
 		{69AF5C02-E59E-49CA-8A41-6F46E58EE893} = {7844C953-924B-4B6E-BD5E-A5939C0563FA}
 		{35B0FAB6-6150-407E-AD32-0DA76AB0598A} = {7844C953-924B-4B6E-BD5E-A5939C0563FA}
 		{A019096A-E01F-45E8-B25A-F47FA552EFA1} = {7844C953-924B-4B6E-BD5E-A5939C0563FA}
