@@ -16,6 +16,10 @@ namespace Restmium.ERP.Services.Warehouse.Domain.Entities.Extensions
 
             return movement == null || movement.CountTotal == 0 ? null : movement.Ware;
         }
+        public static Ware GetLastWare(this Position position)
+        {
+            return position.GetLastMovement()?.Ware;
+        }
         public static int CountWare(this Position position)
         {
             Movement movement = position.GetLastMovement();
