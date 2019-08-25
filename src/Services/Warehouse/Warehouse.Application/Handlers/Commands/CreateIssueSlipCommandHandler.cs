@@ -40,7 +40,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
             List<IssueSlip.Item> items = new List<IssueSlip.Item>(request.Items.Count());
             foreach (CreateIssueSlipCommand.Item item in request.Items)
             {
-                items.Add(new IssueSlip.Item(0, item.Ware.Id, item.PositionId, item.RequstedUnits, 0));
+                items.Add(new IssueSlip.Item(0, item.WareId, item.PositionId, item.RequstedUnits, 0));
             }
 
             return new IssueSlip(request.OrderId, request.UtcDispatchDate, request.UtcDeliveryDate, items);

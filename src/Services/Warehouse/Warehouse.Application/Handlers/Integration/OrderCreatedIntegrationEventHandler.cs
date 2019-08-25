@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.Extensions.Logging;
 using Restmium.ERP.Integration.Ordering;
 using Restmium.ERP.Services.Warehouse.Application.Commands;
 using Restmium.ERP.Services.Warehouse.Application.DependencyInjection.Selectors;
@@ -16,12 +17,14 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Integration
     public class OrderCreatedIntegrationEventHandler : IIntegrationEventHandler<OrderCreatedIntegrationEvent>
     {
         protected DatabaseContext DatabaseContext { get; }
+        protected ILogger<OrderCreatedIntegrationEventHandler> Logger { get; }
         protected IMediator Mediator { get; }
         protected IIssueSlipPositionSelector PositionSelector { get; }
 
-        public OrderCreatedIntegrationEventHandler(DatabaseContext context, IMediator mediator, IIssueSlipPositionSelector positionSelector)
+        public OrderCreatedIntegrationEventHandler(DatabaseContext context, ILogger<OrderCreatedIntegrationEventHandler> logger, IMediator mediator, IIssueSlipPositionSelector positionSelector)
         {
             this.DatabaseContext = context;
+            this.Logger = logger;
             this.Mediator = mediator;
             this.PositionSelector = positionSelector;
         }
@@ -59,19 +62,25 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Integration
             LinkedList<CreateIssueSlipCommand.Item> modelItems = new LinkedList<CreateIssueSlipCommand.Item>();
             foreach (OrderCreatedIntegrationEvent.OrderItem item in orderItems)
             {
-                Ware ware = this.DatabaseContext.Wares.Where(x => x.ProductId == item.ProductId).FirstOrDefault();
+                Ware ware = this.DatabaseContext.Wares.FirstOrDefault(x => x.ProductId == item.ProductId);
+                if (ware == null)
+                {
+                    this.Logger.Log(LogLevel.Critical, Resources.Exceptions.Values["Ware_ProductId_EntityNotFoundException"], item.ProductId);
+                    continue;
+                }
+
                 IEnumerable<PositionCount> positionCounts = this.PositionSelector?.GetPositions(ware, item.Units);
 
                 // Positions will be selected manually
                 if (positionCounts == null)
                 {
-                    modelItems.AddLast(new CreateIssueSlipCommand.Item(ware, null, item.Units));
+                    modelItems.AddLast(new CreateIssueSlipCommand.Item(ware.Id, null, item.Units));
                 }
                 else
                 {
                     foreach (PositionCount positionCount in positionCounts)
                     {
-                        modelItems.AddLast(new CreateIssueSlipCommand.Item(ware, positionCount.Position.Id, positionCount.Count));
+                        modelItems.AddLast(new CreateIssueSlipCommand.Item(ware.Id, positionCount.Position.Id, positionCount.Count));
                     }
                 }
             }
