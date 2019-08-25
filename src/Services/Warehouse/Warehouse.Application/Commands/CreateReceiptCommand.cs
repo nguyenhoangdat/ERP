@@ -7,24 +7,26 @@ namespace Restmium.ERP.Services.Warehouse.Application.Commands
 {
     public class CreateReceiptCommand : IRequest<Receipt>
     {
-        public CreateReceiptCommand(DateTime utcExpected, List<Item> items)
+        public CreateReceiptCommand(DateTime utcExpected, IEnumerable<Item> items)
         {
             this.UtcExpected = utcExpected;
             this.Items = items;
         }
 
         public DateTime UtcExpected { get; }
-        public List<Item> Items { get; }
+        public IEnumerable<Item> Items { get; }
 
         public class Item
         {
-            public Item(int wareId, int countOrdered)
+            public Item(int wareId, long? positionId, int countOrdered)
             {
                 this.WareId = wareId;
+                this.PositionId = positionId;
                 this.CountOrdered = countOrdered;
             }
 
             public int WareId { get; }
+            public long? PositionId { get; }
             public int CountOrdered { get; }
         }
     }
