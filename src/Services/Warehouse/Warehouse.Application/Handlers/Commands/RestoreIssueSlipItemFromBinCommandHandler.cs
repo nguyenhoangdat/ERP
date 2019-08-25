@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Restmium.ERP.Services.Warehouse.Application.Commands;
 using Restmium.ERP.Services.Warehouse.Domain.Entities;
+using Restmium.ERP.Services.Warehouse.Domain.Events;
 using Restmium.ERP.Services.Warehouse.Domain.Exceptions;
 using Restmium.ERP.Services.Warehouse.Infrastructure.Database;
 using System.Linq;
@@ -40,6 +41,8 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
             }
 
             await this.DatabaseContext.SaveChangesAsync(cancellationToken);
+
+            await this.Mediator.Publish(new IssueSlipItemRestoredFromBinDomainEvent(item), cancellationToken);
 
             return item;
         }
