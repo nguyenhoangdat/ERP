@@ -26,7 +26,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
             Receipt receipt = this.DatabaseContext.Receipts.FirstOrDefault(x => x.Id == request.Id);
             if (receipt == null)
             {
-                throw new EntityNotFoundException(string.Format(Resources.Exceptions.Values["Receipt_Delete_EntityNotFoundException"], request.Id));
+                throw new EntityNotFoundException(string.Format(Properties.Resources.Receipt_Delete_EntityNotFoundException, request.Id));
             }
 
             receipt = this.DatabaseContext.Receipts.Remove(receipt).Entity;

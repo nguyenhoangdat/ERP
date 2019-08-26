@@ -30,7 +30,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
 
             if (item == null)
             {
-                throw new EntityNotFoundException(string.Format(Resources.Exceptions.Values["ReceiptItem_EntityNotFoundException"], request.ReceiptId, request.PositionId, request.WareId));
+                throw new EntityNotFoundException(string.Format(Properties.Resources.ReceiptItem_EntityNotFoundException, request.ReceiptId, request.PositionId, request.WareId));
             }
 
             item.CountOrdered = request.OrderedUnits;

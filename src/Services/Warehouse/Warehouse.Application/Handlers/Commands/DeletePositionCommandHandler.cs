@@ -28,12 +28,12 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
 
             if (position == null)
             {
-                throw new EntityNotFoundException(string.Format(Resources.Exceptions.Values["Position_Delete_EntityNotFoundException"], request.Id));
+                throw new EntityNotFoundException(string.Format(Properties.Resources.Position_Delete_EntityNotFoundException, request.Id));
             }
 
             if (position.CountWare() > 0)
             {
-                throw new EntityDeleteException(string.Format(Resources.Exceptions.Values["Position_EntityDeleteException"], position.Id));
+                throw new EntityDeleteException(string.Format(Properties.Resources.Position_EntityDeleteException, position.Id));
             }
 
             position = this.DatabaseContext.Positions.Remove(position).Entity;

@@ -24,7 +24,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
 
             if (receipt == null)
             {
-                throw new EntityNotFoundException(string.Format(Resources.Exceptions.Values["Receipt_EntityNotFoundException"], request.ReceiptId));
+                throw new EntityNotFoundException(string.Format(Properties.Resources.Receipt_EntityNotFoundException, request.ReceiptId));
             }
 
             receipt.UtcMovedToBin = null;

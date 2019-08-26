@@ -43,23 +43,23 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
             // Throw exceptions when Position is not found
             if (positionFrom == null)
             {
-                throw new EntityNotFoundException(string.Format(Resources.Exceptions.Values["Position_EntityNotFoundException"], request.FromPositionWithId));
+                throw new EntityNotFoundException(string.Format(Properties.Resources.Position_EntityNotFoundException, request.FromPositionWithId));
             }
             if (positionTo == null)
             {
-                throw new EntityNotFoundException(string.Format(Resources.Exceptions.Values["Position_EntityNotFoundException"], request.ToPositionWithId));
+                throw new EntityNotFoundException(string.Format(Properties.Resources.Position_EntityNotFoundException, request.ToPositionWithId));
             }
 
             // Throw an exception when Position from which is transfered is empty
             if (positionFrom.CountWare() == 0)
             {
-                throw new PositionEmptyException(string.Format(Resources.Exceptions.Values["Relocation_PositionEmptyException"], positionFrom.Id));
+                throw new PositionEmptyException(string.Format(Properties.Resources.Relocation_PositionEmptyException, positionFrom.Id));
             }
 
             // Throw an exception when Positions do not store that same Ware
             if (positionFrom.GetWare() != positionTo.GetWare() && positionTo.GetWare() != null)
             {
-                throw new PositionWareConflictException(string.Format(Resources.Exceptions.Values["Relocation_PositionWareConflictException"], positionFrom.Id, positionTo.Id));
+                throw new PositionWareConflictException(string.Format(Properties.Resources.Relocation_PositionWareConflictException, positionFrom.Id, positionTo.Id));
             }
 
             // Relocate Wares between Positions - create movements

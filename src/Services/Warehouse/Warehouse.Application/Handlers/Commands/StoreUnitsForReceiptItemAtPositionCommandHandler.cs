@@ -28,7 +28,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
 
             if (items.Count() == 0)
             {
-                throw new EntityNotFoundException(string.Format(Resources.Exceptions.Values["ReceiptItem_EntitiesNotFoundException"], request.ReceiptId, request.WareId));
+                throw new EntityNotFoundException(string.Format(Properties.Resources.ReceiptItem_EntitiesNotFoundException, request.ReceiptId, request.WareId));
             }
 
             Receipt.Item item = items.FirstOrDefault(x => x.PositionId == request.PositionId);
@@ -42,7 +42,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
                 }
                 else
                 {
-                    throw new EntityNotFoundException(string.Format(Resources.Exceptions.Values["ReceiptItem_EntityNotFoundException"], request.ReceiptId, request.PositionId, request.WareId));
+                    throw new EntityNotFoundException(string.Format(Properties.Resources.ReceiptItem_EntityNotFoundException, request.ReceiptId, request.PositionId, request.WareId));
                 }
             }
 
@@ -66,7 +66,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
                 }
                 else
                 {
-                    throw new UnitsExceededException(string.Format(Resources.Exceptions.Values["ReceiptItem_OrderedUnitsExceededException"], request.ReceiptId, request.PositionId, request.WareId));
+                    throw new UnitsExceededException(string.Format(Properties.Resources.ReceiptItem_OrderedUnitsExceededException, request.ReceiptId, request.PositionId, request.WareId));
                 }
             }
             else

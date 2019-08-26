@@ -25,7 +25,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
 
             if (ware == null)
             {
-                throw new EntityNotFoundException(string.Format(Resources.Exceptions.Values["Ware_EntityNotFoundException"], request.WareId));
+                throw new EntityNotFoundException(string.Format(Properties.Resources.Ware_EntityNotFoundException, request.WareId));
             }
 
             ware.UtcMovedToBin = null;

@@ -25,7 +25,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
             Section section = this.DatabaseContext.Sections.FirstOrDefault(x => x.Id == request.SectionId);
             if (section == null)
             {
-                throw new EntityNotFoundException(string.Format(Resources.Exceptions.Values["Section_EntityNotFoundException"], request.SectionId));
+                throw new EntityNotFoundException(string.Format(Properties.Resources.Section_EntityNotFoundException, request.SectionId));
             }
 
             // Return IssueSlip that needs to be processed ASAP

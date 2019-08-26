@@ -25,7 +25,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
             StockTaking stockTaking = this.DatabaseContext.StockTakings.FirstOrDefault(x => x.Id == request.Id);
             if (stockTaking == null)
             {
-                throw new EntityNotFoundException(string.Format(Resources.Exceptions.Values["StockTaking_EntityNotFoundException"], request.Id));
+                throw new EntityNotFoundException(string.Format(Properties.Resources.StockTaking_EntityNotFoundException, request.Id));
             }
 
             stockTaking = this.DatabaseContext.StockTakings.Remove(stockTaking).Entity;

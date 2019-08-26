@@ -29,7 +29,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
             Warehouse.Domain.Entities.Warehouse warehouse = this.DatabaseContext.Warehouses.FirstOrDefault(x => x.Id == request.WarehouseId);
             if (warehouse == null)
             {
-                throw new EntityNotFoundException(string.Format(Resources.Exceptions.Values["Warehouse_EntityNotFoundException"], request.WarehouseId));
+                throw new EntityNotFoundException(string.Format(Properties.Resources.Warehouse_EntityNotFoundException, request.WarehouseId));
             }
 
             // Create Model.Items for Positions in Warehouse
@@ -41,7 +41,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
             }
 
             // Create StockTaking through command
-            StockTaking stockTaking = await this.Mediator.Send(new CreateStockTakingCommand(string.Format(Resources.Exceptions.Values["StockTaking_Name_Warehouse"], warehouse.Id), items), cancellationToken);
+            StockTaking stockTaking = await this.Mediator.Send(new CreateStockTakingCommand(string.Format(Properties.Resources.StockTaking_Name_Warehouse, warehouse.Id), items), cancellationToken);
 
             // Publish DomainEvent that the StockTaking has been created
             await this.Mediator.Publish(new StockTakingCreatedDomainEvent(stockTaking), cancellationToken);

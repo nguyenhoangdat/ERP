@@ -28,31 +28,31 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
 
             if (items.Count() == 0)
             {
-                throw new EntityNotFoundException(string.Format(Resources.Exceptions.Values["IssueSlipItem_EntitiesNotFoundException"], request.IssueSlipId, request.WareId));
+                throw new EntityNotFoundException(string.Format(Properties.Resources.IssueSlipItem_EntitiesNotFoundException, request.IssueSlipId, request.WareId));
             }
 
             if (items.Any(x => x.PositionId == request.PositionId))
             {
-                throw new PositionAlreadyAssignedException(string.Format(Resources.Exceptions.Values["IssueSlipItem_PositionAlreadyAssignedException"], request.IssueSlipId, request.PositionId, request.WareId));
+                throw new PositionAlreadyAssignedException(string.Format(Properties.Resources.IssueSlipItem_PositionAlreadyAssignedException, request.IssueSlipId, request.PositionId, request.WareId));
             }
 
             IssueSlip.Item item = items.FirstOrDefault(x => x.PositionId == null);
 
             if (item == null)
             {
-                throw new FullyAssignedException(string.Format(Resources.Exceptions.Values["IssueSlipItem_FullyAssignedException"], request.IssueSlipId, request.WareId));
+                throw new FullyAssignedException(string.Format(Properties.Resources.IssueSlipItem_FullyAssignedException, request.IssueSlipId, request.WareId));
             }
 
             Position position = this.DatabaseContext.Positions.FirstOrDefault(x => x.Id == request.PositionId);
 
             if (position == null)
             {
-                throw new EntityNotFoundException(string.Format(Resources.Exceptions.Values["Position_EntityNotFoundException"], request.PositionId));
+                throw new EntityNotFoundException(string.Format(Properties.Resources.Position_EntityNotFoundException, request.PositionId));
             }
 
             if (item.Ware != position.GetWare() && position.GetWare() != null)
             {
-                throw new PositionWareConflictException(string.Format(Resources.Exceptions.Values["IssueSlipItem_PositionWareConflictException"], request.IssueSlipId, request.PositionId, request.WareId));
+                throw new PositionWareConflictException(string.Format(Properties.Resources.IssueSlipItem_PositionWareConflictException, request.IssueSlipId, request.PositionId, request.WareId));
             }
 
             item.PositionId = request.PositionId;

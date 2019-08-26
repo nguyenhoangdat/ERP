@@ -27,7 +27,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
 
             if (item == null)
             {
-                throw new EntityNotFoundException(string.Format(Resources.Exceptions.Values["StockTakingItem_EntityNotFoundException"], request.StockTakingId, request.PositionId));
+                throw new EntityNotFoundException(string.Format(Properties.Resources.StockTakingItem_EntityNotFoundException, request.StockTakingId, request.PositionId));
             }
 
             item.UtcMovedToBin = DateTime.UtcNow;

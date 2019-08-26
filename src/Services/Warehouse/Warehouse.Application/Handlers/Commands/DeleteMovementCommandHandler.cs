@@ -27,7 +27,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
             Movement movement = this.DatabaseContext.Movements.FirstOrDefault(x => x.Id == request.Id);
             if (movement == null)
             {
-                throw new EntityNotFoundException(string.Format(Resources.Exceptions.Values["Movement_Delete_EntityNotFoundException"], request.Id));
+                throw new EntityNotFoundException(string.Format(Properties.Resources.Movement_Delete_EntityNotFoundException, request.Id));
             }
 
             // Delete and Save

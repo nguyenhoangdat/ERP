@@ -26,7 +26,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
         {
             if (!this.DatabaseContext.Receipts.Any(x => x.Id == request.Id))
             {
-                throw new EntityNotFoundException(string.Format(Resources.Exceptions.Values["Receipt_Update_EntityNotFoundException"], request.Id));
+                throw new EntityNotFoundException(string.Format(Properties.Resources.Receipt_Update_EntityNotFoundException, request.Id));
             }
 
             Receipt receipt = this.DatabaseContext.Receipts.FirstOrDefault(x => x.Id == request.Id);

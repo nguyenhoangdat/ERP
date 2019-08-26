@@ -26,7 +26,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
             Section section = this.DatabaseContext.Sections.FirstOrDefault(x => x.Id == request.Id);
             if (!this.DatabaseContext.Sections.Any(x => x.Id == request.Id))
             {
-                throw new EntityNotFoundException(string.Format(Resources.Exceptions.Values["Section_Delete_EntityNotFoundException"], request.Id));
+                throw new EntityNotFoundException(string.Format(Properties.Resources.Section_Delete_EntityNotFoundException, request.Id));
             }
 
             section = this.DatabaseContext.Sections.Remove(section).Entity;

@@ -29,7 +29,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
             Section section = this.DatabaseContext.Sections.FirstOrDefault(x => x.Id == request.SectionId);
             if (section == null)
             {
-                throw new EntityNotFoundException(string.Format(Resources.Exceptions.Values["Section_EntityNotFoundException"], request.SectionId));
+                throw new EntityNotFoundException(string.Format(Properties.Resources.Section_EntityNotFoundException, request.SectionId));
             }
 
             // Create Model.Items for Positions
@@ -41,7 +41,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
             }
 
             // Create StockTaking through command
-            StockTaking stockTaking = await this.Mediator.Send(new CreateStockTakingCommand(string.Format(Resources.Exceptions.Values["StockTaking_Name_Section"], section.Id), items), cancellationToken);
+            StockTaking stockTaking = await this.Mediator.Send(new CreateStockTakingCommand(string.Format(Properties.Resources.StockTaking_Name_Section, section.Id), items), cancellationToken);
 
             // Publish DomainEvent that the StockTaking has been created
             await this.Mediator.Publish(new StockTakingCreatedDomainEvent(stockTaking), cancellationToken);

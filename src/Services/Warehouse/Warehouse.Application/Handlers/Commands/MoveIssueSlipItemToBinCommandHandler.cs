@@ -31,7 +31,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
 
             if (item == null)
             {
-                throw new EntityNotFoundException(string.Format(Resources.Exceptions.Values["IssueSlipItem_EntityNotFoundException"], request.IssueSlipId, request.WareId));
+                throw new EntityNotFoundException(string.Format(Properties.Resources.IssueSlipItem_EntityNotFoundException, request.IssueSlipId, request.WareId));
             }
 
             item.UtcMovedToBin = DateTime.UtcNow;

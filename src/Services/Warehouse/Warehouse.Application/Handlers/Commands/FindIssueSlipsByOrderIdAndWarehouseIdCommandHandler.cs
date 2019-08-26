@@ -24,7 +24,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
             Warehouse.Domain.Entities.Warehouse warehouse = this.DatabaseContext.Warehouses.Where(x => x.Id == request.WarehouseId).FirstOrDefault();
             if (warehouse == null)
             {
-                throw new EntityNotFoundException(string.Format(Resources.Exceptions.Values["Warehouse_EntityNotFoundException"], request.WarehouseId));
+                throw new EntityNotFoundException(string.Format(Properties.Resources.Warehouse_EntityNotFoundException, request.WarehouseId));
             }
 
             return this.DatabaseContext.IssueSlips.Where(x => 

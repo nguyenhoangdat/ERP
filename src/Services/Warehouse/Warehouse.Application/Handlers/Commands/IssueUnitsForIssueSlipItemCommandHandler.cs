@@ -32,7 +32,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
 
             if (item == null)
             {
-                throw new EntityNotFoundException(string.Format(Resources.Exceptions.Values["IssueSlipItem_EntityNotFoundException"], request.IssueSlipId, request.PositionId, request.WareId));
+                throw new EntityNotFoundException(string.Format(Properties.Resources.IssueSlipItem_EntityNotFoundException, request.IssueSlipId, request.PositionId, request.WareId));
             }
 
             int unitsRemainingToIssue = item.RequestedUnits - item.IssuedUnits;
@@ -43,7 +43,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
                 if (extraUnits > item.Position.CountAvailableWare())
                 {
                     // Position doesn't hold enough units to successfully issue them
-                    throw new IssueSlipItemPositionAvailableUnitsException(string.Format(Resources.Exceptions.Values["IssueSlipItem_PositionAvailableUnitsException"], request.IssueSlipId, request.PositionId, request.WareId));
+                    throw new IssueSlipItemPositionAvailableUnitsException(string.Format(Properties.Resources.IssueSlipItem_PositionAvailableUnitsException, request.IssueSlipId, request.PositionId, request.WareId));
                 }
                 else if (unassignedItem != null && extraUnits <= unassignedItem.RequestedUnits)
                 {
@@ -64,7 +64,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
                 else
                 {
                     // We don't need to issue more units. => Throw an exception
-                    throw new UnitsExceededException(string.Format(Resources.Exceptions.Values["IssueSlipItem_RequestedUnitsExceededException"], request.IssueSlipId, request.PositionId, request.WareId));
+                    throw new UnitsExceededException(string.Format(Properties.Resources.IssueSlipItem_RequestedUnitsExceededException, request.IssueSlipId, request.PositionId, request.WareId));
                 }
             }
             else

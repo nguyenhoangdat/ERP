@@ -25,7 +25,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
 
             if (position == null)
             {
-                throw new EntityNotFoundException(string.Format(Resources.Exceptions.Values["Position_EntityNotFoundException"], request.PositionId));
+                throw new EntityNotFoundException(string.Format(Properties.Resources.Position_EntityNotFoundException, request.PositionId));
             }
 
             return position.Section.Warehouse;

@@ -27,7 +27,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
 
             if (stockTaking == null)
             {
-                throw new EntityNotFoundException(string.Format(Resources.Exceptions.Values["StockTaking_EntityNotFoundException"], request.Id));
+                throw new EntityNotFoundException(string.Format(Properties.Resources.StockTaking_EntityNotFoundException, request.Id));
             }
 
             stockTaking.Name = request.Name;

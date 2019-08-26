@@ -25,7 +25,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
         {
             if (!this.DatabaseContext.Wares.Any(x => x.Id == request.WareId))
             {
-                throw new EntityNotFoundException(string.Format(Resources.Exceptions.Values["Ware_Update_EntityNotFoundException"], request.WareId));
+                throw new EntityNotFoundException(string.Format(Properties.Resources.Ware_Update_EntityNotFoundException, request.WareId));
             }
 
             Ware ware = this.DatabaseContext.Wares.FirstOrDefault(x => x.Id == request.WareId);

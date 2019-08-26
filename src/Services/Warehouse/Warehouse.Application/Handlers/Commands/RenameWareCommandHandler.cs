@@ -27,7 +27,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
 
             if (ware == null)
             {
-                throw new EntityNotFoundException(string.Format(Resources.Exceptions.Values["Ware_ProductId_EntityNotFoundException"], request.ProductId));
+                throw new EntityNotFoundException(string.Format(Properties.Resources.Ware_ProductId_EntityNotFoundException, request.ProductId));
             }
             else
             {

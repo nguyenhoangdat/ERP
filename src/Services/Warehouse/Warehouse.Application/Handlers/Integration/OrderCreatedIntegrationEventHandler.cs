@@ -65,7 +65,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Integration
                 Ware ware = this.DatabaseContext.Wares.FirstOrDefault(x => x.ProductId == item.ProductId);
                 if (ware == null)
                 {
-                    this.Logger.Log(LogLevel.Critical, Resources.Exceptions.Values["Ware_ProductId_EntityNotFoundException"], item.ProductId);
+                    this.Logger.Log(LogLevel.Critical, Properties.Resources.Ware_ProductId_EntityNotFoundException, item.ProductId);
                     continue;
                 }
 

@@ -25,7 +25,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
         {
             if (this.DatabaseContext.Wares.Any(x => x.ProductId == request.ProductId))
             {
-                throw new EntityAlreadyExitsException(string.Format(Resources.Exceptions.Values["Ware_EntityAlreadyExitsException"], request.ProductId));
+                throw new EntityAlreadyExitsException(string.Format(Properties.Resources.Ware_EntityAlreadyExitsException, request.ProductId));
             }
 
             Ware ware = this.DatabaseContext.Wares.Add(new Ware(request.ProductId, request.ProductName)).Entity;

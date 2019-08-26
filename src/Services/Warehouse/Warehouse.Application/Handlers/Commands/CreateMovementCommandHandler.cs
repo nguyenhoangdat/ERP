@@ -32,7 +32,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
             // Throw an exception if position holds a different ware
             if (ware != null && ware.Id != request.WareId)
             {
-                throw new PositionWareConflictException(string.Format(Resources.Exceptions.Values["Movement_Create_PositionWareConflictException"],
+                throw new PositionWareConflictException(string.Format(Properties.Resources.Movement_Create_PositionWareConflictException,
                     (request.Direction == Movement.Direction.In) ? "store" : "retrieve",
                     request.WareId,
                     request.PositionId,
@@ -42,7 +42,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
             // Throw an exception if position doesn't hold enough units
             if (request.Direction == Movement.Direction.Out && position.CountWare() < request.CountChange)
             {
-                throw new PositionEmptyException(string.Format(Resources.Exceptions.Values["Movement_Create_PositionEmptyException"], request.WareId, request.PositionId));
+                throw new PositionEmptyException(string.Format(Properties.Resources.Movement_Create_PositionEmptyException, request.WareId, request.PositionId));
             }
 
             int newCount = position.CountWare() + request.CountChange;
@@ -52,12 +52,12 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
                 // Check capacity (space)
                 if (!position.HasSpaceCapacity(ware, newCount))
                 {
-                    throw new PositionSpaceCapacityException(string.Format(Resources.Exceptions.Values["Movement_Create_PositionSpaceCapacityException"], ware.Id, position.Id, request.CountChange));
+                    throw new PositionSpaceCapacityException(string.Format(Properties.Resources.Movement_Create_PositionSpaceCapacityException, ware.Id, position.Id, request.CountChange));
                 }
                 // Check load capacity (weight)
                 if (!position.HasLoadCapacity(ware, newCount))
                 {
-                    throw new PositionLoadCapacityException(string.Format(Resources.Exceptions.Values["Movement_Create_PositionLoadCapacityException"], ware.Id, position.Id, request.CountChange));
+                    throw new PositionLoadCapacityException(string.Format(Properties.Resources.Movement_Create_PositionLoadCapacityException, ware.Id, position.Id, request.CountChange));
                 }
             }
 

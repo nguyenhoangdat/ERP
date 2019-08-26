@@ -25,7 +25,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
         {
             if (!this.DatabaseContext.Sections.Any(x => x.Id == request.Id))
             {
-                throw new EntityNotFoundException(string.Format(Resources.Exceptions.Values["Section_Update_EntityNotFoundException"], request.Id));
+                throw new EntityNotFoundException(string.Format(Properties.Resources.Section_Update_EntityNotFoundException, request.Id));
             }
 
             Section section = this.DatabaseContext.Sections.FirstOrDefault(x => x.Id == request.Id);

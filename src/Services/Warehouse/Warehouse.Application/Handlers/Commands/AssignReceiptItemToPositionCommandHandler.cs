@@ -31,31 +31,31 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
 
             if (items.Count() == 0)
             {
-                throw new EntityNotFoundException(string.Format(Resources.Exceptions.Values["ReceiptItem_EntitiesNotFoundException"], request.ReceiptId, request.WareId));
+                throw new EntityNotFoundException(string.Format(Properties.Resources.ReceiptItem_EntitiesNotFoundException, request.ReceiptId, request.WareId));
             }
 
             if (items.Any(x => x.PositionId == request.PositionId))
             {
-                throw new PositionAlreadyAssignedException(string.Format(Resources.Exceptions.Values["ReceiptItem_PositionAlreadyAssignedException"], request.ReceiptId, request.PositionId, request.WareId));
+                throw new PositionAlreadyAssignedException(string.Format(Properties.Resources.ReceiptItem_PositionAlreadyAssignedException, request.ReceiptId, request.PositionId, request.WareId));
             }
 
             Receipt.Item item = items.FirstOrDefault(x => x.PositionId == null);
 
             if (item == null)
             {
-                throw new FullyAssignedException(string.Format(Resources.Exceptions.Values["ReceiptItem_FullyAssignedException"], request.ReceiptId, request.WareId));
+                throw new FullyAssignedException(string.Format(Properties.Resources.ReceiptItem_FullyAssignedException, request.ReceiptId, request.WareId));
             }
 
             Position position = this.DatabaseContext.Positions.FirstOrDefault(x => x.Id == request.PositionId);
 
             if (position == null)
             {
-                throw new EntityNotFoundException(string.Format(Resources.Exceptions.Values["Position_EntityNotFoundException"], request.PositionId));
+                throw new EntityNotFoundException(string.Format(Properties.Resources.Position_EntityNotFoundException, request.PositionId));
             }
 
             if (item.WareId != position.GetWare().Id && position.GetWare() != null)
             {
-                throw new PositionWareConflictException(string.Format(Resources.Exceptions.Values["ReceiptItem_PositionWareConflictException"], request.ReceiptId, request.PositionId, request.WareId));
+                throw new PositionWareConflictException(string.Format(Properties.Resources.ReceiptItem_PositionWareConflictException, request.ReceiptId, request.PositionId, request.WareId));
             }
 
             item.PositionId = request.PositionId;

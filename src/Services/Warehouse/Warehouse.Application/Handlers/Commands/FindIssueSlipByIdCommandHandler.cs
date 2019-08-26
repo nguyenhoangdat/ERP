@@ -24,7 +24,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
 
             if (issueSlip == null)
             {
-                throw new EntityNotFoundException(string.Format(Resources.Exceptions.Values["IssueSlip_EntityNotFoundException"], request.IssueSlipId));
+                throw new EntityNotFoundException(string.Format(Properties.Resources.IssueSlip_EntityNotFoundException, request.IssueSlipId));
             }
 
             return issueSlip;

@@ -25,7 +25,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
             Warehouse.Domain.Entities.Warehouse warehouse = this.DatabaseContext.Warehouses.FirstOrDefault(x => x.Id == request.Id);
             if (this.DatabaseContext.Warehouses.Any(x => x.Id == request.Id))
             {
-                throw new EntityNotFoundException(string.Format(Resources.Exceptions.Values["Warehouse_Delete_EntityNotFoundException"], request.Id));
+                throw new EntityNotFoundException(string.Format(Properties.Resources.Warehouse_Delete_EntityNotFoundException, request.Id));
             }
 
             warehouse = this.DatabaseContext.Warehouses.Remove(warehouse).Entity;

@@ -26,13 +26,13 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
             Ware ware = this.DatabaseContext.Wares.FirstOrDefault(x => x.Id == request.WareId);
             if (ware == null)
             {
-                throw new EntityNotFoundException(string.Format(Resources.Exceptions.Values["Ware_EntityNotFoundException"], request.WareId));
+                throw new EntityNotFoundException(string.Format(Properties.Resources.Ware_EntityNotFoundException, request.WareId));
             }
 
             Warehouse.Domain.Entities.Warehouse warehouse = this.DatabaseContext.Warehouses.FirstOrDefault(x => x.Id == request.WarehouseId);
             if (warehouse == null)
             {
-                throw new EntityNotFoundException(string.Format(Resources.Exceptions.Values["Warehouse_EntityNotFoundException"], request.WarehouseId));
+                throw new EntityNotFoundException(string.Format(Properties.Resources.Warehouse_EntityNotFoundException, request.WarehouseId));
             }
 
             IQueryable<Position> positions = this.DatabaseContext.Positions
