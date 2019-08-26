@@ -1,23 +1,25 @@
-﻿using MediatR;
+﻿using AutoMapper;
+using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Azure.ServiceBus;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Restmium.ERP.Integration.Catalog;
+using Restmium.ERP.Integration.Ordering;
 using Restmium.ERP.Integration.Supply;
+using Restmium.ERP.Services.Warehouse.API.Models.Application.Mapping;
+using Restmium.ERP.Services.Warehouse.API.Models.Domain.Entities.Mapping;
 using Restmium.ERP.Services.Warehouse.Application.Commands;
+using Restmium.ERP.Services.Warehouse.Application.DependencyInjection.Selectors;
+using Restmium.ERP.Services.Warehouse.Application.DependencyInjection.Validators;
 using Restmium.ERP.Services.Warehouse.Application.Handlers.Integration;
 using Restmium.ERP.Services.Warehouse.Infrastructure.Database;
 using Restmium.Messaging;
 using Restmium.Messaging.Azure.ServiceBus;
 using System.Reflection;
-using AutoMapper;
-using Restmium.ERP.Services.Warehouse.API.Models.Domain.Entities.Mapping;
-using Restmium.ERP.Services.Warehouse.API.Models.Application.Mapping;
 
 namespace Restmium.ERP.Services.Warehouse.API
 {
@@ -78,6 +80,27 @@ namespace Restmium.ERP.Services.Warehouse.API
                     });
                 swagger.CustomSchemaIds(x => x.FullName);
             });
+
+            #region Warehouse.Application.DependencyInjection
+            #region IOrderValidator
+            if (this.Configuration.GetSection("DependencyInjection").GetSection("IOrderValidator").GetValue("DefaultOrderValidator", false))
+            {
+                services.AddTransient<IOrderValidator, DefaultOrderValidator>();
+            }
+            #endregion
+            #region IIssueSlipPositionSelector
+            if (this.Configuration.GetSection("DependencyInjection").GetSection("IIssueSlipPositionSelector").GetValue("DefaultIssueSlipPositionSelector", false))
+            {
+                services.AddTransient<IIssueSlipPositionSelector, DefaultIssueSlipPositionSelector>();
+            }
+            #endregion
+            #region IReceiptPositionSelector
+            if (this.Configuration.GetSection("DependencyInjection").GetSection("IReceiptPositionSelector").GetValue("DefaultReceiptPositionSelector", false))
+            {
+                services.AddTransient<IReceiptPositionSelector, DefaultReceiptPositionSelector>();
+            }
+            #endregion
+            #endregion
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -121,17 +144,42 @@ namespace Restmium.ERP.Services.Warehouse.API
         #region EventBus
         private void RegisterEventBus(IServiceCollection services)
         {
-            services.AddTransient<OrderCreatedIntegrationEventHandler>();
-            services.AddTransient<ProductCreatedIntegrationEventHandler>();
-            services.AddTransient<ProductRemovedIntegrationEventHandler>();
-            services.AddTransient<ProductRenamedIntegrationEventHandler>();
-            services.AddTransient<SuppliesOrderedIntegrationEventHandler>();
+            services.AddTransient(sp => {
+                DatabaseContext context = sp.GetRequiredService<DatabaseContext>();
+                ILogger<OrderCreatedIntegrationEventHandler> logger = sp.GetRequiredService<ILogger<OrderCreatedIntegrationEventHandler>>();
+                IMediator mediator = sp.GetRequiredService<IMediator>();
+                IIssueSlipPositionSelector issueSlipPositionSelector = sp.GetRequiredService<IIssueSlipPositionSelector>();
+                return new OrderCreatedIntegrationEventHandler(context, logger, mediator, issueSlipPositionSelector);
+            }); // OrderCreatedIntegrationEventHandler
+            services.AddTransient(sp => {
+                ILogger<ProductCreatedIntegrationEventHandler> logger = sp.GetRequiredService<ILogger<ProductCreatedIntegrationEventHandler>>();
+                IMediator mediator = sp.GetRequiredService<IMediator>();
+                return new ProductCreatedIntegrationEventHandler(logger, mediator);
+            }); // ProductCreatedIntegrationEventHandler
+            services.AddTransient(sp => {
+                DatabaseContext context = sp.GetRequiredService<DatabaseContext>();
+                ILogger<ProductRemovedIntegrationEventHandler> logger = sp.GetRequiredService<ILogger<ProductRemovedIntegrationEventHandler>>();
+                IMediator mediator = sp.GetRequiredService<IMediator>();
+                return new ProductRemovedIntegrationEventHandler(context, logger, mediator);
+            }); // ProductRemovedIntegrationEventHandler
+            services.AddTransient(sp => {
+                ILogger<ProductRenamedIntegrationEvent> logger = sp.GetRequiredService<ILogger<ProductRenamedIntegrationEvent>>();
+                IMediator mediator = sp.GetRequiredService<IMediator>();
+                return new ProductRenamedIntegrationEventHandler(logger, mediator);
+            }); // ProductRenamedIntegrationEventHandler
+            services.AddTransient(sp => {
+                DatabaseContext context = sp.GetRequiredService<DatabaseContext>();
+                ILogger<SuppliesOrderedIntegrationEventHandler> logger = sp.GetRequiredService<ILogger<SuppliesOrderedIntegrationEventHandler>>();
+                IMediator mediator = sp.GetRequiredService<IMediator>();
+                IReceiptPositionSelector positionSelector = sp.GetRequiredService<IReceiptPositionSelector>();
+                return new SuppliesOrderedIntegrationEventHandler(context, logger, mediator, positionSelector);
+            }); // SuppliesOrderedIntegrationEventHandler
         }
         private void ConfigureEventBus(IApplicationBuilder app)
         {
             IEventBus eventBus = app.ApplicationServices.GetRequiredService<IEventBus>();
 
-            //TODO: Add missing subscriptions
+            eventBus.Subscribe<OrderCreatedIntegrationEvent, OrderCreatedIntegrationEventHandler>();
             eventBus.Subscribe<ProductCreatedIntegrationEvent, ProductCreatedIntegrationEventHandler>();
             eventBus.Subscribe<ProductRemovedIntegrationEvent, ProductRemovedIntegrationEventHandler>();
             eventBus.Subscribe<ProductRenamedIntegrationEvent, ProductRenamedIntegrationEventHandler>();

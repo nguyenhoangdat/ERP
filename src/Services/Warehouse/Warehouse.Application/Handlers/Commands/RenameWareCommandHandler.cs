@@ -2,6 +2,7 @@
 using Restmium.ERP.Services.Warehouse.Application.Commands;
 using Restmium.ERP.Services.Warehouse.Domain.Entities;
 using Restmium.ERP.Services.Warehouse.Domain.Events;
+using Restmium.ERP.Services.Warehouse.Domain.Exceptions;
 using Restmium.ERP.Services.Warehouse.Infrastructure.Database;
 using System.Linq;
 using System.Threading;
@@ -26,7 +27,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
 
             if (ware == null)
             {
-                await this.Mediator.Publish(new WareRenameFailedDomainEvent(request.ProductId));
+                throw new EntityNotFoundException(string.Format(Resources.Exceptions.Values["Ware_ProductId_EntityNotFoundException"], request.ProductId));
             }
             else
             {
