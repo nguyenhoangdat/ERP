@@ -23,5 +23,11 @@ namespace Restmium.ERP.BuildingBlocks.Common.Entities
         /// DateTime when the entity was moved to the bin. Entity should be removed after 30 days in the bin.
         /// </summary>
         public DateTime? UtcMovedToBin { get; set; }
+
+        /// <summary>
+        /// Indicates whether the entity was moved to bin with its parent entity.
+        /// </summary>
+        [Required]
+        public bool MovedToBinWithParent { get; set; }
     }
 }
