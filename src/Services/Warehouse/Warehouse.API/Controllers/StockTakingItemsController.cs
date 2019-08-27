@@ -64,23 +64,18 @@ namespace Warehouse.API.Controllers
             }
         }
 
-        // PUT: api/StockTakingItems/5
-        [HttpPut("{stockTakingId}/{positionId}")]
+        // GET: api/StockTakingItems/UpdateCountedStock/5/2/30
+        [HttpGet("UpdateCountedStock/{stockTakingId}/{positionId}/{countedStock}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
         [ProducesResponseType(500)]
-        public async Task<IActionResult> PutStockTakingItem(int stockTakingId, long positionId, StockTakingDTO.ItemDTO item)
+        public async Task<ActionResult<StockTakingDTO.ItemDTO>> GetStockTakingItem(int stockTakingId, long positionId, int countedStock)
         {
-            if (stockTakingId != item.StockTakingId || positionId != item.PositionId)
-            {
-                return this.BadRequest();
-            }
-
             try
             {
-                await this.Mediator.Send(new UpdateStockTakingItemCommand(item.StockTakingId, item.WareId, item.PositionId, item.CurrentStock, item.CountedStock, item.UtcCounted));
-                return this.NoContent();
+                StockTaking.Item item = await this.Mediator.Send(new UpdateStockTakingItemCountedStockCommand(stockTakingId, positionId, countedStock));
+                return this.Ok(this.Mapper.Map<StockTakingDTO.ItemDTO>(item));
             }
             catch (EntityNotFoundException ex)
             {

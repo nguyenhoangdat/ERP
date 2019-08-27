@@ -31,10 +31,10 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
                 StockTaking.Item entity = this.DatabaseContext.StockTakingItems.FirstOrDefault(x => x.PositionId == request.ToPositionId && x.UtcCounted == null);
                 if (entity != null)
                 {
-                    output.Add(await this.Mediator.Send(new UpdateStockTakingItemCommand(entity.StockTakingId, entity.WareId, entity.PositionId, entity.CurrentStock + item.CurrentStock, entity.CountedStock, entity.UtcCounted), cancellationToken));
+                    output.Add(await this.Mediator.Send(new UpdateStockTakingItemCurrentStockCommand(entity.StockTakingId, entity.PositionId, entity.CurrentStock + item.CurrentStock), cancellationToken));
                 }
 
-                output.Add(await this.Mediator.Send(new UpdateStockTakingItemCommand(item.StockTakingId, item.WareId, item.PositionId, 0, 0, DateTime.UtcNow), cancellationToken));
+                output.Add(await this.Mediator.Send(new MoveStockTakingItemToBinCommand(item.PositionId, item.StockTakingId), cancellationToken));
             }
 
             return output;
