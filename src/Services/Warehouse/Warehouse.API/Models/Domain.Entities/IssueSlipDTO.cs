@@ -18,7 +18,5 @@ namespace Restmium.ERP.Services.Warehouse.API.Models.Domain.Entities
 
         [Required]
         public DateTime UtcDeliveryDate { get; set; }
-
-        //TODO: Add Collection of Items
     }
 }

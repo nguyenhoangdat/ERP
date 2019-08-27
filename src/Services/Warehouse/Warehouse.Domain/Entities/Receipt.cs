@@ -40,7 +40,7 @@ namespace Restmium.ERP.Services.Warehouse.Domain.Entities
         [Required]
         public long Id { get; set; }
 
-        //TODO: Add supplier & transport details (contact, ...)
+        //TODO: 2019.2 Add supplier & transport details (contact, ...)
 
         [Required]
         public DateTime UtcExpected { get; set; }

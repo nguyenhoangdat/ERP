@@ -96,7 +96,7 @@ namespace Restmium.ERP.Services.Warehouse.Domain.Entities.Extensions
                 throw new ArgumentNullException(nameof(ware));
             }
 
-            return position.MaxSpaceCapacity(ware, false); //HACK: Use property of Ware in 2020.1
+            return position.MaxSpaceCapacity(ware, false); //HACK: 2020.1 Use property of Ware
         }
 
         private static int MaxSpaceCapacity(this Position position, Ware ware, bool thisSideUp)

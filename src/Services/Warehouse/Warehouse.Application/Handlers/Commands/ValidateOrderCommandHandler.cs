@@ -17,7 +17,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
 
         public async Task<bool> Handle(ValidateOrderCommand request, CancellationToken cancellationToken)
         {
-            // TODO: Reimplement in 2019.2
+            // TODO: 2020.1 Reimplement
 
             bool isValid = true;
 
@@ -26,8 +26,6 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
                 if (this.OrderValidator.IsValid(item.WareId, item.Count) == false)
                 {
                     isValid = false;
-
-                    //TODO: Publish notification
                 }
             }
 

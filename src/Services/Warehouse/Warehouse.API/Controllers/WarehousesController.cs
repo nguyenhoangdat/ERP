@@ -21,7 +21,7 @@ namespace Warehouse.API.Controllers
     {
         protected IMapper Mapper { get; }
         protected IMediator Mediator { get; }
-        protected DatabaseContext DatabaseContext { get; } //HACK: Remove as soon as the problem with multiple warehouses is solved
+        protected DatabaseContext DatabaseContext { get; } //HACK: 2020.1 Warehouse RESTRICTION
 
         public WarehousesController(IMapper mapper, IMediator mediator, DatabaseContext context)
         {
@@ -73,13 +73,13 @@ namespace Warehouse.API.Controllers
         [HttpPost]
         [ProducesResponseType(201)]
         [ProducesResponseType(400)]
-        [ProducesResponseType(403)] //HACK: Warehouse RESTRICTION
+        [ProducesResponseType(403)] //HACK: 2020.1 Warehouse RESTRICTION
         [ProducesResponseType(500)]
         public async Task<ActionResult<WarehouseDTO>> PostWarehouse(WarehouseDTO warehouse)
         {
             if (this.DatabaseContext.Warehouses.Count() > 0)
             {
-                return this.StatusCode(403); //TODO: Warehouse RESTRICTION
+                return this.StatusCode(403); //HACK: 2020.1 Warehouse RESTRICTION
             }
 
             this.ModelState.Remove("Id");
