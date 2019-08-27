@@ -23,7 +23,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
 
         public async Task<Ware> Handle(RenameWareCommand request, CancellationToken cancellationToken)
         {
-            Ware ware = this.DatabaseContext.Wares.Where(x => x.ProductId == request.ProductId).FirstOrDefault();
+            Ware ware = this.DatabaseContext.Wares.FirstOrDefault(x => x.ProductId == request.ProductId);
 
             if (ware == null)
             {

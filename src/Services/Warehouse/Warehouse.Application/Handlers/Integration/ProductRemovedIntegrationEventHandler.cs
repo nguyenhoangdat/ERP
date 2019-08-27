@@ -25,7 +25,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Integration
 
         public async Task Handle(ProductRemovedIntegrationEvent @event)
         {
-            Ware ware = this.DatabaseContext.Wares.Where(x => x.ProductId == @event.ProductId).FirstOrDefault();
+            Ware ware = this.DatabaseContext.Wares.FirstOrDefault(x => x.ProductId == @event.ProductId);
             if (ware == null)
             {
                 this.Logger.Log(LogLevel.Critical, Properties.Resources.Ware_ProductId_EntityNotFoundException, @event.ProductId);

@@ -21,7 +21,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
 
         public async Task<IEnumerable<IssueSlip>> Handle(FindIssueSlipsByOrderIdAndWarehouseIdCommand request, CancellationToken cancellationToken)
         {
-            Warehouse.Domain.Entities.Warehouse warehouse = this.DatabaseContext.Warehouses.Where(x => x.Id == request.WarehouseId).FirstOrDefault();
+            Warehouse.Domain.Entities.Warehouse warehouse = this.DatabaseContext.Warehouses.FirstOrDefault(x => x.Id == request.WarehouseId);
             if (warehouse == null)
             {
                 throw new EntityNotFoundException(string.Format(Properties.Resources.Warehouse_EntityNotFoundException, request.WarehouseId));
