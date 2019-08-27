@@ -66,7 +66,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
             await this.DatabaseContext.SaveChangesAsync(cancellationToken);
 
             // Publish Notification (Domain Event)
-            await this.Mediator.Publish(new MovementCreatedDomainEvent(movement), cancellationToken);
+            await this.Mediator.Publish(new MovementCreatedDomainEvent(movement.PositionId, movement.WareId, movement.CountTotal), cancellationToken);
 
             return movement;
         }

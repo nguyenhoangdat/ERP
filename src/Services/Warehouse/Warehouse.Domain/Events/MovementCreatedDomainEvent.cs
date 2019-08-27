@@ -1,15 +1,18 @@
 ﻿using MediatR;
-using Restmium.ERP.Services.Warehouse.Domain.Entities;
 
 namespace Restmium.ERP.Services.Warehouse.Domain.Events
 {
     public class MovementCreatedDomainEvent : INotification
     {
-        public MovementCreatedDomainEvent(Movement movement)
+        public MovementCreatedDomainEvent(long positionId, int wareId, int countTotal)
         {
-            this.Movement = movement;
+            this.PositionId = positionId;
+            this.WareId = wareId;
+            this.CountTotal = countTotal;
         }
 
-        public Movement Movement { get; }
+        public long PositionId { get; }
+        public int WareId { get; }
+        public int CountTotal { get; }
     }
 }

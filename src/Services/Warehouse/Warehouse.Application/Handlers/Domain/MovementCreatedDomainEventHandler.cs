@@ -21,16 +21,14 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Domain
 
         public async Task Handle(MovementCreatedDomainEvent notification, CancellationToken cancellationToken)
         {
-            StockTaking.Item item = this.DatabaseContext.StockTakingItems.Where(x =>
-                x.PositionId == notification.Movement.PositionId &&
-                x.WareId == notification.Movement.WareId &&
-                x.UtcCounted == null).FirstOrDefault();
+            StockTaking.Item item = this.DatabaseContext.StockTakingItems.FirstOrDefault(x =>
+                x.PositionId == notification.PositionId &&
+                x.WareId == notification.WareId &&
+                x.UtcCounted == null);
 
             if (item != null)
             {
-                item.CurrentStock = notification.Movement.CountTotal;
-
-                item = this.DatabaseContext.StockTakingItems.Update(item).Entity;
+                item.CurrentStock = notification.CountTotal;
                 await this.DatabaseContext.SaveChangesAsync(cancellationToken);
 
                 await this.Mediator.Publish(new StockTakingItemUpdatedDomainEvent(item), cancellationToken);
