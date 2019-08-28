@@ -34,7 +34,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
                     output.Add(await this.Mediator.Send(new UpdateStockTakingItemCurrentStockCommand(entity.StockTakingId, entity.PositionId, entity.CurrentStock + item.CurrentStock), cancellationToken));
                 }
 
-                output.Add(await this.Mediator.Send(new MoveStockTakingItemToBinCommand(item.PositionId, item.StockTakingId), cancellationToken));
+                output.Add(await this.Mediator.Send(new MoveStockTakingItemToBinCommand(item.StockTakingId, item.PositionId, false), cancellationToken));
             }
 
             return output;

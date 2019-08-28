@@ -3,15 +3,15 @@ using Restmium.ERP.Services.Warehouse.Domain.Entities;
 
 namespace Restmium.ERP.Services.Warehouse.Application.Commands
 {
-    public class MoveIssueSlipToBinCommand : IRequest<IssueSlip>
+    public class MoveMovementToBinCommand : IRequest<Movement>
     {
-        public MoveIssueSlipToBinCommand(long issueSlipId, bool movedToBinInCascade)
+        public MoveMovementToBinCommand(long movementId, bool movedToBinInCascade)
         {
-            this.IssueSlipId = issueSlipId;
+            this.MovementId = movementId;
             this.MovedToBinInCascade = movedToBinInCascade;
         }
 
-        public long IssueSlipId { get; }
+        public long MovementId { get; }
         public bool MovedToBinInCascade { get; }
     }
 }

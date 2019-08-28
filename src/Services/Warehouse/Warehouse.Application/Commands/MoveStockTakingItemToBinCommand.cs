@@ -5,13 +5,15 @@ namespace Restmium.ERP.Services.Warehouse.Application.Commands
 {
     public class MoveStockTakingItemToBinCommand : IRequest<StockTaking.Item>
     {
-        public MoveStockTakingItemToBinCommand(long positionId, int stockTakingId)
+        public MoveStockTakingItemToBinCommand(int stockTakingId, long positionId, bool movedToBinInCascade)
         {
-            this.PositionId = positionId;
             this.StockTakingId = stockTakingId;
+            this.PositionId = positionId;
+            this.MovedToBinInCascade = movedToBinInCascade;
         }
 
-        public long PositionId { get; set; }
-        public int StockTakingId { get; set; }
+        public int StockTakingId { get; }
+        public long PositionId { get; }
+        public bool MovedToBinInCascade { get; }
     }
 }

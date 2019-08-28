@@ -120,17 +120,22 @@ namespace Warehouse.API.Controllers
         [HttpGet("MoveToBin/{id}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
+        [ProducesResponseType(409)]
         [ProducesResponseType(500)]
         public async Task<ActionResult<PositionDTO>> GetMoveToBin(long id)
         {
             try
             {
-                Position entity = await this.Mediator.Send(new MovePositionToBinCommand(id));
+                Position entity = await this.Mediator.Send(new MovePositionToBinCommand(id, false));
                 return this.Ok(this.Mapper.Map<PositionDTO>(entity));
             }
             catch (EntityNotFoundException ex)
             {
                 return this.NotFound(ex.Message);
+            }
+            catch (EntityMoveToBinException ex)
+            {
+                return this.Conflict(ex.Message);
             }
             catch (Exception)
             {

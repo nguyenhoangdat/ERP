@@ -264,4 +264,37 @@
   <data name="StockTaking_Name_Warehouse" xml:space="preserve">
     <value>Stock-Taking in Warehouse(Id={0})</value>
   </data>
+  <data name="Position_EntityMoveToBinException" xml:space="preserve">
+    <value>Unable to move Position(Id={0}) to bin!</value>
+  </data>
+  <data name="Section_EntityMoveToBinException" xml:space="preserve">
+    <value>Unable to move Section(Id={0}) to bin!</value>
+  </data>
+  <data name="Movement_EntityNotFoundException" xml:space="preserve">
+    <value>Movement(Id={0}) not found!</value>
+  </data>
+  <data name="ReceiptItem_EntityMoveToBinException" xml:space="preserve">
+    <value>Unable to move Receipt.Item(ReceiptId={0}, PositionId={1}, WareId={2}) to bin!</value>
+  </data>
+  <data name="StockTakingItem_EntityMoveToBinException" xml:space="preserve">
+    <value>Unable to move StockTakingItem(StockTakingId={0}, PositionId={1}) to bin!</value>
+  </data>
+  <data name="StockTaking_EntityMoveToBinException" xml:space="preserve">
+    <value>Unable to move StockTaking(Id={0}) to bin!</value>
+  </data>
+  <data name="Warehouse_EntityMoveToBinException" xml:space="preserve">
+    <value>Unable to move Warehouse(Id={0}) to bin!</value>
+  </data>
+  <data name="IssueSlip_EntityMoveToBinException" xml:space="preserve">
+    <value>Unable to move IssueSlip(Id={0}) to bin!</value>
+  </data>
+  <data name="Ware_EntityMoveToBinException" xml:space="preserve">
+    <value>Unable to move Ware(Id={0}) to bin!</value>
+  </data>
+  <data name="IssueSlipItem_EntityMoveToBinException" xml:space="preserve">
+    <value>Unable to move IssueSlip.Item(IssueSlipId={0}, PositionId={1}, WareId={2}) to bin!</value>
+  </data>
+  <data name="Movement_EntityMoveToBinException" xml:space="preserve">
+    <value>Unable to move Movement(Id={0}) to bin!</value>
+  </data>
 </root>

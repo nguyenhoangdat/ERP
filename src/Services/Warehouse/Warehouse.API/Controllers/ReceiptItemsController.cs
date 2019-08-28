@@ -8,7 +8,6 @@ using Restmium.ERP.Services.Warehouse.Application.Models;
 using Restmium.ERP.Services.Warehouse.Domain.Entities;
 using Restmium.ERP.Services.Warehouse.Domain.Exceptions;
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Warehouse.API.Controllers
@@ -69,17 +68,22 @@ namespace Warehouse.API.Controllers
         [HttpGet("MoveToBin/{receiptId}/{positionId}/{wareId}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
+        [ProducesResponseType(409)]
         [ProducesResponseType(500)]
         public async Task<ActionResult<ReceiptDTO.ItemDTO>> GetMoveToBin(long receiptId, long? positionId, int wareId)
         {
             try
             {
-                Receipt.Item entity = await this.Mediator.Send(new MoveReceiptItemToBinCommand(wareId, positionId, receiptId));
+                Receipt.Item entity = await this.Mediator.Send(new MoveReceiptItemToBinCommand(receiptId, positionId, wareId, false));
                 return this.Ok(this.Mapper.Map<ReceiptDTO.ItemDTO>(entity));
             }
             catch (EntityNotFoundException ex)
             {
                 return this.NotFound(ex.Message);
+            }
+            catch (EntityMoveToBinException ex)
+            {
+                return this.Conflict(ex.Message);
             }
             catch (Exception)
             {

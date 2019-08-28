@@ -25,9 +25,9 @@ namespace Restmium.ERP.BuildingBlocks.Common.Entities
         public DateTime? UtcMovedToBin { get; set; }
 
         /// <summary>
-        /// Indicates whether the entity was moved to bin with its parent entity.
+        /// Indicates whether the entity was moved to bin in cascade.
         /// </summary>
         [Required]
-        public bool MovedToBinWithParent { get; set; }
+        public bool MovedToBinInCascade { get; set; }
     }
 }

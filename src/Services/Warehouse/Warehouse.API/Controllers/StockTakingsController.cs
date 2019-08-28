@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using MediatR;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Restmium.ERP.Services.Warehouse.API.Models.Application;
 using Restmium.ERP.Services.Warehouse.API.Models.Domain.Entities;
@@ -12,6 +7,8 @@ using Restmium.ERP.Services.Warehouse.Application.Commands;
 using Restmium.ERP.Services.Warehouse.Application.Models;
 using Restmium.ERP.Services.Warehouse.Domain.Entities;
 using Restmium.ERP.Services.Warehouse.Domain.Exceptions;
+using System;
+using System.Threading.Tasks;
 
 namespace Warehouse.API.Controllers
 {
@@ -115,17 +112,22 @@ namespace Warehouse.API.Controllers
         [HttpGet("MoveToBin/{id}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
+        [ProducesResponseType(409)]
         [ProducesResponseType(500)]
         public async Task<ActionResult<StockTakingDTO>> GetMoveToBin(int id)
         {
             try
             {
-                StockTaking entity = await this.Mediator.Send(new MoveStockTakingToBinCommand(id));
+                StockTaking entity = await this.Mediator.Send(new MoveStockTakingToBinCommand(id, false));
                 return this.Ok(this.Mapper.Map<StockTakingDTO>(entity));
             }
             catch (EntityNotFoundException ex)
             {
                 return this.NotFound(ex.Message);
+            }
+            catch (EntityMoveToBinException ex)
+            {
+                return this.Conflict(ex.Message);
             }
             catch (Exception)
             {

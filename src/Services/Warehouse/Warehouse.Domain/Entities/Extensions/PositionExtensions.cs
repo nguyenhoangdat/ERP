@@ -137,5 +137,43 @@ namespace Restmium.ERP.Services.Warehouse.Domain.Entities.Extensions
         {
             return position.StockTakingItems.Count(x => x.UtcCounted == null) == 0;
         }
+
+        public static bool CanBeMovedToBin(this Position position)
+        {
+            if (position.UtcMovedToBin != null || position.CountWare() != 0)
+            {
+                return false;
+            }
+
+            foreach (StockTaking.Item item in position.StockTakingItems.Where(x => x.UtcMovedToBin == null))
+            {
+                if (item.CanBeMovedToBin() == false)
+                {
+                    return false;
+                }
+            }
+
+            foreach (Receipt.Item item in position.ReceiptItems.Where(x => x.UtcMovedToBin == null))
+            {
+                if (item.CanBeMovedToBin() == false)
+                {
+                    return false;
+                }
+            }
+
+            foreach (IssueSlip.Item item in position.IssueSlipItems.Where(x => x.UtcMovedToBin == null))
+            {
+                if (item.CanBeMovedToBin() == false)
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+        public static bool CanBeDeleted(this Position position)
+        {
+            throw new NotImplementedException("PositionExtensions.CanBeDeleted()"); // TODO: 2019.2 Implement CanBeDeleted
+        }
     }
 }
