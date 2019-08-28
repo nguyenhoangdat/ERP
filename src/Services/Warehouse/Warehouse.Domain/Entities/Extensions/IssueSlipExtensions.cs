@@ -37,7 +37,9 @@ namespace Restmium.ERP.Services.Warehouse.Domain.Entities.Extensions
         }
         public static bool CanBeRestoredFromBin(this IssueSlip issueSlip)
         {
-            return issueSlip.UtcMovedToBin != null;
+            return
+                issueSlip.UtcMovedToBin != null &&
+                !issueSlip.Items.Where(x => x.MovedToBinInCascade == true).Any(x => x.CanBeRestoredFromBin() == false);
         }
     }
 }

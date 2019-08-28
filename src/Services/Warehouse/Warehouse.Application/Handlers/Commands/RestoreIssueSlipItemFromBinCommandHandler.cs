@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Restmium.ERP.Services.Warehouse.Application.Commands;
 using Restmium.ERP.Services.Warehouse.Domain.Entities;
+using Restmium.ERP.Services.Warehouse.Domain.Entities.Extensions;
 using Restmium.ERP.Services.Warehouse.Domain.Events;
 using Restmium.ERP.Services.Warehouse.Domain.Exceptions;
 using Restmium.ERP.Services.Warehouse.Infrastructure.Database;
@@ -32,8 +33,17 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
             {
                 throw new EntityNotFoundException(string.Format(Properties.Resources.IssueSlipItem_EntityNotFoundException, request.IssueSlipId, request.WareId));
             }
+            if (item.IssueSlip.CanBeRestoredFromBin())
+            {
+                await this.Mediator.Send(new RestoreIssueSlipFromBinCommand(item.IssueSlipId), cancellationToken);
+            }
+            if (item.CanBeRestoredFromBin() == false)
+            {
+                throw new EntityRestoreFromBinException(string.Format(Properties.Resources.IssueSlipItem_EntityRestoreFromBinException, request.IssueSlipId, request.PositionId, request.WareId));
+            }
 
             item.UtcMovedToBin = null;
+            item.MovedToBinInCascade = false;
 
             if (item.IssuedUnits < item.RequestedUnits)
             {

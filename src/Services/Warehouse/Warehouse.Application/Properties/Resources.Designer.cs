@@ -88,6 +88,15 @@ namespace Restmium.ERP.Services.Warehouse.Application.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Unable to restore IssueSlip(Id={0}) from bin!.
+        /// </summary>
+        public static string IssueSlip_EntityRestoreFromBinException {
+            get {
+                return ResourceManager.GetString("IssueSlip_EntityRestoreFromBinException", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Unable to update IssueSlip(Id={0}). IssueSlip not found!.
         /// </summary>
         public static string IssueSlip_Update_EntityNotFoundException {
@@ -120,6 +129,15 @@ namespace Restmium.ERP.Services.Warehouse.Application.Properties {
         public static string IssueSlipItem_EntityNotFoundException {
             get {
                 return ResourceManager.GetString("IssueSlipItem_EntityNotFoundException", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unable to restore IssueSlip.Item(IssueSlipId={0}, PositionId={1}, WareId={2}) from bin!.
+        /// </summary>
+        public static string IssueSlipItem_EntityRestoreFromBinException {
+            get {
+                return ResourceManager.GetString("IssueSlipItem_EntityRestoreFromBinException", resourceCulture);
             }
         }
         
@@ -214,6 +232,15 @@ namespace Restmium.ERP.Services.Warehouse.Application.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Unable to move Movement(Id={0}) to bin!.
+        /// </summary>
+        public static string Movement_EntityMoveToBinException {
+            get {
+                return ResourceManager.GetString("Movement_EntityMoveToBinException", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Movement(Id={0}) not found!.
         /// </summary>
         public static string Movement_EntityNotFoundException {
@@ -286,6 +313,15 @@ namespace Restmium.ERP.Services.Warehouse.Application.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Unable to restore Receipt(Id={0}) from bin!.
+        /// </summary>
+        public static string Receipt_EntityRestoreFromBinException {
+            get {
+                return ResourceManager.GetString("Receipt_EntityRestoreFromBinException", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Unable to update Receipt(Id={0}). Receipt not found!.
         /// </summary>
         public static string Receipt_Update_EntityNotFoundException {
@@ -336,6 +372,15 @@ namespace Restmium.ERP.Services.Warehouse.Application.Properties {
         public static string ReceiptItem_EntityNotFoundException {
             get {
                 return ResourceManager.GetString("ReceiptItem_EntityNotFoundException", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unable to restore Receipt.Item(ReceiptId={0}, PositiondId={1}, WareId={2}) from bin!.
+        /// </summary>
+        public static string ReceiptItem_EntityRestoreFromBinException {
+            get {
+                return ResourceManager.GetString("ReceiptItem_EntityRestoreFromBinException", resourceCulture);
             }
         }
         
@@ -439,6 +484,15 @@ namespace Restmium.ERP.Services.Warehouse.Application.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Unable to restore Section(Id={0}} from bin!.
+        /// </summary>
+        public static string Section_EntityRestoreFromBinException {
+            get {
+                return ResourceManager.GetString("Section_EntityRestoreFromBinException", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Unable to update Section(Id={0}). Section not found!.
         /// </summary>
         public static string Section_Update_EntityNotFoundException {
@@ -462,6 +516,15 @@ namespace Restmium.ERP.Services.Warehouse.Application.Properties {
         public static string StockTaking_EntityNotFoundException {
             get {
                 return ResourceManager.GetString("StockTaking_EntityNotFoundException", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unable to restore StockTaking(Id={0}) from bin!.
+        /// </summary>
+        public static string StockTaking_EntityRestoreFromBinException {
+            get {
+                return ResourceManager.GetString("StockTaking_EntityRestoreFromBinException", resourceCulture);
             }
         }
         
@@ -502,6 +565,15 @@ namespace Restmium.ERP.Services.Warehouse.Application.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Unable to restore StockTaking.Item(StockTakingId={0}, PositionId={1}) from bin!.
+        /// </summary>
+        public static string StockTakingItem_EntityRestoreFromBinException {
+            get {
+                return ResourceManager.GetString("StockTakingItem_EntityRestoreFromBinException", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Unable to delete Ware(Id={0}). Ware not found!.
         /// </summary>
         public static string Ware_Delete_EntityNotFoundException {
@@ -534,6 +606,15 @@ namespace Restmium.ERP.Services.Warehouse.Application.Properties {
         public static string Ware_EntityNotFoundException {
             get {
                 return ResourceManager.GetString("Ware_EntityNotFoundException", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unable to restore Ware(Id={0}) from bin!.
+        /// </summary>
+        public static string Ware_EntityRestoreFromBinException {
+            get {
+                return ResourceManager.GetString("Ware_EntityRestoreFromBinException", resourceCulture);
             }
         }
         
@@ -579,6 +660,15 @@ namespace Restmium.ERP.Services.Warehouse.Application.Properties {
         public static string Warehouse_EntityNotFoundException {
             get {
                 return ResourceManager.GetString("Warehouse_EntityNotFoundException", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unable to restore Warehouse(Id={0}) from bin!.
+        /// </summary>
+        public static string Warehouse_EntityRestoreFromBinException {
+            get {
+                return ResourceManager.GetString("Warehouse_EntityRestoreFromBinException", resourceCulture);
             }
         }
         

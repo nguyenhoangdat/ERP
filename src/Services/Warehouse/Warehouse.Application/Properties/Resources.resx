@@ -294,4 +294,34 @@
   <data name="IssueSlipItem_EntityMoveToBinException" xml:space="preserve">
     <value>Unable to move IssueSlip.Item(IssueSlipId={0}, PositionId={1}, WareId={2}) to bin!</value>
   </data>
+  <data name="IssueSlip_EntityRestoreFromBinException" xml:space="preserve">
+    <value>Unable to restore IssueSlip(Id={0}) from bin!</value>
+  </data>
+  <data name="Movement_EntityMoveToBinException" xml:space="preserve">
+    <value>Unable to move Movement(Id={0}) to bin!</value>
+  </data>
+  <data name="Section_EntityRestoreFromBinException" xml:space="preserve">
+    <value>Unable to restore Section(Id={0}} from bin!</value>
+  </data>
+  <data name="Warehouse_EntityRestoreFromBinException" xml:space="preserve">
+    <value>Unable to restore Warehouse(Id={0}) from bin!</value>
+  </data>
+  <data name="IssueSlipItem_EntityRestoreFromBinException" xml:space="preserve">
+    <value>Unable to restore IssueSlip.Item(IssueSlipId={0}, PositionId={1}, WareId={2}) from bin!</value>
+  </data>
+  <data name="ReceiptItem_EntityRestoreFromBinException" xml:space="preserve">
+    <value>Unable to restore Receipt.Item(ReceiptId={0}, PositiondId={1}, WareId={2}) from bin!</value>
+  </data>
+  <data name="Receipt_EntityRestoreFromBinException" xml:space="preserve">
+    <value>Unable to restore Receipt(Id={0}) from bin!</value>
+  </data>
+  <data name="StockTakingItem_EntityRestoreFromBinException" xml:space="preserve">
+    <value>Unable to restore StockTaking.Item(StockTakingId={0}, PositionId={1}) from bin!</value>
+  </data>
+  <data name="StockTaking_EntityRestoreFromBinException" xml:space="preserve">
+    <value>Unable to restore StockTaking(Id={0}) from bin!</value>
+  </data>
+  <data name="Ware_EntityRestoreFromBinException" xml:space="preserve">
+    <value>Unable to restore Ware(Id={0}) from bin!</value>
+  </data>
 </root>
