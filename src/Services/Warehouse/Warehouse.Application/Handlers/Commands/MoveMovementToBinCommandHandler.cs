@@ -28,13 +28,6 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
             {
                 throw new EntityNotFoundException(string.Format(Properties.Resources.Movement_EntityNotFoundException, request.MovementId));
             }
-            if (request.MovedToBinInCascade == false)
-            {
-                if (movement.CanBeMovedToBin() == false)
-                {
-                    throw new EntityMoveToBinException(string.Format(Properties.Resources.Movement_EntityMoveToBinException, request.MovementId));
-                }
-            }
 
             movement.UtcMovedToBin = DateTime.UtcNow;
             movement.MovedToBinInCascade = request.MovedToBinInCascade;

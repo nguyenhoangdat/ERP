@@ -214,15 +214,6 @@ namespace Restmium.ERP.Services.Warehouse.Application.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Unable to move Movement(Id={0}) to bin!.
-        /// </summary>
-        public static string Movement_EntityMoveToBinException {
-            get {
-                return ResourceManager.GetString("Movement_EntityMoveToBinException", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Movement(Id={0}) not found!.
         /// </summary>
         public static string Movement_EntityNotFoundException {

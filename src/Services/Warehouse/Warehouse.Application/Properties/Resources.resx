@@ -294,7 +294,4 @@
   <data name="IssueSlipItem_EntityMoveToBinException" xml:space="preserve">
     <value>Unable to move IssueSlip.Item(IssueSlipId={0}, PositionId={1}, WareId={2}) to bin!</value>
   </data>
-  <data name="Movement_EntityMoveToBinException" xml:space="preserve">
-    <value>Unable to move Movement(Id={0}) to bin!</value>
-  </data>
 </root>
