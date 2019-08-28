@@ -6,5 +6,13 @@
         {
             return item.UtcMovedToBin == null && item.UtcCounted != null;
         }
+        public static bool CanBeRestoredFromBin(this StockTaking.Item item)
+        {
+            return
+                item.UtcMovedToBin != null &&
+                item.StockTaking.CanBeMovedToBin() &&
+                item.Ware.CanBeMovedToBin() &&
+                item.Position.CanBeMovedToBin();
+        }
     }
 }

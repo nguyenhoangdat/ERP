@@ -171,6 +171,11 @@ namespace Restmium.ERP.Services.Warehouse.Domain.Entities.Extensions
 
             return true;
         }
+        public static bool CanBeRestoredFromBin(this Position position)
+        {
+            return position.UtcMovedToBin != null && position.Section.CanBeMovedToBin();
+        }
+
         public static bool CanBeDeleted(this Position position)
         {
             throw new NotImplementedException("PositionExtensions.CanBeDeleted()"); // TODO: 2019.2 Implement CanBeDeleted

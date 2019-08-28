@@ -6,5 +6,13 @@
         {
             return item.UtcMovedToBin == null && item.RequestedUnits == item.IssuedUnits;
         }
+        public static bool CanBeRestoredFromBin(this IssueSlip.Item item)
+        {
+            return
+                item.UtcMovedToBin != null &&
+                item.IssueSlip.CanBeMovedToBin() &&
+                item.Ware.CanBeMovedToBin() &&
+                item.Position.CanBeMovedToBin();
+        }
     }
 }

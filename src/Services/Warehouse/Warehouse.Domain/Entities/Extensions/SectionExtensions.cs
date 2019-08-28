@@ -21,6 +21,10 @@ namespace Restmium.ERP.Services.Warehouse.Domain.Entities.Extensions
 
             return true;
         }
+        public static bool CanBeRestoredFromBin(this Section section)
+        {
+            return section.UtcMovedToBin != null && section.Warehouse.CanBeMovedToBin();
+        }
 
         public static bool CanBeDeleted(this Section section)
         {

@@ -6,5 +6,13 @@
         {
             return item.UtcMovedToBin == null && item.UtcProcessed != null;
         }
+        public static bool CanBeRestoredFromBin(this Receipt.Item item)
+        {
+            return
+                item.UtcMovedToBin != null &&
+                item.Receipt.CanBeMovedToBin() &&
+                item.Ware.CanBeMovedToBin() &&
+                item.Position.CanBeMovedToBin();
+        }
     }
 }

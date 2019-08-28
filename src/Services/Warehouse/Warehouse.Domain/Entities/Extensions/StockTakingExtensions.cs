@@ -8,5 +8,9 @@ namespace Restmium.ERP.Services.Warehouse.Domain.Entities.Extensions
         {
             return stockTaking.UtcMovedToBin != null ? false : !stockTaking.Items.Where(x => x.UtcMovedToBin == null).Any(x => x.UtcCounted == null);
         }
+        public static bool CanBeRestoredFromBin(this StockTaking stockTaking)
+        {
+            return stockTaking.UtcMovedToBin != null;
+        }
     }
 }
