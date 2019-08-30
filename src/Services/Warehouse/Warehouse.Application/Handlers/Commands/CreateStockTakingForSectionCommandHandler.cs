@@ -33,7 +33,10 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
             }
 
             // Create Model.Items for Positions
-            IEnumerable<Position> positions = this.DatabaseContext.Positions.Where(x => x.SectionId == request.SectionId).ToList();
+            IEnumerable<Position> positions = request.IncludeEmptyPositions
+                ? this.DatabaseContext.Positions.Where(x => x.SectionId == request.SectionId).ToList()
+                : this.DatabaseContext.Positions.Where(x => x.SectionId == request.SectionId && x.CountWare() > 0).ToList();
+
             List<CreateStockTakingCommand.Item> items = new List<CreateStockTakingCommand.Item>();
             foreach (Position item in positions)
             {

@@ -17,7 +17,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Commands
 
         public class Item
         {
-            public Item(int wareId, long positionId, int currentStock, int countedStock)
+            public Item(int? wareId, long positionId, int currentStock, int countedStock)
             {
                 this.WareId = wareId;
                 this.PositionId = positionId;
@@ -25,7 +25,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Commands
                 this.CountedStock = countedStock;
             }
 
-            public int WareId { get; }
+            public int? WareId { get; }
             public long PositionId { get; }
             public int CurrentStock { get; }
             public int CountedStock { get; }

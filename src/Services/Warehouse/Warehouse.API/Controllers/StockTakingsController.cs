@@ -64,16 +64,16 @@ namespace Warehouse.API.Controllers
             }
         }
 
-        // Get: api/StockTakings/CreateForWarehouse/5
-        [HttpGet("CreateForWarehouse/{warehouseId}")]
+        // Get: api/StockTakings/CreateForWarehouse/5/false
+        [HttpGet("CreateForWarehouse/{warehouseId}/{includeEmptyPositions}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(500)]
-        public async Task<ActionResult<StockTakingDTO>> GetCreateForWarehouse(int warehouseId)
+        public async Task<ActionResult<StockTakingDTO>> GetCreateForWarehouse(int warehouseId, bool includeEmptyPositions)
         {
             try
             {
-                StockTaking stockTaking = await this.Mediator.Send(new CreateStockTakingForWarehouseCommand(warehouseId));
+                StockTaking stockTaking = await this.Mediator.Send(new CreateStockTakingForWarehouseCommand(warehouseId, includeEmptyPositions));
                 return this.Ok(this.Mapper.Map<StockTakingDTO>(stockTaking));
             }
             catch (EntityNotFoundException ex)
@@ -86,16 +86,16 @@ namespace Warehouse.API.Controllers
             }
         }
 
-        // Get: api/StockTakings/CreateForSection/5
-        [HttpGet("CreateForSection/{sectionId}")]
+        // Get: api/StockTakings/CreateForSection/5/false
+        [HttpGet("CreateForSection/{sectionId}/{includeEmptyPositions}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(500)]
-        public async Task<ActionResult<StockTakingDTO>> GetCreateForSection(int sectionId)
+        public async Task<ActionResult<StockTakingDTO>> GetCreateForSection(int sectionId, bool includeEmptyPositions)
         {
             try
             {
-                StockTaking stockTaking = await this.Mediator.Send(new CreateStockTakingForSectionCommand(sectionId));
+                StockTaking stockTaking = await this.Mediator.Send(new CreateStockTakingForSectionCommand(sectionId, includeEmptyPositions));
                 return this.Ok(this.Mapper.Map<StockTakingDTO>(stockTaking));
             }
             catch (EntityNotFoundException ex)

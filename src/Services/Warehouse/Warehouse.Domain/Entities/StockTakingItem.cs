@@ -12,7 +12,7 @@ namespace Restmium.ERP.Services.Warehouse.Domain.Entities
             {
 
             }
-            public Item(int stockTakingId, int wareId, long positionId, int currentStock, int countedStock) : this()
+            public Item(int stockTakingId, int? wareId, long positionId, int currentStock, int countedStock) : this()
             {
                 this.StockTakingId = stockTakingId;
                 this.WareId = wareId;
@@ -20,13 +20,12 @@ namespace Restmium.ERP.Services.Warehouse.Domain.Entities
                 this.CurrentStock = currentStock;
                 this.CountedStock = countedStock;
             }
-            public Item(int stockTakingId, int wareId, long positionId, int currentStock, int countedStock, DateTime? utcCounted) : this(stockTakingId, wareId, positionId, currentStock, countedStock)
+            public Item(int stockTakingId, int? wareId, long positionId, int currentStock, int countedStock, DateTime? utcCounted) : this(stockTakingId, wareId, positionId, currentStock, countedStock)
             {
                 this.UtcCounted = utcCounted;
             }
 
-            [Required]
-            public int WareId { get; set; }
+            public int? WareId { get; set; }
             public virtual Ware Ware { get; set; }
 
             [Required]
