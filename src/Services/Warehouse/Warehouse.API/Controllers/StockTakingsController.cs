@@ -139,6 +139,7 @@ namespace Warehouse.API.Controllers
         [HttpGet("Restore/{id}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
+        [ProducesResponseType(409)]
         [ProducesResponseType(500)]
         public async Task<ActionResult<StockTakingDTO>> GetRestore(int id)
         {
@@ -150,6 +151,10 @@ namespace Warehouse.API.Controllers
             catch (EntityNotFoundException ex)
             {
                 return this.NotFound(ex.Message);
+            }
+            catch (EntityRestoreFromBinException ex)
+            {
+                return this.Conflict(ex.Message);
             }
             catch (Exception)
             {

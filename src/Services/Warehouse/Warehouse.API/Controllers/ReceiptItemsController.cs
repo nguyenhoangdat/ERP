@@ -95,17 +95,22 @@ namespace Warehouse.API.Controllers
         [HttpGet("Restore/{receiptId}/{positionId}/{wareId}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
+        [ProducesResponseType(409)]
         [ProducesResponseType(500)]
         public async Task<ActionResult<ReceiptDTO.ItemDTO>> GetRestore(long receiptId, long? positionId, int wareId)
         {
             try
             {
-                Receipt.Item entity = await this.Mediator.Send(new RestoreReceiptItemFromBinCommand(wareId, positionId, receiptId));
+                Receipt.Item entity = await this.Mediator.Send(new RestoreReceiptItemFromBinCommand(receiptId, positionId, wareId));
                 return this.Ok(this.Mapper.Map<ReceiptDTO.ItemDTO>(entity));
             }
             catch (EntityNotFoundException ex)
             {
                 return this.NotFound(ex.Message);
+            }
+            catch (EntityRestoreFromBinException ex)
+            {
+                return this.Conflict(ex.Message);
             }
             catch (Exception)
             {

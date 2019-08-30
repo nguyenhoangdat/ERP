@@ -112,6 +112,7 @@ namespace Warehouse.API.Controllers
         [HttpGet("Restore/{issueSlipId}/{positionId}/{wareId}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
+        [ProducesResponseType(409)]
         [ProducesResponseType(500)]
         public async Task<ActionResult<IssueSlipDTO.ItemDTO>> GetRestore(long issueSlipId, long positionId, int wareId)
         {
@@ -123,6 +124,10 @@ namespace Warehouse.API.Controllers
             catch (EntityNotFoundException ex)
             {
                 return this.NotFound(ex.Message);
+            }
+            catch (EntityRestoreFromBinException ex)
+            {
+                return this.Conflict(ex.Message);
             }
             catch (Exception)
             {
