@@ -50,9 +50,9 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
         {
             foreach (IssueSlip.Item item in items)
             {
-                if (item.PositionId != null)
+                if (item.PositionId != 1)
                 {
-                    await this.Mediator.Send(new CreateIssueSlipReservationCommand(item.PositionId.Value, item.RequestedUnits), cancellationToken);
+                    await this.Mediator.Send(new CreateIssueSlipReservationCommand(item.PositionId, item.RequestedUnits), cancellationToken);
                 }
             }
         }

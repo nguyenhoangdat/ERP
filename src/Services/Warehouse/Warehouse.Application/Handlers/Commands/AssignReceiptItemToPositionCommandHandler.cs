@@ -26,7 +26,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
         {
             IQueryable<Receipt.Item> items = this.DatabaseContext.ReceiptItems.Where(x =>
                 x.ReceiptId == request.ReceiptId &&
-                x.PositionId == null &&
+                x.PositionId == 1 &&
                 x.WareId == request.WareId);
 
             if (items.Count() == 0)
@@ -39,7 +39,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
                 throw new PositionAlreadyAssignedException(string.Format(Properties.Resources.ReceiptItem_PositionAlreadyAssignedException, request.ReceiptId, request.PositionId, request.WareId));
             }
 
-            Receipt.Item item = items.FirstOrDefault(x => x.PositionId == null);
+            Receipt.Item item = items.FirstOrDefault(x => x.PositionId == 1);
 
             if (item == null)
             {

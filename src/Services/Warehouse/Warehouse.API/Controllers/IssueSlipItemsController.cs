@@ -70,7 +70,7 @@ namespace Warehouse.API.Controllers
         [ProducesResponseType(404)]
         [ProducesResponseType(409)]
         [ProducesResponseType(500)]
-        public async Task<ActionResult<IssueSlipDTO.ItemDTO>> GetMoveToBin(long issueSlipId, long? positionId, int wareId)
+        public async Task<ActionResult<IssueSlipDTO.ItemDTO>> GetMoveToBin(long issueSlipId, long positionId, int wareId)
         {
             try
             {

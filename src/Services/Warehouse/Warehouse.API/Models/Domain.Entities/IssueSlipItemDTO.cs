@@ -12,7 +12,8 @@ namespace Restmium.ERP.Services.Warehouse.API.Models.Domain.Entities
             [Required]
             public int WareId { get; set; }
 
-            public long? PositionId { get; set; }
+            [Required]
+            public long PositionId { get; set; }
 
             [Required]
             public long IssueSlipId { get; set; }

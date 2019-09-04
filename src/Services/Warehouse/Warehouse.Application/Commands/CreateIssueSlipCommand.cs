@@ -23,7 +23,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Commands
 
         public class Item
         {
-            public Item(int wareId, long? positionId, int requestedUnits)
+            public Item(int wareId, long positionId, int requestedUnits)
             {
                 this.WareId = wareId;
                 this.PositionId = positionId;
@@ -31,7 +31,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Commands
             }
 
             public int WareId { get; }
-            public long? PositionId { get; }
+            public long PositionId { get; }
             public int RequstedUnits { get; }
         }
     }

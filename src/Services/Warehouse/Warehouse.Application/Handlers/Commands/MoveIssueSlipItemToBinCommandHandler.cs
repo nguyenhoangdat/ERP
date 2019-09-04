@@ -49,7 +49,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
 
             if (item.IssuedUnits < item.RequestedUnits)
             {
-                await this.Mediator.Send(new RemoveIssueSlipReservationCommand(item.PositionId.Value, item.RequestedUnits - item.IssuedUnits), cancellationToken);
+                await this.Mediator.Send(new RemoveIssueSlipReservationCommand(item.PositionId, item.RequestedUnits - item.IssuedUnits), cancellationToken);
             }
 
             if (item.IssueSlip.CanBeMovedToBin())

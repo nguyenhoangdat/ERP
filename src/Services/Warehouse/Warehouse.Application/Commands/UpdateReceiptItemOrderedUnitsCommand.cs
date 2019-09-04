@@ -5,7 +5,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Commands
 {
     public class UpdateReceiptItemOrderedUnitsCommand : IRequest<Receipt.Item>
     {
-        public UpdateReceiptItemOrderedUnitsCommand(long receiptId, long? positionId, int wareId, int orderedUnits)
+        public UpdateReceiptItemOrderedUnitsCommand(long receiptId, long positionId, int wareId, int orderedUnits)
         {
             this.ReceiptId = receiptId;
             this.PositionId = positionId;
@@ -14,7 +14,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Commands
         }
 
         public long ReceiptId { get; }
-        public long? PositionId { get; }
+        public long PositionId { get; }
         public int WareId { get; }
         public int OrderedUnits { get; }
     }

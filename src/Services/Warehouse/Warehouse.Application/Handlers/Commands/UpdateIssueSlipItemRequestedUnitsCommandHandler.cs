@@ -29,11 +29,11 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
 
             if (item.RequestedUnits < request.RequestedUnits)
             {
-                await this.Mediator.Send(new CreateIssueSlipReservationCommand(item.PositionId.Value, request.RequestedUnits - item.RequestedUnits), cancellationToken);
+                await this.Mediator.Send(new CreateIssueSlipReservationCommand(item.PositionId, request.RequestedUnits - item.RequestedUnits), cancellationToken);
             }
             else
             {
-                await this.Mediator.Send(new RemoveIssueSlipReservationCommand(item.PositionId.Value, item.RequestedUnits - request.RequestedUnits), cancellationToken);
+                await this.Mediator.Send(new RemoveIssueSlipReservationCommand(item.PositionId, item.RequestedUnits - request.RequestedUnits), cancellationToken);
             }
 
             item.RequestedUnits = request.RequestedUnits;

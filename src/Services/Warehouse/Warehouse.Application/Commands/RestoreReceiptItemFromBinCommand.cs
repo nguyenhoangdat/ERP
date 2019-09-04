@@ -5,7 +5,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Commands
 {
     public class RestoreReceiptItemFromBinCommand : IRequest<Receipt.Item>
     {
-        public RestoreReceiptItemFromBinCommand(long receiptId, long? positionId, int wareId)
+        public RestoreReceiptItemFromBinCommand(long receiptId, long positionId, int wareId)
         {
             this.WareId = wareId;
             this.PositionId = positionId;
@@ -13,7 +13,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Commands
         }
 
         public int WareId { get; }
-        public long? PositionId { get; }
+        public long PositionId { get; }
         public long ReceiptId { get; }
     }
 }

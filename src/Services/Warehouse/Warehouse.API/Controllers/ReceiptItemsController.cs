@@ -30,7 +30,7 @@ namespace Warehouse.API.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(500)]
-        public async Task<ActionResult<ReceiptDTO.ItemDTO>> GetReceiptItem(long receiptId, long? positionId, int wareId)
+        public async Task<ActionResult<ReceiptDTO.ItemDTO>> GetReceiptItem(long receiptId, long positionId, int wareId)
         {
             try
             {
@@ -70,7 +70,7 @@ namespace Warehouse.API.Controllers
         [ProducesResponseType(404)]
         [ProducesResponseType(409)]
         [ProducesResponseType(500)]
-        public async Task<ActionResult<ReceiptDTO.ItemDTO>> GetMoveToBin(long receiptId, long? positionId, int wareId)
+        public async Task<ActionResult<ReceiptDTO.ItemDTO>> GetMoveToBin(long receiptId, long positionId, int wareId)
         {
             try
             {
@@ -97,7 +97,7 @@ namespace Warehouse.API.Controllers
         [ProducesResponseType(404)]
         [ProducesResponseType(409)]
         [ProducesResponseType(500)]
-        public async Task<ActionResult<ReceiptDTO.ItemDTO>> GetRestore(long receiptId, long? positionId, int wareId)
+        public async Task<ActionResult<ReceiptDTO.ItemDTO>> GetRestore(long receiptId, long positionId, int wareId)
         {
             try
             {

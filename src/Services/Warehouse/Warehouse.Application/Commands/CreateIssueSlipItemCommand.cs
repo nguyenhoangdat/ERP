@@ -5,7 +5,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Commands
 {
     public class CreateIssueSlipItemCommand : IRequest<IssueSlip.Item>
     {
-        public CreateIssueSlipItemCommand(long issueSlipId, int wareId, long? positionId, int requestedUnits, int issuedUnits)
+        public CreateIssueSlipItemCommand(long issueSlipId, int wareId, long positionId, int requestedUnits, int issuedUnits)
         {
             this.IssueSlipId = issueSlipId;
             this.WareId = wareId;
@@ -16,7 +16,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Commands
 
         public long IssueSlipId { get; }
         public int WareId { get; }
-        public long? PositionId { get; }
+        public long PositionId { get; }
         public int RequestedUnits { get; }
         public int IssuedUnits { get; }
     }

@@ -32,7 +32,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
             }
 
             Receipt.Item item = items.FirstOrDefault(x => x.PositionId == request.PositionId);
-            Receipt.Item unassignedItem = items.FirstOrDefault(x => x.PositionId == null);
+            Receipt.Item unassignedItem = items.FirstOrDefault(x => x.PositionId == 1);
 
             if (item == null)
             {
@@ -50,7 +50,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
             if (item.CountOrdered < request.Count) // Trying to store more units than ordered
             {
                 int extraUnits = request.Count - (item.CountOrdered - item.CountReceived);
-                unassignedItem = items.FirstOrDefault(x => x.PositionId == null);
+                unassignedItem = items.FirstOrDefault(x => x.PositionId == 1);
 
                 if (unassignedItem != null && extraUnits <= (unassignedItem.CountOrdered - unassignedItem.CountReceived))
                 {
@@ -78,10 +78,10 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
                 {
                     unitsRemainingToStore = item.CountOrdered - item.CountReceived;
 
-                    unassignedItem = items.FirstOrDefault(x => x.PositionId == null);
+                    unassignedItem = items.FirstOrDefault(x => x.PositionId == 1);
                     if (unassignedItem == null)
                     {
-                        await this.Mediator.Send(new CreateReceiptItemCommand(item.WareId, null, item.ReceiptId, unitsRemainingToStore, 0), cancellationToken);
+                        await this.Mediator.Send(new CreateReceiptItemCommand(item.WareId, 1, item.ReceiptId, unitsRemainingToStore, 0), cancellationToken);
                     }
                     else
                     {

@@ -55,7 +55,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Integration
                 // Positions will be selected manually
                 if (positionCounts == null)
                 {
-                    items.AddLast(new CreateReceiptCommand.Item(ware.Id, null, item.Count));
+                    items.AddLast(new CreateReceiptCommand.Item(ware.Id, 1, item.Count));
                 }
                 else
                 {

@@ -36,7 +36,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
                 throw new PositionAlreadyAssignedException(string.Format(Properties.Resources.IssueSlipItem_PositionAlreadyAssignedException, request.IssueSlipId, request.PositionId, request.WareId));
             }
 
-            IssueSlip.Item item = items.FirstOrDefault(x => x.PositionId == null);
+            IssueSlip.Item item = items.FirstOrDefault(x => x.PositionId == 1);
 
             if (item == null)
             {

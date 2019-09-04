@@ -17,21 +17,21 @@ namespace Restmium.ERP.Services.Warehouse.Domain.Entities
                 this.WareId = wareId;
                 this.CountOrdered = countOrdered;
             }
-            public Item(long receiptId, long? positionId, int wareId, int countOrdered, int countReceived) : this(wareId, countOrdered)
+            public Item(long receiptId, long positionId, int wareId, int countOrdered, int countReceived) : this(wareId, countOrdered)
             {
                 this.ReceiptId = receiptId;
                 this.PositionId = positionId;
                 this.CountReceived = countReceived;
             }
-            public Item(Receipt receipt, long? positionId, int wareId, int countOrdered, int countReceived) : this(receipt.Id, positionId, wareId, countOrdered, countReceived)
+            public Item(Receipt receipt, long positionId, int wareId, int countOrdered, int countReceived) : this(receipt.Id, positionId, wareId, countOrdered, countReceived)
             {
                 this.Receipt = receipt;
             }
-            public Item(long receiptId, long? positionId, int wareId, int countOrdered, int countReceived, DateTime? utcProcessed) : this(receiptId, positionId, wareId, countOrdered, countReceived)
+            public Item(long receiptId, long positionId, int wareId, int countOrdered, int countReceived, DateTime? utcProcessed) : this(receiptId, positionId, wareId, countOrdered, countReceived)
             {
                 this.UtcProcessed = utcProcessed;
             }
-            public Item(Receipt receipt, long? positionId, int wareId, int countOrdered, int countReceived, DateTime? utcProcessed) : this(receipt, positionId, wareId, countOrdered, countReceived)
+            public Item(Receipt receipt, long positionId, int wareId, int countOrdered, int countReceived, DateTime? utcProcessed) : this(receipt, positionId, wareId, countOrdered, countReceived)
             {
                 this.UtcProcessed = utcProcessed;
             }
@@ -40,7 +40,8 @@ namespace Restmium.ERP.Services.Warehouse.Domain.Entities
             public int WareId { get; set; }
             public virtual Ware Ware { get; set; }
 
-            public long? PositionId { get; set; }
+            [Required]
+            public long PositionId { get; set; }
             public virtual Position Position { get; set; }
 
             [Required]
