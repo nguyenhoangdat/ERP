@@ -15,6 +15,7 @@ namespace Restmium.ERP.Services.Warehouse.Domain.Entities
             public Item(int wareId, int countOrdered) : this()
             {
                 this.WareId = wareId;
+                this.PositionId = 1;
                 this.CountOrdered = countOrdered;
             }
             public Item(long receiptId, long positionId, int wareId, int countOrdered, int countReceived) : this(wareId, countOrdered)

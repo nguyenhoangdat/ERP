@@ -9,7 +9,7 @@ namespace Restmium.ERP.Services.Warehouse.Domain.Entities
         {
             public Item()
             {
-
+                this.PositionId = 1;
             }
             private Item(int requestedUnits, int issuedUnits) : this()
             {
