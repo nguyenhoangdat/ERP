@@ -9,17 +9,26 @@ namespace Restmium.ERP.Services.Warehouse.Tests.Common
 {
     public class DatabaseContextSeeder : IDbSeeder
     {
-        public DatabaseContextSeeder(DatabaseContext context)
+        public void Seed(DatabaseContext databaseContext)
         {
-            this.DatabaseContext = context;
-            this.DatabaseContext.Database.EnsureCreated();
-        }
+            #region System entities
+            databaseContext.Warehouses.Add(new Domain.Entities.Warehouse(name: "System", new Address()
+            {
+                Street = "System",
+                City = "System",
+                Country = "System",
+                ZipCode = "System"
+            }));
+            databaseContext.SaveChanges();
 
-        protected DatabaseContext DatabaseContext { get; }
+            databaseContext.Sections.Add(new Section(name: "System", warehouseId: 1));
+            databaseContext.SaveChanges();
 
-        public void Seed()
-        {
-            // Create addresses
+            databaseContext.Positions.Add(new Position(name: "System", width: 0, height: 0, depth: 0, maxWeight: 0, sectionId: 1));
+            databaseContext.SaveChanges();
+            #endregion
+
+            // Create Addresses
             Address addressPrague = new Address()
             {
                 Street = "Korunní 10",
@@ -27,83 +36,117 @@ namespace Restmium.ERP.Services.Warehouse.Tests.Common
                 Country = "Czech Republic",
                 ZipCode = "150 90"
             };
-            Address addressBrno = new Address()
-            {
-                Street = "Příčná 34",
-                City = "Brno",
-                Country = "Czech Republic",
-                ZipCode = "298 90"
-            };
 
-            // Create warehouses
-            Domain.Entities.Warehouse warehousePrague = new Domain.Entities.Warehouse("Warehouse in Prague", addressPrague);
-            Domain.Entities.Warehouse warehouseBrno = new Domain.Entities.Warehouse("Warehouse in Brno", addressBrno);
-            this.DatabaseContext.Warehouses.Add(warehousePrague);
-            this.DatabaseContext.Warehouses.Add(warehouseBrno);
+            // Create Warehouses
+            Domain.Entities.Warehouse warehousePrague = new Domain.Entities.Warehouse(name: "Warehouse - Prague", addressPrague);
+            databaseContext.Warehouses.Add(warehousePrague);
+            databaseContext.SaveChanges();
 
-            // Create sections
-            Section warehousePragueSection = new Section("Section Prague 1", warehousePrague);
-            Section warehouseBrnoSection = new Section("Section Brno 1", warehouseBrno);
-            this.DatabaseContext.Sections.Add(warehousePragueSection);
-            this.DatabaseContext.Sections.Add(warehouseBrnoSection);
+            // Create Sections
+            Section sectionA = databaseContext.Sections.Add(new Section(name: "Section A", warehousePrague)).Entity;
+            databaseContext.SaveChanges();
 
-            // Conts for the dimension of the positions
-            const double Width = 10;
-            const double Height = 10;
-            const double Depth = 10;
-            const double MaxWeight = 10;
+            Section sectionB = databaseContext.Sections.Add(new Section(name: "Section B", warehousePrague)).Entity;
+            databaseContext.SaveChanges();
 
-            // Const for wares generation
-            const int NumberOfWares = 10;
+            // Generate Positions
+            databaseContext.Positions.Add(new Position(name: "A.1", width: 1265, height: 400, depth: 400, maxWeight: 30000, sectionA));
+            databaseContext.Positions.Add(new Position(name: "A.2", width: 1265, height: 400, depth: 400, maxWeight: 30000, sectionA));
+            databaseContext.Positions.Add(new Position(name: "A.3", width: 1265, height: 400, depth: 400, maxWeight: 30000, sectionA));
 
-            // Generate positions
-            for (int i = 1; i <= NumberOfWares; i++)
-            {
-                this.DatabaseContext.Positions.Add(new Position($"Position Prague {i}", Width, Height, Depth, MaxWeight, warehousePragueSection, i));
-            }
-            for (int i = 1; i <= NumberOfWares * 2; i++)
-            {
-                this.DatabaseContext.Positions.Add(new Position($"Position Brno {i}", Width, Height, Depth, MaxWeight, warehouseBrnoSection, i));
-            }
+            databaseContext.Positions.Add(new Position(name: "B.1", width: 965, height: 400, depth: 400, maxWeight: 30000, sectionB));
+            databaseContext.Positions.Add(new Position(name: "B.2", width: 965, height: 400, depth: 400, maxWeight: 30000, sectionB));
+            databaseContext.Positions.Add(new Position(name: "B.3", width: 965, height: 400, depth: 400, maxWeight: 30000, sectionB));
+            databaseContext.SaveChanges();
 
-            // Generate wares
-            for (int i = 1; i <= NumberOfWares * 5; i++)
-            {
-                this.DatabaseContext.Wares.Add(new Ware(0, $"Ware {i}", Convert.ToDouble(i), Convert.ToDouble(i), Convert.ToDouble(i), Convert.ToDouble(i)));
-            }
+            // Generate Wares
+            databaseContext.Wares.Add(new Ware(productId: 13, productName: $"Samsung Galaxy J5", width: 65, height: 50, depth: 135, weight: 250));
+            databaseContext.Wares.Add(new Ware(productId: 11, productName: $"Huawei Nova 3", width: 70, height: 50, depth: 150, weight: 300));
+            databaseContext.Wares.Add(new Ware(productId: 12, productName: $"Huawei P20", width: 70, height: 50, depth: 150, weight: 280));
+            databaseContext.SaveChanges();
 
-            List<Ware> wares = this.DatabaseContext.Wares.Take(NumberOfWares).ToList();
-            List<Position> positions = this.DatabaseContext.Positions.OrderBy(x => x.Rating).ToList();
+            // Generate Receipts
+            databaseContext.Receipts.Add(
+                new Receipt(
+                    utcExpected: DateTime.UtcNow,
+                    utcReceived: DateTime.UtcNow,
+                    items: new List<Receipt.Item>()
+                    {
+                        new Receipt.Item(
+                            receiptId: 0,
+                            positionId: 2,
+                            wareId: 1,
+                            countOrdered: 10,
+                            countReceived: 10,
+                            utcProcessed: DateTime.UtcNow)
+                    }));
+            databaseContext.Movements.Add(
+                new Movement(
+                    wareId: 1,
+                    positionId: 2,
+                    direction: Movement.Direction.In,
+                    countChange: 10,
+                    countTotal: 10));
+            databaseContext.SaveChanges();
 
-            /* Generate movements and IssueSlip:
-             *      Assign each ware to two positions and generate movement => every ware will have two positions
-             *      First position:  12 units
-             *      Second position: 22 units
-             *      
-             *      Each IssueSlip contans one Item with Issued = 2 and Requested units = 2
-             */
-            for (int w = 0; w < wares.Count(); w++)
-            {
-                Ware ware = wares[w];
+            databaseContext.Receipts.Add(new Receipt(
+                    utcExpected: DateTime.UtcNow.AddHours(5),
+                    items: new List<Receipt.Item>()
+                    {
+                        new Receipt.Item(1, 10)
+                    }));
+            databaseContext.SaveChanges();
 
-                for (int p = w * 2; p < w * 2 + 2; p++)
-                {
-                    Position position = positions[p];
+            databaseContext.Receipts.Add(
+                new Receipt(
+                    utcExpected: DateTime.UtcNow.AddDays(1),
+                    items: new List<Receipt.Item>()
+                    {
+                        new Receipt.Item(2, 5)
+                    }));
+            databaseContext.SaveChanges();
 
-                    // Generate movements
-                    int initialValue = 10 * (w % 2 + 1); // Produce 10 or 20
-                    int movedUnits = 2; // Requested and Issued units
+            // Generate IssueSlips
+            databaseContext.IssueSlips.Add(
+                new IssueSlip(
+                    orderId: 1,
+                    utcDispatchDate: DateTime.UtcNow.AddHours(1),
+                    utcDeliveryDate: DateTime.UtcNow.AddHours(6),
+                    new List<IssueSlip.Item>()
+                    {
+                        new IssueSlip.Item(
+                            issueSlipId: 0,
+                            wareId: 1,
+                            positionId: 2,
+                            requestedUnits: 1,
+                            issuedUnits: 1)
+                    }));
+            databaseContext.Movements.Add(
+                new Movement(
+                    wareId: 1,
+                    positionId: 2,
+                    direction: Movement.Direction.Out,
+                    countChange: 1,
+                    countTotal: 9));
+            databaseContext.SaveChanges();
 
-                    this.DatabaseContext.Movements.Add(new Movement(ware, position, Movement.Direction.In, Movement.EntryContent.Delivery, initialValue, initialValue));
-                    this.DatabaseContext.Movements.Add(new Movement(ware, position, Movement.Direction.Out, Movement.EntryContent.Receipt, movedUnits, initialValue - movedUnits));
-                    this.DatabaseContext.Movements.Add(new Movement(ware, position, Movement.Direction.In, Movement.EntryContent.Delivery, movedUnits * 2, initialValue + movedUnits));
+            // Generate StockTakings (including empty positions)
+            databaseContext.StockTakings.Add(
+                new StockTaking(
+                    name: "StockTaking for Warehouse - Praha",
+                    items: new List<StockTaking.Item>()
+                    {
+                        new StockTaking.Item(stockTakingId: 0, wareId: 1, positionId: 2, currentStock: 9, countedStock: 9, utcCounted: DateTime.UtcNow.AddSeconds(30)),
+                        new StockTaking.Item(stockTakingId: 0, wareId: null, positionId: 3, currentStock: 0, countedStock: 0, utcCounted: DateTime.UtcNow.AddSeconds(35)),
+                        new StockTaking.Item(stockTakingId: 0, wareId: null, positionId: 4, currentStock: 0, countedStock: 0, utcCounted: DateTime.UtcNow.AddSeconds(40)),
 
-                    // Generate IssueSlip
-                    StockTaking issueSlip = new StockTaking($"{ware.ToString()} {position.ToString()}", DateTime.UtcNow.AddDays(-1), DateTime.UtcNow);
-                    issueSlip.Items.Add(new StockTaking.Item(issueSlip, ware, position, movedUnits, movedUnits));
-                    this.DatabaseContext.IssueSlips.Add(issueSlip);
-                }
-            }
+                        new StockTaking.Item(stockTakingId: 0, wareId: null, positionId: 5, currentStock: 0, countedStock: 0, utcCounted: DateTime.UtcNow.AddSeconds(45)),
+                        new StockTaking.Item(stockTakingId: 0, wareId: null, positionId: 6, currentStock: 0, countedStock: 0, utcCounted: DateTime.UtcNow.AddSeconds(50)),
+                        new StockTaking.Item(stockTakingId: 0, wareId: null, positionId: 7, currentStock: 0, countedStock: 0, utcCounted: DateTime.UtcNow.AddSeconds(55))
+                    }));
+            databaseContext.SaveChanges();
+
+            // TODO: Do revision for "GetNextToBeProcessed" for Receipt, IssueSlip, and StockTaking - do we need the parentId?
         }
     }
 }
