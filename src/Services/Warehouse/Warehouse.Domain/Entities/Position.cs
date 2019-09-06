@@ -6,14 +6,14 @@ namespace Restmium.ERP.Services.Warehouse.Domain.Entities
 {
     public class Position : DatabaseEntity
     {
-        public Position()
+        protected Position()
         {
             this.Movements = new HashSet<Movement>();
             this.IssueSlipItems = new HashSet<IssueSlip.Item>();
             this.StockTakingItems = new HashSet<StockTaking.Item>();
             this.ReceiptItems = new HashSet<Receipt.Item>();
         }
-        public Position(string name, double width, double height, double depth, double maxWeight) : this()
+        protected Position(string name, double width, double height, double depth, double maxWeight) : this()
         {
             this.Name = name;
             this.Width = width;

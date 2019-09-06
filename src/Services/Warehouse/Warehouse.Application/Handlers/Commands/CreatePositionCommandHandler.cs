@@ -21,7 +21,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
 
         public async Task<Position> Handle(CreatePositionCommand request, CancellationToken cancellationToken)
         {
-            Position position = this.DatabaseContext.Positions.Add(new Position(request.Name, request.Width, request.Height, request.Depth, request.MaxWeight)).Entity;
+            Position position = this.DatabaseContext.Positions.Add(new Position(request.Name, request.Width, request.Height, request.Depth, request.MaxWeight, request.SectionId)).Entity;
             await this.DatabaseContext.SaveChangesAsync(cancellationToken);
 
             await this.Mediator.Publish(new PositionCreatedDomainEvent(position), cancellationToken);
