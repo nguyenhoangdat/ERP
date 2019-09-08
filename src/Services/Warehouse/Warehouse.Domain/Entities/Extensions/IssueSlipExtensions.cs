@@ -7,17 +7,19 @@ namespace Restmium.ERP.Services.Warehouse.Domain.Entities.Extensions
     {
         public static bool HasSectionId(this IssueSlip issueSlip, int sectionId)
         {
-            return issueSlip.Items.FirstOrDefault(x => x.Position.SectionId == sectionId) != null;
+            return sectionId <= 1 ? false : issueSlip.Items.FirstOrDefault(x => x.Position.SectionId == sectionId) != null;
         }
 
         public static bool HasSectionIdWithUnissuedUnits(this IssueSlip issueSlip, int sectionId)
         {
-            return issueSlip.GetFirstItemInSectionWithUnissuedUnits(sectionId) != null;
+            return sectionId <= 1 ? false : issueSlip.GetFirstItemInSectionWithUnissuedUnits(sectionId) != null;
         }
 
         public static IssueSlip.Item GetFirstItemInSectionWithUnissuedUnits(this IssueSlip issueSlip, int sectionId)
         {
-            return issueSlip.Items.FirstOrDefault(x =>
+            return sectionId <= 1
+                ? null
+                : issueSlip.Items.FirstOrDefault(x =>
                 x.Position.SectionId == sectionId &&
                 x.IssuedUnits < x.RequestedUnits);
         }
