@@ -131,6 +131,17 @@ namespace Warehouse.Domain.Tests.Entities
         }
 
         [TestMethod, TestCategory("Extensions")]
+        public void GetUnassignedItems()
+        {
+            IssueSlip issueSlip = this.DatabaseContext.IssueSlips.FirstOrDefault(x => x.OrderId == 1);
+            List<IssueSlip.Item> items = this.DatabaseContext.IssueSlipItems.Where(x =>
+                x.IssueSlipId == issueSlip.Id &&
+                x.PositionId == 1).ToList();
+
+            CollectionAssert.AreEqual(items, issueSlip.GetUnassignedItems().ToList());
+        }
+
+        [TestMethod, TestCategory("Extensions")]
         public void CanBeMovedToBin()
         {
             IssueSlip issueSlip;

@@ -32,6 +32,10 @@ namespace Restmium.ERP.Services.Warehouse.Domain.Entities.Extensions
         {
             return issueSlip.Items.Where(x => x.IssuedUnits < x.RequestedUnits);
         }
+        public static IEnumerable<IssueSlip.Item> GetUnassignedItems(this IssueSlip issueSlip)
+        {
+            return issueSlip.Items.Where(x => x.PositionId == 1);
+        }
 
         public static bool CanBeMovedToBin(this IssueSlip issueSlip)
         {
