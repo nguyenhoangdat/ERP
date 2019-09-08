@@ -168,13 +168,29 @@ namespace Restmium.ERP.Services.Warehouse.Tests.Common
                     direction: Movement.Direction.Out,
                     countChange: 1,
                     countTotal: 9));
+
             databaseContext.IssueSlips.Add(
                 new IssueSlip(
                     orderId: 2,
                     utcDispatchDate: DateTime.UtcNow.AddHours(2),
                     utcDeliveryDate: DateTime.UtcNow.AddHours(7),
                     new List<IssueSlip.Item>()
-                    ));
+                    {
+                        new IssueSlip.Item(
+                            issueSlipId: 0,
+                            wareId: 1,
+                            positionId: 2,
+                            requestedUnits: 1,
+                            issuedUnits: 1)
+                    }));
+            databaseContext.Movements.Add(
+                new Movement(
+                    wareId: 1,
+                    positionId: 2,
+                    direction: Movement.Direction.Out,
+                    countChange: 1,
+                    countTotal: 8));
+
             databaseContext.IssueSlips.Add(
                 new IssueSlip(
                     orderId: 3,
@@ -190,6 +206,35 @@ namespace Restmium.ERP.Services.Warehouse.Tests.Common
                             issuedUnits: 1) { UtcMovedToBin = DateTime.UtcNow }
                     }
                 ) { UtcMovedToBin = DateTime.UtcNow });
+            databaseContext.Movements.Add(
+                new Movement(
+                    wareId: 1,
+                    positionId: 2,
+                    direction: Movement.Direction.Out,
+                    countChange: 1,
+                    countTotal: 7));
+
+            databaseContext.IssueSlips.Add(
+                new IssueSlip(
+                    orderId: 4,
+                    utcDispatchDate: DateTime.UtcNow.AddHours(2),
+                    utcDeliveryDate: DateTime.UtcNow.AddHours(7),
+                    new List<IssueSlip.Item>()
+                    {
+                        new IssueSlip.Item(
+                            issueSlipId: 0,
+                            wareId: 1,
+                            positionId: 2,
+                            requestedUnits: 1,
+                            issuedUnits: 0) { UtcMovedToBin = DateTime.UtcNow },
+                        new IssueSlip.Item(
+                            issueSlipId: 0,
+                            wareId: 2,
+                            positionId: 3,
+                            requestedUnits: 1,
+                            issuedUnits: 0)
+                    }));
+
             databaseContext.SaveChanges();
 
             // Generate StockTakings (including empty positions)

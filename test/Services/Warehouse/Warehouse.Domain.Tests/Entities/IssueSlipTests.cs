@@ -1,15 +1,14 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.Data.Sqlite;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Restmium.ERP.Services.Warehouse.Domain.Entities;
+using Restmium.ERP.Services.Warehouse.Domain.Entities.Extensions;
 using Restmium.ERP.Services.Warehouse.Infrastructure.Database;
+using Restmium.ERP.Services.Warehouse.Tests.Common;
+using Restmium.ERP.Services.Warehouse.Tests.Common.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Data.Sqlite;
-using Restmium.ERP.Services.Warehouse.Domain.Entities.Extensions;
-using Restmium.ERP.Services.Warehouse.Tests.Common;
-using Restmium.ERP.Services.Warehouse.Tests.Common.Interfaces;
 
 namespace Warehouse.Domain.Tests.Entities
 {
@@ -108,7 +107,7 @@ namespace Warehouse.Domain.Tests.Entities
         public void GetFirstItemInSectionWithUnissuedUnits()
         {
             IssueSlip issueSlip = this.DatabaseContext.IssueSlips.FirstOrDefault(x => x.OrderId == 1);
-            IssueSlip.Item item = this.DatabaseContext.IssueSlipItems.FirstOrDefault(x => 
+            IssueSlip.Item item = this.DatabaseContext.IssueSlipItems.FirstOrDefault(x =>
                 x.IssueSlipId == issueSlip.Id &&
                 x.IssuedUnits < x.RequestedUnits &&
                 x.Position.SectionId == 2);
