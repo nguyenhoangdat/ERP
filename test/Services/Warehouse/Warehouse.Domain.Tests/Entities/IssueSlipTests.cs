@@ -79,11 +79,80 @@ namespace Warehouse.Domain.Tests.Entities
                 issueSlip.Items.Count == items.Count);
         }
 
-        [TestMethod, TestCategory("Extensions"), ]
+        [TestMethod, TestCategory("Extensions")]
         public void HasSectionIdTest()
         {
-            int count = this.DatabaseContext.IssueSlips.Count();
-            Assert.IsTrue(this.DatabaseContext.IssueSlips.FirstOrDefault(x => x.OrderId == 1).HasSectionId(2));
+            IssueSlip issueSlip = this.DatabaseContext.IssueSlips.FirstOrDefault(x => x.OrderId == 1);
+
+            Assert.IsTrue(issueSlip.HasSectionId(2));
+
+            Assert.IsFalse(issueSlip.HasSectionId(0));
+            Assert.IsFalse(issueSlip.HasSectionId(1)); // Unassigned position (system)
+            Assert.IsFalse(issueSlip.HasSectionId(3));
+        }
+
+        [TestMethod, TestCategory("Extensions")]
+        public void HasSectionIdWithUnissuedUnitsTest()
+        {
+            IssueSlip issueSlip = this.DatabaseContext.IssueSlips.FirstOrDefault(x => x.OrderId == 1);
+
+            Assert.IsTrue(issueSlip.HasSectionIdWithUnissuedUnits(2)); // Exists
+
+            Assert.IsFalse(issueSlip.HasSectionIdWithUnissuedUnits(0)); // Doesn't exit
+            Assert.IsFalse(issueSlip.HasSectionIdWithUnissuedUnits(1)); // Unassigned position (system)
+
+            Assert.IsFalse(issueSlip.HasSectionIdWithUnissuedUnits(3));
+        }
+
+        [TestMethod, TestCategory("Extensions")]
+        public void GetFirstItemInSectionWithUnissuedUnits()
+        {
+            IssueSlip issueSlip = this.DatabaseContext.IssueSlips.FirstOrDefault(x => x.OrderId == 1);
+            IssueSlip.Item item = this.DatabaseContext.IssueSlipItems.FirstOrDefault(x => 
+                x.IssueSlipId == issueSlip.Id &&
+                x.IssuedUnits < x.RequestedUnits &&
+                x.Position.SectionId == 2);
+
+            Assert.AreEqual(item, issueSlip.GetFirstItemInSectionWithUnissuedUnits(2));
+
+            Assert.AreEqual(null, issueSlip.GetFirstItemInSectionWithUnissuedUnits(0));
+            Assert.AreEqual(null, issueSlip.GetFirstItemInSectionWithUnissuedUnits(1));
+            Assert.AreEqual(null, issueSlip.GetFirstItemInSectionWithUnissuedUnits(3));
+        }
+
+        [TestMethod, TestCategory("Extensions")]
+        public void GetUnissuedItems()
+        {
+            IssueSlip issueSlip = this.DatabaseContext.IssueSlips.FirstOrDefault(x => x.OrderId == 1);
+            List<IssueSlip.Item> items = this.DatabaseContext.IssueSlipItems.Where(x =>
+                x.IssueSlipId == issueSlip.Id &&
+                x.IssuedUnits < x.RequestedUnits).ToList();
+
+            CollectionAssert.AreEqual(items, issueSlip.GetUnissuedItems().ToList());
+        }
+
+        [TestMethod, TestCategory("Extensions")]
+        public void CanBeMovedToBin()
+        {
+            IssueSlip issueSlip;
+
+            issueSlip = this.DatabaseContext.IssueSlips.FirstOrDefault(x => x.OrderId == 1);
+            Assert.IsFalse(issueSlip.CanBeMovedToBin());
+
+            issueSlip = this.DatabaseContext.IssueSlips.FirstOrDefault(x => x.OrderId == 2);
+            Assert.IsTrue(issueSlip.CanBeMovedToBin());
+        }
+
+        [TestMethod, TestCategory("Extensions")]
+        public void CanBeRestoredFromBin()
+        {
+            IssueSlip issueSlip;
+
+            issueSlip = this.DatabaseContext.IssueSlips.FirstOrDefault(x => x.OrderId == 1);
+            Assert.IsFalse(issueSlip.CanBeRestoredFromBin());
+
+            issueSlip = this.DatabaseContext.IssueSlips.FirstOrDefault(x => x.OrderId == 3);
+            Assert.IsTrue(issueSlip.CanBeRestoredFromBin());
         }
     }
 }

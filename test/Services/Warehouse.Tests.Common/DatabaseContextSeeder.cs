@@ -78,6 +78,20 @@ namespace Restmium.ERP.Services.Warehouse.Tests.Common
                             wareId: 1,
                             countOrdered: 10,
                             countReceived: 10,
+                            utcProcessed: DateTime.UtcNow),
+                        new Receipt.Item(
+                            receiptId: 0,
+                            positionId: 3,
+                            wareId: 2,
+                            countOrdered: 5,
+                            countReceived: 5,
+                            utcProcessed: DateTime.UtcNow),
+                        new Receipt.Item(
+                            receiptId: 0,
+                            positionId: 4,
+                            wareId: 3,
+                            countOrdered: 5,
+                            countReceived: 5,
                             utcProcessed: DateTime.UtcNow)
                     }));
             databaseContext.Movements.Add(
@@ -87,6 +101,20 @@ namespace Restmium.ERP.Services.Warehouse.Tests.Common
                     direction: Movement.Direction.In,
                     countChange: 10,
                     countTotal: 10));
+            databaseContext.Movements.Add(
+                new Movement(
+                    wareId: 2,
+                    positionId: 3,
+                    direction: Movement.Direction.In,
+                    countChange: 5,
+                    countTotal: 5));
+            databaseContext.Movements.Add(
+                new Movement(
+                    wareId: 3,
+                    positionId: 4,
+                    direction: Movement.Direction.In,
+                    countChange: 5,
+                    countTotal: 5));
             databaseContext.SaveChanges();
 
             databaseContext.Receipts.Add(new Receipt(
@@ -119,7 +147,19 @@ namespace Restmium.ERP.Services.Warehouse.Tests.Common
                             wareId: 1,
                             positionId: 2,
                             requestedUnits: 1,
-                            issuedUnits: 1)
+                            issuedUnits: 1),
+                        new IssueSlip.Item(
+                            issueSlipId: 0,
+                            wareId: 2,
+                            positionId: 1, // Unassigned position
+                            requestedUnits: 1,
+                            issuedUnits: 0), // Unissued item
+                        new IssueSlip.Item(
+                            issueSlipId: 0,
+                            wareId: 3,
+                            positionId: 4,
+                            requestedUnits: 1,
+                            issuedUnits: 0) // Unissued item
                     }));
             databaseContext.Movements.Add(
                 new Movement(
@@ -128,6 +168,28 @@ namespace Restmium.ERP.Services.Warehouse.Tests.Common
                     direction: Movement.Direction.Out,
                     countChange: 1,
                     countTotal: 9));
+            databaseContext.IssueSlips.Add(
+                new IssueSlip(
+                    orderId: 2,
+                    utcDispatchDate: DateTime.UtcNow.AddHours(2),
+                    utcDeliveryDate: DateTime.UtcNow.AddHours(7),
+                    new List<IssueSlip.Item>()
+                    ));
+            databaseContext.IssueSlips.Add(
+                new IssueSlip(
+                    orderId: 3,
+                    utcDispatchDate: DateTime.UtcNow.AddHours(2),
+                    utcDeliveryDate: DateTime.UtcNow.AddHours(7),
+                    new List<IssueSlip.Item>()
+                    {
+                        new IssueSlip.Item(
+                            issueSlipId: 0,
+                            wareId: 1,
+                            positionId: 2,
+                            requestedUnits: 1,
+                            issuedUnits: 1) { UtcMovedToBin = DateTime.UtcNow }
+                    }
+                ) { UtcMovedToBin = DateTime.UtcNow });
             databaseContext.SaveChanges();
 
             // Generate StockTakings (including empty positions)
