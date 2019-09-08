@@ -10,9 +10,9 @@
         {
             return
                 item.UtcMovedToBin != null &&
-                item.IssueSlip.CanBeMovedToBin() &&
-                item.Ware.CanBeMovedToBin() &&
-                item.Position.CanBeMovedToBin();
+                item.IssueSlip.UtcMovedToBin == null &&
+                item.Ware.UtcMovedToBin == null &&
+                item.Position.UtcMovedToBin == null;
         }
     }
 }
