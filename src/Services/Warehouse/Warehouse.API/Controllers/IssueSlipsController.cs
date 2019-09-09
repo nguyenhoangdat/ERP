@@ -228,6 +228,7 @@ namespace Warehouse.API.Controllers
         // GET: api/IssueSlips/IssueSlipsForOrderWithIdInWarehouse/5
         [HttpGet("IssueSlipsForOrderWithIdInWarehouse/{orderId}/{warehouseId}")]
         [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
         [ProducesResponseType(500)]
         public async Task<ActionResult<IEnumerable<IssueSlipDTO>>> GetIssueSlipsForOrderWithIdInWarehouse(long orderId, int warehouseId)
         {
@@ -235,6 +236,10 @@ namespace Warehouse.API.Controllers
             {
                 IEnumerable<IssueSlip> issueSlips = await this.Mediator.Send(new FindIssueSlipsByOrderIdAndWarehouseIdCommand(orderId, warehouseId));
                 return this.Ok(this.Mapper.Map<IEnumerable<IssueSlip>, IEnumerable<IssueSlipDTO>>(issueSlips));
+            }
+            catch (EntityNotFoundException ex)
+            {
+                return this.NotFound(ex.Message);
             }
             catch (Exception)
             {
