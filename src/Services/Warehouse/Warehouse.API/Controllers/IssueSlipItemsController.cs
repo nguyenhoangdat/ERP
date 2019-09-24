@@ -8,6 +8,7 @@ using Restmium.ERP.Services.Warehouse.Application.Models;
 using Restmium.ERP.Services.Warehouse.Domain.Entities;
 using Restmium.ERP.Services.Warehouse.Domain.Exceptions;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Warehouse.API.Controllers
@@ -216,6 +217,50 @@ namespace Warehouse.API.Controllers
             catch (UnitsExceededException ex)
             {
                 return this.Conflict(ex.Message);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        // GET: api/IssueSlipItems/UnissuedItemsByIssueSlipId/1
+        [HttpGet("UnissuedItemsByIssueSlipId/{issueSlipId}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
+        public async Task<ActionResult<IEnumerable<IssueSlipDTO.ItemDTO>>> GetUnissuedItemsByIssueSlipId(long issueSlipId)
+        {
+            try
+            {
+                IEnumerable<IssueSlip.Item> items = await this.Mediator.Send(new FindUnissuedIssueSlipItemsByIssueSlipIdCommand(issueSlipId));
+                return this.Ok(this.Mapper.Map<IEnumerable<IssueSlipDTO.ItemDTO>>(items));
+            }
+            catch (EntityNotFoundException ex)
+            {
+                return this.NotFound(ex.Message);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        // GET: api/IssueSlipItems/UnassignedItemsByIssueSlipId/1
+        [HttpGet("UnassignedItemsByIssueSlipId/{issueSlipId}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
+        public async Task<ActionResult<IEnumerable<IssueSlipDTO.ItemDTO>>> GetUnassignedItemsByIssueSlipId(long issueSlipId)
+        {
+            try
+            {
+                IEnumerable<IssueSlip.Item> items = await this.Mediator.Send(new FindUnassignedIssueSlipItemsByIssueSlipIdCommand(issueSlipId));
+                return this.Ok(this.Mapper.Map<IEnumerable<IssueSlipDTO.ItemDTO>>(items));
+            }
+            catch (EntityNotFoundException ex)
+            {
+                return this.NotFound(ex.Message);
             }
             catch (Exception)
             {
