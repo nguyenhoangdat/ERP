@@ -16,6 +16,7 @@ namespace Restmium.ERP.BuildingBlocks.Common.Entities
 
         /// <summary>
         /// DateTime when the entity should be moved to the bin.
+        /// Null means never.
         /// </summary>
         public DateTime? UtcDelete { get; set; }
 
