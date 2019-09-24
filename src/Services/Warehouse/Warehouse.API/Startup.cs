@@ -104,12 +104,10 @@ namespace Restmium.ERP.Services.Warehouse.API
             #endregion
 
             #region Infrastucture configuration
-            #region Movement
             services.AddScoped<IMovementSetting>(sp => {
                 int? monthsRetentionPeriod = this.Configuration.GetSection("Infrastucture").GetSection("Movement").GetValue<int?>("MonthsRetentionPeriod", null);
                 return new MovementSetting(monthsRetentionPeriod);
             });
-            #endregion
             #endregion
         }
 
