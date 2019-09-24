@@ -17,6 +17,7 @@ using Restmium.ERP.Services.Warehouse.Application.DependencyInjection.Selectors;
 using Restmium.ERP.Services.Warehouse.Application.DependencyInjection.Validators;
 using Restmium.ERP.Services.Warehouse.Application.Handlers.Integration;
 using Restmium.ERP.Services.Warehouse.Infrastructure.Database;
+using Restmium.ERP.Services.Warehouse.Infrastructure.Database.Configuration.Setting;
 using Restmium.Messaging;
 using Restmium.Messaging.Azure.ServiceBus;
 using System.Reflection;
@@ -99,6 +100,15 @@ namespace Restmium.ERP.Services.Warehouse.API
             {
                 services.AddTransient<IReceiptPositionSelector, DefaultReceiptPositionSelector>();
             }
+            #endregion
+            #endregion
+
+            #region Infrastucture configuration
+            #region Movement
+            services.AddScoped<IMovementSetting>(sp => {
+                int? monthsRetentionPeriod = this.Configuration.GetSection("Infrastucture").GetSection("Movement").GetValue<int?>("MonthsRetentionPeriod", null);
+                return new MovementSetting(monthsRetentionPeriod);
+            });
             #endregion
             #endregion
         }

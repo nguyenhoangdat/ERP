@@ -1,12 +1,20 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Restmium.ERP.Services.Warehouse.Domain.Entities;
+using Restmium.ERP.Services.Warehouse.Infrastructure.Database.Configuration.Setting;
 using System;
 
 namespace Restmium.ERP.Services.Warehouse.Infrastructure.Database.Configuration
 {
     public class MovementConfiguration : IEntityTypeConfiguration<Movement>
     {
+        public MovementConfiguration(IMovementSetting setting)
+        {
+            this.Setting = setting;
+        }
+
+        protected IMovementSetting Setting { get; }
+
         public void Configure(EntityTypeBuilder<Movement> builder)
         {
             builder.HasKey(x => x.Id);
@@ -27,6 +35,12 @@ namespace Restmium.ERP.Services.Warehouse.Infrastructure.Database.Configuration
                 .HasDefaultValue(DateTime.UtcNow);
             builder.Property(x => x.UtcCreated)
                 .ValueGeneratedOnAdd();
+
+            if (this.Setting.MonthsRetentionPeriod.HasValue)
+            {
+                builder.Property(x => x.UtcDelete)
+                    .HasDefaultValue(DateTime.UtcNow.AddMonths(this.Setting.MonthsRetentionPeriod.Value));
+            }
         }
     }
 }

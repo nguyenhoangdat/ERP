@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Restmium.ERP.Services.Warehouse.Domain.Entities;
 using Restmium.ERP.Services.Warehouse.Infrastructure.Database.Configuration;
+using Restmium.ERP.Services.Warehouse.Infrastructure.Database.Configuration.Setting;
 
 namespace Restmium.ERP.Services.Warehouse.Infrastructure.Database
 {
@@ -9,8 +10,9 @@ namespace Restmium.ERP.Services.Warehouse.Infrastructure.Database
         protected DatabaseContext() : base()
         {
         }
-        public DatabaseContext(DbContextOptions options) : base(options)
+        public DatabaseContext(DbContextOptions options, IMovementSetting movementSetting) : base(options)
         {
+            this.MovementSetting = movementSetting;
         }
 
         #region DbSets
@@ -28,11 +30,18 @@ namespace Restmium.ERP.Services.Warehouse.Infrastructure.Database
         public DbSet<StockTaking.Item> StockTakingItems { get; set; }
         #endregion
 
+        #region Settings
+        public IMovementSetting MovementSetting { get; }
+        #endregion
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(WarehouseConfiguration).Assembly);
+
+            // All configurations without implicit constructor
+            modelBuilder.ApplyConfiguration(new MovementConfiguration(this.MovementSetting));
         }
     }
 }
