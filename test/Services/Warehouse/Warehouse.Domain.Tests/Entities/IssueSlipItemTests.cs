@@ -4,6 +4,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Restmium.ERP.Services.Warehouse.Domain.Entities;
 using Restmium.ERP.Services.Warehouse.Domain.Entities.Extensions;
 using Restmium.ERP.Services.Warehouse.Infrastructure.Database;
+using Restmium.ERP.Services.Warehouse.Infrastructure.Database.Configuration.Setting;
 using Restmium.ERP.Services.Warehouse.Tests.Common;
 using Restmium.ERP.Services.Warehouse.Tests.Common.Interfaces;
 using System.Linq;
@@ -27,7 +28,7 @@ namespace Warehouse.Domain.Tests.Entities
                 .Options;
 
             // Create the schema in the database
-            this.DatabaseContext = new DatabaseContext(options);
+            this.DatabaseContext = new DatabaseContext(options, new MovementSetting(monthsRetentionPeriod: 0));
             this.DatabaseContext.Database.EnsureCreated();
 
             this.DbSeeder.Seed(this.DatabaseContext);
