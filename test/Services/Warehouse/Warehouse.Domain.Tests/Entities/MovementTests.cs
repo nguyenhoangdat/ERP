@@ -50,8 +50,6 @@ namespace Warehouse.Domain.Tests.Entities
 
             movement = this.DatabaseContext.Movements.FirstOrDefault(x => x.Id == 1);
             Assert.IsTrue(movement.CanBeMovedToBin());
-
-            
         }
 
         [TestMethod, TestCategory("Extensions")]
