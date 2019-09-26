@@ -61,19 +61,22 @@ namespace Warehouse.Domain.Tests.Entities
         {
             IssueSlip.Item item;
 
+            // Delivered IssueSlip
             item = this.DatabaseContext.IssueSlipItems.FirstOrDefault(x =>
-                x.IssueSlip.OrderId == 2 &&
+                x.IssueSlip.OrderId == 1 &&
                 x.IssuedUnits == x.RequestedUnits);
             Assert.IsTrue(item.CanBeMovedToBin());
 
+            // Current - Unissued Item
             item = this.DatabaseContext.IssueSlipItems.FirstOrDefault(x =>
-                x.IssueSlip.OrderId == 3 &&
-                x.IssuedUnits == x.RequestedUnits);
+                x.IssueSlip.OrderId == 2 &&
+                x.IssuedUnits < x.RequestedUnits);
             Assert.IsFalse(item.CanBeMovedToBin());
 
+            // Current - Item moved to bin
             item = this.DatabaseContext.IssueSlipItems.FirstOrDefault(x =>
-                x.IssueSlip.OrderId == 1 &&
-                x.IssuedUnits < x.RequestedUnits);
+                x.IssueSlip.OrderId == 2 &&
+                x.UtcMovedToBin != null);
             Assert.IsFalse(item.CanBeMovedToBin());
         }
 
@@ -83,12 +86,12 @@ namespace Warehouse.Domain.Tests.Entities
             IssueSlip.Item item;
 
             item = this.DatabaseContext.IssueSlipItems.FirstOrDefault(x =>
-                x.IssueSlip.OrderId == 4 &&
+                x.IssueSlip.OrderId == 2 &&
                 x.UtcMovedToBin != null);
             Assert.IsTrue(item.CanBeRestoredFromBin());
 
             item = this.DatabaseContext.IssueSlipItems.FirstOrDefault(x =>
-                x.IssueSlip.OrderId == 4 &&
+                x.IssueSlip.OrderId == 1 &&
                 x.UtcMovedToBin == null);
             Assert.IsFalse(item.CanBeRestoredFromBin());
         }

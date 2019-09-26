@@ -94,7 +94,7 @@ namespace Warehouse.Domain.Tests.Entities
         [TestMethod, TestCategory("Extensions")]
         public void HasSectionIdWithUnissuedUnitsTest()
         {
-            IssueSlip issueSlip = this.DatabaseContext.IssueSlips.FirstOrDefault(x => x.OrderId == 1);
+            IssueSlip issueSlip = this.DatabaseContext.IssueSlips.FirstOrDefault(x => x.OrderId == 2);
 
             Assert.IsTrue(issueSlip.HasSectionIdWithUnissuedUnits(2)); // Exists
 
@@ -148,10 +148,10 @@ namespace Warehouse.Domain.Tests.Entities
             IssueSlip issueSlip;
 
             issueSlip = this.DatabaseContext.IssueSlips.FirstOrDefault(x => x.OrderId == 1);
-            Assert.IsFalse(issueSlip.CanBeMovedToBin());
+            Assert.IsTrue(issueSlip.CanBeMovedToBin());
 
             issueSlip = this.DatabaseContext.IssueSlips.FirstOrDefault(x => x.OrderId == 2);
-            Assert.IsTrue(issueSlip.CanBeMovedToBin());
+            Assert.IsFalse(issueSlip.CanBeMovedToBin());
         }
 
         [TestMethod, TestCategory("Extensions")]

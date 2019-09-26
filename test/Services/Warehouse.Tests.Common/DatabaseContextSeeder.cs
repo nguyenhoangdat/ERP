@@ -11,22 +11,10 @@ namespace Restmium.ERP.Services.Warehouse.Tests.Common
     {
         public void Seed(DatabaseContext databaseContext)
         {
-            #region System entities
-            databaseContext.Warehouses.Add(new Domain.Entities.Warehouse(name: "System", new Address()
+            if (this.SeedSystemEntities(databaseContext) != 3)
             {
-                Street = "System",
-                City = "System",
-                Country = "System",
-                ZipCode = "System"
-            }));
-            databaseContext.SaveChanges();
-
-            databaseContext.Sections.Add(new Section(name: "System", warehouseId: 1));
-            databaseContext.SaveChanges();
-
-            databaseContext.Positions.Add(new Position(name: "System", width: 0, height: 0, depth: 0, maxWeight: 0, sectionId: 1));
-            databaseContext.SaveChanges();
-            #endregion
+                throw new Exception("System entities seed failed!");
+            }
 
             // Create Addresses
             Address addressPrague = new Address()
@@ -38,38 +26,75 @@ namespace Restmium.ERP.Services.Warehouse.Tests.Common
             };
 
             // Create Warehouses
-            Domain.Entities.Warehouse warehousePrague = new Domain.Entities.Warehouse(name: "Warehouse - Prague", addressPrague);
+            Domain.Entities.Warehouse warehousePrague = new Domain.Entities.Warehouse(name: "Warehouse - Prague", addressPrague)
+            {
+                UtcCreated = DateTime.UtcNow.AddMonths(-1)
+            };
             databaseContext.Warehouses.Add(warehousePrague);
             databaseContext.SaveChanges();
 
             // Create Sections
-            Section sectionA = databaseContext.Sections.Add(new Section(name: "Section A", warehousePrague)).Entity;
+            Section sectionA = databaseContext.Sections.Add(new Section(name: "Section A", warehousePrague)
+            {
+                UtcCreated = DateTime.UtcNow.AddMonths(-1)
+            }).Entity;
             databaseContext.SaveChanges();
 
-            Section sectionB = databaseContext.Sections.Add(new Section(name: "Section B", warehousePrague)).Entity;
+            Section sectionB = databaseContext.Sections.Add(new Section(name: "Section B", warehousePrague)
+            {
+                UtcCreated = DateTime.UtcNow.AddMonths(-1)
+            }).Entity;
             databaseContext.SaveChanges();
 
             // Generate Positions
-            databaseContext.Positions.Add(new Position(name: "A.1", width: 1265, height: 400, depth: 400, maxWeight: 30000, sectionA));
-            databaseContext.Positions.Add(new Position(name: "A.2", width: 1265, height: 400, depth: 400, maxWeight: 30000, sectionA));
-            databaseContext.Positions.Add(new Position(name: "A.3", width: 1265, height: 400, depth: 400, maxWeight: 30000, sectionA));
+            databaseContext.Positions.Add(new Position(name: "A.01", width: 1265, height: 400, depth: 400, maxWeight: 30000, sectionA)
+            {
+                UtcCreated = DateTime.UtcNow.AddMonths(-1)
+            });
+            databaseContext.Positions.Add(new Position(name: "A.02", width: 1265, height: 400, depth: 400, maxWeight: 30000, sectionA)
+            {
+                UtcCreated = DateTime.UtcNow.AddMonths(-1)
+            });
+            databaseContext.Positions.Add(new Position(name: "A.03", width: 1265, height: 400, depth: 400, maxWeight: 30000, sectionA)
+            {
+                UtcCreated = DateTime.UtcNow.AddMonths(-1)
+            });
+            databaseContext.SaveChanges();
 
-            databaseContext.Positions.Add(new Position(name: "B.1", width: 965, height: 400, depth: 400, maxWeight: 30000, sectionB));
-            databaseContext.Positions.Add(new Position(name: "B.2", width: 965, height: 400, depth: 400, maxWeight: 30000, sectionB));
-            databaseContext.Positions.Add(new Position(name: "B.3", width: 965, height: 400, depth: 400, maxWeight: 30000, sectionB));
+            databaseContext.Positions.Add(new Position(name: "B.01", width: 965, height: 400, depth: 400, maxWeight: 30000, sectionB)
+            {
+                UtcCreated = DateTime.UtcNow.AddMonths(-1)
+            });
+            databaseContext.Positions.Add(new Position(name: "B.02", width: 965, height: 400, depth: 400, maxWeight: 30000, sectionB)
+            {
+                UtcCreated = DateTime.UtcNow.AddMonths(-1)
+            });
+            databaseContext.Positions.Add(new Position(name: "B.03", width: 965, height: 400, depth: 400, maxWeight: 30000, sectionB)
+            {
+                UtcCreated = DateTime.UtcNow.AddMonths(-1)
+            });
             databaseContext.SaveChanges();
 
             // Generate Wares
-            databaseContext.Wares.Add(new Ware(productId: 13, productName: $"Samsung Galaxy J5", width: 65, height: 50, depth: 135, weight: 250));
-            databaseContext.Wares.Add(new Ware(productId: 11, productName: $"Huawei Nova 3", width: 70, height: 50, depth: 150, weight: 300));
-            databaseContext.Wares.Add(new Ware(productId: 12, productName: $"Huawei P20", width: 70, height: 50, depth: 150, weight: 280));
+            databaseContext.Wares.Add(new Ware(productId: 13, productName: $"Samsung Galaxy J5", width: 65, height: 50, depth: 135, weight: 250)
+            {
+                UtcCreated = DateTime.UtcNow.AddMonths(-1).AddHours(1)
+            });
+            databaseContext.Wares.Add(new Ware(productId: 11, productName: $"Huawei Nova 3", width: 70, height: 50, depth: 150, weight: 300)
+            {
+                UtcCreated = DateTime.UtcNow.AddMonths(-1).AddHours(1)
+            });
+            databaseContext.Wares.Add(new Ware(productId: 12, productName: $"Huawei P20", width: 70, height: 50, depth: 150, weight: 280)
+            {
+                UtcCreated = DateTime.UtcNow.AddMonths(-1).AddHours(1)
+            });
             databaseContext.SaveChanges();
 
             // Generate Receipts
             databaseContext.Receipts.Add(
                 new Receipt(
-                    utcExpected: DateTime.UtcNow,
-                    utcReceived: DateTime.UtcNow,
+                    utcExpected: DateTime.UtcNow.AddMonths(-1).AddDays(1).AddHours(6),
+                    utcReceived: DateTime.UtcNow.AddMonths(-1).AddDays(1).AddHours(7),
                     items: new List<Receipt.Item>()
                     {
                         new Receipt.Item(
@@ -78,102 +103,103 @@ namespace Restmium.ERP.Services.Warehouse.Tests.Common
                             wareId: 1,
                             countOrdered: 10,
                             countReceived: 10,
-                            utcProcessed: DateTime.UtcNow),
+                            utcProcessed: DateTime.UtcNow.AddMonths(-1).AddDays(1).AddHours(10).AddMinutes(1))
+                        {
+                            UtcCreated = DateTime.UtcNow.AddMonths(-1).AddDays(1)
+                        },
                         new Receipt.Item(
                             receiptId: 0,
                             positionId: 3,
                             wareId: 2,
                             countOrdered: 5,
                             countReceived: 5,
-                            utcProcessed: DateTime.UtcNow),
+                            utcProcessed: DateTime.UtcNow.AddMonths(-1).AddDays(1).AddHours(10).AddMinutes(2))
+                        {
+                            UtcCreated = DateTime.UtcNow.AddMonths(-1).AddDays(1)
+                        },
                         new Receipt.Item(
                             receiptId: 0,
                             positionId: 4,
                             wareId: 3,
                             countOrdered: 5,
                             countReceived: 5,
-                            utcProcessed: DateTime.UtcNow)
-                    }));
+                            utcProcessed: DateTime.UtcNow.AddMonths(-1).AddDays(1).AddHours(10).AddMinutes(3))
+                        {
+                            UtcCreated = DateTime.UtcNow.AddMonths(-1).AddDays(1)
+                        }
+                    })
+                {
+                    UtcCreated = DateTime.UtcNow.AddMonths(-1).AddDays(1)
+                });
             databaseContext.Movements.Add(
                 new Movement(
                     wareId: 1,
                     positionId: 2,
                     direction: Movement.Direction.In,
                     countChange: 10,
-                    countTotal: 10));
+                    countTotal: 10)
+                {
+                    UtcCreated = DateTime.UtcNow.AddMonths(-1).AddDays(1).AddHours(10).AddMinutes(11)
+                });
             databaseContext.Movements.Add(
                 new Movement(
                     wareId: 2,
                     positionId: 3,
                     direction: Movement.Direction.In,
                     countChange: 5,
-                    countTotal: 5));
+                    countTotal: 5)
+                {
+                    UtcCreated = DateTime.UtcNow.AddMonths(-1).AddDays(1).AddHours(10).AddMinutes(12)
+                });
             databaseContext.Movements.Add(
                 new Movement(
                     wareId: 3,
                     positionId: 4,
                     direction: Movement.Direction.In,
                     countChange: 5,
-                    countTotal: 5));
+                    countTotal: 5)
+                {
+                    UtcCreated = DateTime.UtcNow.AddMonths(-1).AddDays(1).AddHours(10).AddMinutes(13)
+                });
             databaseContext.SaveChanges();
 
-            databaseContext.Receipts.Add(new Receipt(
-                    utcExpected: DateTime.UtcNow.AddHours(5),
+            // Future Receipts
+            databaseContext.Receipts.Add(
+                new Receipt(
+                    utcExpected: DateTime.UtcNow.AddDays(2).AddHours(5),
                     items: new List<Receipt.Item>()
                     {
                         new Receipt.Item(1, 10)
-                    }));
+                        {
+                            UtcCreated = DateTime.UtcNow.AddDays(-2)
+                        }
+                    })
+                {
+                    UtcCreated = DateTime.UtcNow.AddDays(-2)
+                });
             databaseContext.SaveChanges();
 
             databaseContext.Receipts.Add(
                 new Receipt(
-                    utcExpected: DateTime.UtcNow.AddDays(1),
+                    utcExpected: DateTime.UtcNow.AddDays(3).AddHours(4),
                     items: new List<Receipt.Item>()
                     {
                         new Receipt.Item(2, 5)
-                    }));
+                        {
+                            UtcCreated = DateTime.UtcNow.AddDays(-1)
+                        }
+                    })
+                {
+                    UtcCreated = DateTime.UtcNow.AddDays(-1)
+                });
             databaseContext.SaveChanges();
 
-            // Generate IssueSlips
+            // Generate IssueSlips - Past
             databaseContext.IssueSlips.Add(
                 new IssueSlip(
                     orderId: 1,
-                    utcDispatchDate: DateTime.UtcNow.AddHours(1),
-                    utcDeliveryDate: DateTime.UtcNow.AddHours(6),
-                    new List<IssueSlip.Item>()
-                    {
-                        new IssueSlip.Item(
-                            issueSlipId: 0,
-                            wareId: 1,
-                            positionId: 2,
-                            requestedUnits: 1,
-                            issuedUnits: 1),
-                        new IssueSlip.Item(
-                            issueSlipId: 0,
-                            wareId: 2,
-                            positionId: 1, // Unassigned position
-                            requestedUnits: 1,
-                            issuedUnits: 0), // Unissued item
-                        new IssueSlip.Item(
-                            issueSlipId: 0,
-                            wareId: 3,
-                            positionId: 4,
-                            requestedUnits: 1,
-                            issuedUnits: 0) // Unissued item
-                    }));
-            databaseContext.Movements.Add(
-                new Movement(
-                    wareId: 1,
-                    positionId: 2,
-                    direction: Movement.Direction.Out,
-                    countChange: 1,
-                    countTotal: 9));
-
-            databaseContext.IssueSlips.Add(
-                new IssueSlip(
-                    orderId: 2,
-                    utcDispatchDate: DateTime.UtcNow.AddHours(2),
-                    utcDeliveryDate: DateTime.UtcNow.AddHours(7),
+                    utcDispatchDate: DateTime.UtcNow.AddDays(-15),
+                    utcDeliveryDate: DateTime.UtcNow.AddDays(-14),
                     new List<IssueSlip.Item>()
                     {
                         new IssueSlip.Item(
@@ -182,59 +208,89 @@ namespace Restmium.ERP.Services.Warehouse.Tests.Common
                             positionId: 2,
                             requestedUnits: 1,
                             issuedUnits: 1)
-                    }));
+                        {
+                            UtcCreated = DateTime.UtcNow.AddDays(-16)
+                        }
+                    })
+                {
+                    UtcCreated = DateTime.UtcNow.AddDays(-16)
+                });
             databaseContext.Movements.Add(
                 new Movement(
                     wareId: 1,
                     positionId: 2,
                     direction: Movement.Direction.Out,
                     countChange: 1,
-                    countTotal: 8));
+                    countTotal: 9)
+                {
+                    UtcCreated = DateTime.UtcNow.AddDays(-16).AddHours(12)
+                });
 
+            // IssueSlips - Current
             databaseContext.IssueSlips.Add(
                 new IssueSlip(
-                    orderId: 3,
-                    utcDispatchDate: DateTime.UtcNow.AddHours(2),
-                    utcDeliveryDate: DateTime.UtcNow.AddHours(7),
+                    orderId: 2,
+                    utcDispatchDate: DateTime.UtcNow.AddDays(1),
+                    utcDeliveryDate: DateTime.UtcNow.AddDays(1).AddHours(12),
                     new List<IssueSlip.Item>()
                     {
-                        new IssueSlip.Item(
-                            issueSlipId: 0,
-                            wareId: 1,
-                            positionId: 2,
-                            requestedUnits: 1,
-                            issuedUnits: 1) { UtcMovedToBin = DateTime.UtcNow }
-                    }
-                ) { UtcMovedToBin = DateTime.UtcNow });
-            databaseContext.Movements.Add(
-                new Movement(
-                    wareId: 1,
-                    positionId: 2,
-                    direction: Movement.Direction.Out,
-                    countChange: 1,
-                    countTotal: 7));
-
-            databaseContext.IssueSlips.Add(
-                new IssueSlip(
-                    orderId: 4,
-                    utcDispatchDate: DateTime.UtcNow.AddHours(2),
-                    utcDeliveryDate: DateTime.UtcNow.AddHours(7),
-                    new List<IssueSlip.Item>()
-                    {
-                        new IssueSlip.Item(
-                            issueSlipId: 0,
-                            wareId: 1,
-                            positionId: 2,
-                            requestedUnits: 1,
-                            issuedUnits: 0) { UtcMovedToBin = DateTime.UtcNow },
                         new IssueSlip.Item(
                             issueSlipId: 0,
                             wareId: 2,
-                            positionId: 3,
+                            positionId: 1, // Unassigned position
                             requestedUnits: 1,
-                            issuedUnits: 0)
-                    }));
+                            issuedUnits: 0) // Unissued item
+                        {
+                            UtcCreated = DateTime.UtcNow.AddDays(-1)
+                        }, 
+                        new IssueSlip.Item(
+                            issueSlipId: 0,
+                            wareId: 3,
+                            positionId: 4,
+                            requestedUnits: 1,
+                            issuedUnits: 0) // Unissued item
+                        {
+                            UtcCreated = DateTime.UtcNow.AddDays(-1)
+                        },
+                        new IssueSlip.Item(
+                            issueSlipId: 0,
+                            wareId: 3,
+                            positionId: 1,
+                            requestedUnits: 1,
+                            issuedUnits: 0) // Unissued item
+                        {
+                            UtcCreated = DateTime.UtcNow.AddDays(-1),
+                            UtcMovedToBin = DateTime.UtcNow.AddDays(-1)
+                        }
+                    })
+                {
+                    UtcCreated = DateTime.UtcNow.AddDays(-1)
+                });
+            databaseContext.SaveChanges();
 
+            // IssueSlip - Current - Cancelled order
+            databaseContext.IssueSlips.Add(
+                new IssueSlip(
+                    orderId: 3,
+                    utcDispatchDate: DateTime.UtcNow.AddDays(1),
+                    utcDeliveryDate: DateTime.UtcNow.AddDays(1).AddHours(12),
+                    new List<IssueSlip.Item>()
+                    {
+                        new IssueSlip.Item(
+                            issueSlipId: 0,
+                            wareId: 2,
+                            positionId: 1, // Unassigned position
+                            requestedUnits: 1,
+                            issuedUnits: 0) // Unissued
+                        {
+                            UtcCreated = DateTime.UtcNow.AddDays(-1),
+                            UtcMovedToBin = DateTime.UtcNow.AddDays(-1).AddHours(1)
+                        }
+                    })
+                {
+                    UtcCreated = DateTime.UtcNow.AddDays(-1),
+                    UtcMovedToBin = DateTime.UtcNow.AddDays(-1).AddHours(1)
+                });
             databaseContext.SaveChanges();
 
             // Generate StockTakings (including empty positions)
@@ -254,6 +310,28 @@ namespace Restmium.ERP.Services.Warehouse.Tests.Common
             databaseContext.SaveChanges();
 
             // TODO: Do revision for "GetNextToBeProcessed" for Receipt, IssueSlip, and StockTaking - do we need the parentId?
+        }
+
+        private int SeedSystemEntities(DatabaseContext databaseContext)
+        {
+            int count = 0;
+
+            databaseContext.Warehouses.Add(new Domain.Entities.Warehouse(name: "System", new Address()
+            {
+                Street = "System",
+                City = "System",
+                Country = "System",
+                ZipCode = "System"
+            }));
+            count += databaseContext.SaveChanges();
+
+            databaseContext.Sections.Add(new Section(name: "System", warehouseId: 1));
+            count += databaseContext.SaveChanges();
+
+            databaseContext.Positions.Add(new Position(name: "System", width: 0, height: 0, depth: 0, maxWeight: 0, sectionId: 1));
+            count += databaseContext.SaveChanges();
+
+            return count;
         }
     }
 }

@@ -45,11 +45,11 @@ namespace Warehouse.Domain.Tests.Entities
         {
             Movement movement;
 
-            movement = this.DatabaseContext.Movements.FirstOrDefault(x => x.Id == 6);
-            Assert.IsFalse(movement.CanBeMovedToBin());
-
             movement = this.DatabaseContext.Movements.FirstOrDefault(x => x.Id == 1);
             Assert.IsTrue(movement.CanBeMovedToBin());
+
+            movement = this.DatabaseContext.Movements.FirstOrDefault(x => x.Id == 4);
+            Assert.IsFalse(movement.CanBeMovedToBin());
         }
 
         [TestMethod, TestCategory("Extensions")]
@@ -61,7 +61,7 @@ namespace Warehouse.Domain.Tests.Entities
             movement.UtcMovedToBin = DateTime.UtcNow;
             Assert.IsTrue(movement.CanBeRestoredFromBin());
 
-            movement = this.DatabaseContext.Movements.FirstOrDefault(x => x.Id == 6);
+            movement = this.DatabaseContext.Movements.FirstOrDefault(x => x.Id == 4);
             Assert.IsFalse(movement.CanBeRestoredFromBin());
         }
     }
