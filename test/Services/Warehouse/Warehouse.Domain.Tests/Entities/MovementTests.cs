@@ -48,7 +48,7 @@ namespace Warehouse.Domain.Tests.Entities
             movement = this.DatabaseContext.Movements.FirstOrDefault(x => x.Id == 1);
             Assert.IsTrue(movement.CanBeMovedToBin());
 
-            movement = this.DatabaseContext.Movements.FirstOrDefault(x => x.Id == 4);
+            movement = this.DatabaseContext.Movements.FirstOrDefault(x => x.Id == 5);
             Assert.IsFalse(movement.CanBeMovedToBin());
         }
 
