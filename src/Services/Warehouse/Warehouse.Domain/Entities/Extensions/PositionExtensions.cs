@@ -118,9 +118,9 @@ namespace Restmium.ERP.Services.Warehouse.Domain.Entities.Extensions
         }
         private static int MaxSpaceCapacity(this Position position, double width, double depth, double height)
         {
-            int maxWidth = Convert.ToInt32(position.Width / width);
-            int maxDepth = Convert.ToInt32(position.Depth / depth);
-            int maxHeight = Convert.ToInt32(position.Height / height);
+            int maxWidth = Convert.ToInt32(Math.Floor(position.Width / width));
+            int maxDepth = Convert.ToInt32(Math.Floor(position.Depth / depth));
+            int maxHeight = Convert.ToInt32(Math.Floor(position.Height / height));
 
             return maxWidth * maxDepth * maxHeight;
         }
