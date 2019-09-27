@@ -59,6 +59,10 @@ namespace Restmium.ERP.Services.Warehouse.Tests.Common
             {
                 UtcCreated = DateTime.UtcNow.AddMonths(-1)
             });
+            databaseContext.Positions.Add(new Position(name: "A.04", width: 1265, height: 400, depth: 400, maxWeight: 30000, sectionA)
+            {
+                UtcCreated = DateTime.UtcNow.AddMonths(-1)
+            });
             databaseContext.SaveChanges();
 
             databaseContext.Positions.Add(new Position(name: "B.01", width: 965, height: 400, depth: 400, maxWeight: 30000, sectionB)
@@ -88,8 +92,13 @@ namespace Restmium.ERP.Services.Warehouse.Tests.Common
             {
                 UtcCreated = DateTime.UtcNow.AddMonths(-1).AddHours(1)
             });
+            databaseContext.Wares.Add(new Ware(productId: 12, productName: $"Samsung Galaxy A5", width: 70, height: 50, depth: 150, weight: 280)
+            {
+                UtcCreated = DateTime.UtcNow.AddMonths(-1).AddHours(1)
+            });
             databaseContext.SaveChanges();
 
+            #region Receipts
             // Generate Receipts
             databaseContext.Receipts.Add(
                 new Receipt(
@@ -124,6 +133,16 @@ namespace Restmium.ERP.Services.Warehouse.Tests.Common
                             countOrdered: 5,
                             countReceived: 5,
                             utcProcessed: DateTime.UtcNow.AddMonths(-1).AddDays(1).AddHours(10).AddMinutes(3))
+                        {
+                            UtcCreated = DateTime.UtcNow.AddMonths(-1).AddDays(1)
+                        },
+                        new Receipt.Item(
+                            receiptId: 0,
+                            positionId: 5,
+                            wareId: 4,
+                            countOrdered: 1,
+                            countReceived: 1,
+                            utcProcessed: DateTime.UtcNow.AddMonths(-1).AddDays(1).AddHours(10).AddMinutes(4))
                         {
                             UtcCreated = DateTime.UtcNow.AddMonths(-1).AddDays(1)
                         }
@@ -161,6 +180,16 @@ namespace Restmium.ERP.Services.Warehouse.Tests.Common
                 {
                     UtcCreated = DateTime.UtcNow.AddMonths(-1).AddDays(1).AddHours(10).AddMinutes(13)
                 });
+            databaseContext.Movements.Add(
+                new Movement(
+                    wareId: 4,
+                    positionId: 5,
+                    direction: Movement.Direction.In,
+                    countChange: 1,
+                    countTotal: 1)
+                {
+                    UtcCreated = DateTime.UtcNow.AddMonths(-1).AddDays(1).AddHours(10).AddMinutes(14)
+                });
             databaseContext.SaveChanges();
 
             // Future Receipts
@@ -169,7 +198,7 @@ namespace Restmium.ERP.Services.Warehouse.Tests.Common
                     utcExpected: DateTime.UtcNow.AddDays(2).AddHours(5),
                     items: new List<Receipt.Item>()
                     {
-                        new Receipt.Item(1, 10)
+                        new Receipt.Item(0, 2, 1, 10, 0)
                         {
                             UtcCreated = DateTime.UtcNow.AddDays(-2)
                         }
@@ -193,7 +222,9 @@ namespace Restmium.ERP.Services.Warehouse.Tests.Common
                     UtcCreated = DateTime.UtcNow.AddDays(-1)
                 });
             databaseContext.SaveChanges();
+            #endregion
 
+            #region IssueSlips
             // Generate IssueSlips - Past
             databaseContext.IssueSlips.Add(
                 new IssueSlip(
@@ -206,6 +237,15 @@ namespace Restmium.ERP.Services.Warehouse.Tests.Common
                             issueSlipId: 0,
                             wareId: 1,
                             positionId: 2,
+                            requestedUnits: 1,
+                            issuedUnits: 1)
+                        {
+                            UtcCreated = DateTime.UtcNow.AddDays(-16)
+                        },
+                        new IssueSlip.Item(
+                            issueSlipId: 0,
+                            wareId: 4,
+                            positionId: 5,
                             requestedUnits: 1,
                             issuedUnits: 1)
                         {
@@ -225,6 +265,16 @@ namespace Restmium.ERP.Services.Warehouse.Tests.Common
                 {
                     UtcCreated = DateTime.UtcNow.AddDays(-16).AddHours(12)
                 });
+            databaseContext.Movements.Add(
+               new Movement(
+                   wareId: 4,
+                   positionId: 5,
+                   direction: Movement.Direction.Out,
+                   countChange: 1,
+                   countTotal: 0)
+               {
+                   UtcCreated = DateTime.UtcNow.AddDays(-16).AddHours(12).AddMinutes(2)
+               });
 
             // IssueSlips - Current
             databaseContext.IssueSlips.Add(
@@ -266,6 +316,7 @@ namespace Restmium.ERP.Services.Warehouse.Tests.Common
                 {
                     UtcCreated = DateTime.UtcNow.AddDays(-1)
                 });
+            databaseContext.Positions.FirstOrDefault(x => x.Id == 4).ReservedUnits += 1;
             databaseContext.SaveChanges();
 
             // IssueSlip - Current - Cancelled order
@@ -292,6 +343,7 @@ namespace Restmium.ERP.Services.Warehouse.Tests.Common
                     UtcMovedToBin = DateTime.UtcNow.AddDays(-1).AddHours(1)
                 });
             databaseContext.SaveChanges();
+            #endregion
 
             // Generate StockTakings (including empty positions)
             databaseContext.StockTakings.Add(
@@ -300,12 +352,13 @@ namespace Restmium.ERP.Services.Warehouse.Tests.Common
                     items: new List<StockTaking.Item>()
                     {
                         new StockTaking.Item(stockTakingId: 0, wareId: 1, positionId: 2, currentStock: 9, countedStock: 9, utcCounted: DateTime.UtcNow.AddSeconds(30)),
-                        new StockTaking.Item(stockTakingId: 0, wareId: null, positionId: 3, currentStock: 0, countedStock: 0, utcCounted: DateTime.UtcNow.AddSeconds(35)),
-                        new StockTaking.Item(stockTakingId: 0, wareId: null, positionId: 4, currentStock: 0, countedStock: 0, utcCounted: DateTime.UtcNow.AddSeconds(40)),
+                        new StockTaking.Item(stockTakingId: 0, wareId: 2, positionId: 3, currentStock: 5, countedStock: 0, utcCounted: DateTime.UtcNow.AddSeconds(35)),
+                        new StockTaking.Item(stockTakingId: 0, wareId: 3, positionId: 4, currentStock: 5, countedStock: 0, utcCounted: DateTime.UtcNow.AddSeconds(40)),
+                        new StockTaking.Item(stockTakingId: 0, wareId: 4, positionId: 5, currentStock: 0, countedStock: 0),
 
-                        new StockTaking.Item(stockTakingId: 0, wareId: null, positionId: 5, currentStock: 0, countedStock: 0, utcCounted: DateTime.UtcNow.AddSeconds(45)),
-                        new StockTaking.Item(stockTakingId: 0, wareId: null, positionId: 6, currentStock: 0, countedStock: 0, utcCounted: DateTime.UtcNow.AddSeconds(50)),
-                        new StockTaking.Item(stockTakingId: 0, wareId: null, positionId: 7, currentStock: 0, countedStock: 0, utcCounted: DateTime.UtcNow.AddSeconds(55))
+                        new StockTaking.Item(stockTakingId: 0, wareId: null, positionId: 6, currentStock: 0, countedStock: 0, utcCounted: DateTime.UtcNow.AddSeconds(45)),
+                        new StockTaking.Item(stockTakingId: 0, wareId: null, positionId: 7, currentStock: 0, countedStock: 0, utcCounted: DateTime.UtcNow.AddSeconds(50)),
+                        new StockTaking.Item(stockTakingId: 0, wareId: null, positionId: 8, currentStock: 0, countedStock: 0, utcCounted: DateTime.UtcNow.AddSeconds(55))
                     }));
             databaseContext.SaveChanges();
 
