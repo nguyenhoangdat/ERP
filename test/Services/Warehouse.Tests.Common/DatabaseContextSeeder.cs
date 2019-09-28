@@ -98,6 +98,17 @@ namespace Restmium.ERP.Services.Warehouse.Tests.Common
             });
             databaseContext.SaveChanges();
 
+            // Possible to Delete
+            databaseContext.Wares.Add(new Ware(productId: 1, productName: $"Ware - Possible to Delete", width: 0, height: 0, depth: 0, weight: 0));
+            databaseContext.SaveChanges();
+
+            // Already in a bin
+            databaseContext.Wares.Add(new Ware(productId: 2, productName: $"Ware - Already in a bin", width: 0, height: 0, depth: 0, weight: 0)
+            {
+                UtcMovedToBin = DateTime.UtcNow
+            });
+            databaseContext.SaveChanges();
+
             #region Receipts
             // Generate Receipts
             databaseContext.Receipts.Add(
@@ -208,6 +219,7 @@ namespace Restmium.ERP.Services.Warehouse.Tests.Common
                 });
             databaseContext.SaveChanges();
 
+            // Cancelled
             databaseContext.Receipts.Add(
                 new Receipt(
                     utcExpected: DateTime.UtcNow.AddDays(3).AddHours(4),
@@ -215,11 +227,13 @@ namespace Restmium.ERP.Services.Warehouse.Tests.Common
                     {
                         new Receipt.Item(2, 5)
                         {
-                            UtcCreated = DateTime.UtcNow.AddDays(-1)
+                            UtcCreated = DateTime.UtcNow.AddDays(-1),
+                            UtcMovedToBin = DateTime.UtcNow.AddDays(-1)
                         }
                     })
                 {
-                    UtcCreated = DateTime.UtcNow.AddDays(-1)
+                    UtcCreated = DateTime.UtcNow.AddDays(-1),
+                    UtcMovedToBin = DateTime.UtcNow.AddDays(-1)
                 });
             databaseContext.SaveChanges();
             #endregion
@@ -345,24 +359,79 @@ namespace Restmium.ERP.Services.Warehouse.Tests.Common
             databaseContext.SaveChanges();
             #endregion
 
+            #region StockTakings
             // Generate StockTakings (including empty positions)
             databaseContext.StockTakings.Add(
                 new StockTaking(
                     name: "StockTaking for Warehouse - Praha",
                     items: new List<StockTaking.Item>()
                     {
-                        new StockTaking.Item(stockTakingId: 0, wareId: 1, positionId: 2, currentStock: 9, countedStock: 9, utcCounted: DateTime.UtcNow.AddSeconds(30)),
-                        new StockTaking.Item(stockTakingId: 0, wareId: 2, positionId: 3, currentStock: 5, countedStock: 0, utcCounted: DateTime.UtcNow.AddSeconds(35)),
-                        new StockTaking.Item(stockTakingId: 0, wareId: 3, positionId: 4, currentStock: 5, countedStock: 0, utcCounted: DateTime.UtcNow.AddSeconds(40)),
+                        new StockTaking.Item(stockTakingId: 0, wareId: 1, positionId: 2, currentStock: 9, countedStock: 9, utcCounted: DateTime.UtcNow.AddDays(-1)),
+                        new StockTaking.Item(stockTakingId: 0, wareId: 2, positionId: 3, currentStock: 5, countedStock: 0, utcCounted: DateTime.UtcNow.AddDays(-1)),
+                        new StockTaking.Item(stockTakingId: 0, wareId: 3, positionId: 4, currentStock: 5, countedStock: 0, utcCounted: DateTime.UtcNow.AddDays(-1)),
                         new StockTaking.Item(stockTakingId: 0, wareId: 4, positionId: 5, currentStock: 0, countedStock: 0),
 
-                        new StockTaking.Item(stockTakingId: 0, wareId: null, positionId: 6, currentStock: 0, countedStock: 0, utcCounted: DateTime.UtcNow.AddSeconds(45)),
-                        new StockTaking.Item(stockTakingId: 0, wareId: null, positionId: 7, currentStock: 0, countedStock: 0, utcCounted: DateTime.UtcNow.AddSeconds(50)),
-                        new StockTaking.Item(stockTakingId: 0, wareId: null, positionId: 8, currentStock: 0, countedStock: 0, utcCounted: DateTime.UtcNow.AddSeconds(55))
+                        new StockTaking.Item(stockTakingId: 0, wareId: null, positionId: 6, currentStock: 0, countedStock: 0, utcCounted: DateTime.UtcNow.AddDays(-1)),
+                        new StockTaking.Item(stockTakingId: 0, wareId: null, positionId: 7, currentStock: 0, countedStock: 0, utcCounted: DateTime.UtcNow.AddDays(-1)),
+                        new StockTaking.Item(stockTakingId: 0, wareId: null, positionId: 8, currentStock: 0, countedStock: 0, utcCounted: DateTime.UtcNow.AddDays(-1))
                     }));
             databaseContext.SaveChanges();
 
+            databaseContext.StockTakings.Add(
+                new StockTaking(
+                    name: "StockTaking - Possible to Delete",
+                    items: new List<StockTaking.Item>()
+                    {
+                        new StockTaking.Item(stockTakingId: 0, wareId: null, positionId: 6, currentStock: 0, countedStock: 0, utcCounted: DateTime.UtcNow.AddHours(-1))
+                        {
+                            UtcCreated = DateTime.UtcNow.AddHours(-2)
+                        },
+                        new StockTaking.Item(stockTakingId: 0, wareId: null, positionId: 7, currentStock: 0, countedStock: 0, utcCounted: DateTime.UtcNow.AddHours(-1))
+                        {
+                            UtcCreated = DateTime.UtcNow.AddHours(-2)
+                        },
+                        new StockTaking.Item(stockTakingId: 0, wareId: null, positionId: 8, currentStock: 0, countedStock: 0, utcCounted: DateTime.UtcNow.AddHours(-1))
+                        {
+                            UtcCreated = DateTime.UtcNow.AddHours(-2),
+                            UtcMovedToBin = DateTime.UtcNow.AddHours(-2)
+                        }
+                    })
+                { UtcCreated = DateTime.UtcNow.AddHours(-2) });
+            databaseContext.SaveChanges();
+
+            databaseContext.StockTakings.Add(
+                new StockTaking(
+                    name: "StockTaking - Possible to Delete",
+                    items: new List<StockTaking.Item>()
+                    {
+                        new StockTaking.Item(stockTakingId: 0, wareId: null, positionId: 6, currentStock: 0, countedStock: 0, utcCounted: DateTime.UtcNow.AddHours(-1))
+                        {
+                            UtcCreated = DateTime.UtcNow.AddHours(-2),
+                            UtcMovedToBin = DateTime.UtcNow
+                        },
+                        new StockTaking.Item(stockTakingId: 0, wareId: null, positionId: 7, currentStock: 0, countedStock: 0, utcCounted: DateTime.UtcNow.AddHours(-1))
+                        {
+                            UtcCreated = DateTime.UtcNow.AddHours(-2),
+                            UtcMovedToBin = DateTime.UtcNow
+                        },
+                        new StockTaking.Item(stockTakingId: 0, wareId: null, positionId: 8, currentStock: 0, countedStock: 0, utcCounted: DateTime.UtcNow.AddHours(-1))
+                        {
+                            UtcCreated = DateTime.UtcNow.AddHours(-2),
+                            UtcMovedToBin = DateTime.UtcNow
+                        }
+                    })
+                {
+                    UtcCreated = DateTime.UtcNow.AddHours(-2),
+                    UtcMovedToBin = DateTime.UtcNow
+                }); ;
+            databaseContext.SaveChanges();
+            #endregion
+
             // TODO: Do revision for "GetNextToBeProcessed" for Receipt, IssueSlip, and StockTaking - do we need the parentId?
+
+            // Always do last
+            this.SeedDeletedWarehouse(databaseContext);
+            this.SeedPossibleToDeleteWarehouse(databaseContext);
         }
 
         private int SeedSystemEntities(DatabaseContext databaseContext)
@@ -385,6 +454,64 @@ namespace Restmium.ERP.Services.Warehouse.Tests.Common
             count += databaseContext.SaveChanges();
 
             return count;
+        }
+        private int SeedDeletedWarehouse(DatabaseContext databaseContext)
+        {
+            databaseContext.Warehouses.Add(
+                new Domain.Entities.Warehouse(
+                    name: "Deleted Warehouse",
+                    address: new Address()
+                    {
+                        Street = "Unknown Street",
+                        City = "Non-existing City",
+                        Country = "Extincted country",
+                        ZipCode = "1159"
+                    },
+                    sections: new List<Section>()
+                    {
+                        new Section(
+                            name: "Deleted Section",
+                            warehouseId: 0,
+                            positions: new List<Position>()
+                            {
+                                new Position(name: "Deleted Position", width: 965, height: 400, depth: 400, maxWeight: 30000, 0)
+                                {
+                                    UtcMovedToBin = DateTime.UtcNow.AddHours(-1)
+                                }
+                            })
+                        {
+                            UtcMovedToBin = DateTime.UtcNow.AddHours(-1)
+                        }
+                    })
+                {
+                    UtcMovedToBin = DateTime.UtcNow.AddHours(-1)
+                });
+
+            return databaseContext.SaveChanges();
+        }
+        private int SeedPossibleToDeleteWarehouse(DatabaseContext databaseContext)
+        {
+            databaseContext.Warehouses.Add(
+                new Domain.Entities.Warehouse(
+                    name: "Warehouse - Possible to Delete",
+                    address: new Address()
+                    {
+                        Street = "Unknown Street",
+                        City = "Non-existing City",
+                        Country = "Extincted country",
+                        ZipCode = "1159"
+                    },
+                    sections: new List<Section>()
+                    {
+                        new Section(
+                            name: "Section - Possible to Delete",
+                            warehouseId: 0,
+                            positions: new List<Position>()
+                            {
+                                new Position(name: "Position - Possible to Delete", width: 965, height: 400, depth: 400, maxWeight: 30000, 0)
+                            })
+                    }));
+            return databaseContext.SaveChanges();
         }
     }
 }
