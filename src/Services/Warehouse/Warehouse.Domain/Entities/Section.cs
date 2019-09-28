@@ -6,7 +6,7 @@ namespace Restmium.ERP.Services.Warehouse.Domain.Entities
 {
     public class Section : DatabaseEntity
     {
-        public Section()
+        protected Section()
         {
             this.Positions = new HashSet<Position>();
         }
@@ -15,10 +15,18 @@ namespace Restmium.ERP.Services.Warehouse.Domain.Entities
             this.Name = name;
             this.WarehouseId = warehouseId;
         }
+        public Section(string name, int warehouseId, ICollection<Position> positions) : this(name, warehouseId)
+        {
+            this.Positions = positions;
+        }
         public Section(string name, Warehouse warehouse) : this()
         {
             this.Name = name;
             this.Warehouse = warehouse;
+        }
+        public Section(string name, Warehouse warehouse, ICollection<Position> positions) : this(name, warehouse)
+        {
+            this.Positions = positions;
         }
 
         [Required]
