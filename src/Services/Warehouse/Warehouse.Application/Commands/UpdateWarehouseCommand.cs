@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using Restmium.ERP.Services.Warehouse.Domain.Entities;
+using System;
 
 namespace Restmium.ERP.Services.Warehouse.Application.Commands
 {
@@ -7,6 +8,11 @@ namespace Restmium.ERP.Services.Warehouse.Application.Commands
     {
         public UpdateWarehouseCommand(int id, string name, Address address)
         {
+            if (id <= 1)
+            {
+                throw new ArgumentOutOfRangeException(nameof(id));
+            }
+
             this.Id = id;
             this.Name = name;
             this.Address = address;

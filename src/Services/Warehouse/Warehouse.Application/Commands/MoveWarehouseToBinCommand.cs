@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using System;
 
 namespace Restmium.ERP.Services.Warehouse.Application.Commands
 {
@@ -6,6 +7,11 @@ namespace Restmium.ERP.Services.Warehouse.Application.Commands
     {
         public MoveWarehouseToBinCommand(int warehouseId, bool movedToBinInCascade)
         {
+            if (warehouseId <= 1)
+            {
+                throw new ArgumentOutOfRangeException(nameof(warehouseId));
+            }
+
             this.WarehouseId = warehouseId;
             this.MovedToBinInCascade = movedToBinInCascade;
         }

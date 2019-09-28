@@ -20,7 +20,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
 
         public async Task<Page<Section>> Handle(FindSectionsOnPageCommand request, CancellationToken cancellationToken)
         {
-            IQueryable<Section> sections = this.DatabaseContext.Sections.Where(x => x.UtcMovedToBin == null);
+            IQueryable<Section> sections = this.DatabaseContext.Sections.Where(x => 1 < x.Id && x.UtcMovedToBin == null);
 
             return new Page<Section>(
                 request.Page,

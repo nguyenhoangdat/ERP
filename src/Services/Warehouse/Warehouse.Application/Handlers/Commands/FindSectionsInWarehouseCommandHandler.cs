@@ -22,7 +22,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
 
         public async Task<IEnumerable<Section>> Handle(FindSectionsInWarehouseCommand request, CancellationToken cancellationToken)
         {
-            Entities.Warehouse warehouse = this.DatabaseContext.Warehouses.FirstOrDefault(x => x.Id == request.WarehouseId);
+            Entities.Warehouse warehouse = this.DatabaseContext.Warehouses.FirstOrDefault(x => 1 < x.Id && x.Id == request.WarehouseId);
 
             if (warehouse == null)
             {

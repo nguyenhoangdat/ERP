@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using Restmium.ERP.Services.Warehouse.Application.Models;
+using System;
 
 namespace Restmium.ERP.Services.Warehouse.Application.Commands
 {
@@ -8,6 +9,11 @@ namespace Restmium.ERP.Services.Warehouse.Application.Commands
         public GetWareAvailabilityInWarehouseCommand(int wareId, int warehouseId)
         {
             this.WareId = wareId;
+
+            if (warehouseId <= 1)
+            {
+                throw new ArgumentOutOfRangeException(nameof(warehouseId));
+            }
             this.WarehouseId = warehouseId;
         }
 

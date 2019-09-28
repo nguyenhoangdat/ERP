@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using Restmium.ERP.Services.Warehouse.Domain.Entities;
+using System;
 using System.Collections.Generic;
 
 namespace Restmium.ERP.Services.Warehouse.Application.Commands
@@ -8,6 +9,11 @@ namespace Restmium.ERP.Services.Warehouse.Application.Commands
     {
         public FindWaresInSectionCommand(int sectionId)
         {
+            if (sectionId <= 1)
+            {
+                throw new ArgumentOutOfRangeException(nameof(sectionId));
+            }
+
             this.SectionId = sectionId;
         }
 

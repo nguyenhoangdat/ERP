@@ -20,7 +20,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
 
         public async Task<Page<Position>> Handle(FindDeletedPositionsOnPageCommand request, CancellationToken cancellationToken)
         {
-            IQueryable<Position> positions = this.DatabaseContext.Positions.Where(x => x.UtcMovedToBin != null);
+            IQueryable<Position> positions = this.DatabaseContext.Positions.Where(x => 1 < x.Id && x.UtcMovedToBin != null);
 
             return new Page<Position>(
                 request.Page,

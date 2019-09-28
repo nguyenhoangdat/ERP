@@ -20,7 +20,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
 
         public async Task<Page<Entities.Warehouse>> Handle(FindWarehousesOnPageCommand request, CancellationToken cancellationToken)
         {
-            IQueryable<Entities.Warehouse> warehouses = this.DatabaseContext.Warehouses.Where(x => x.UtcMovedToBin == null);
+            IQueryable<Entities.Warehouse> warehouses = this.DatabaseContext.Warehouses.Where(x => 1 < x.Id && x.UtcMovedToBin == null);
 
             return new Page<Entities.Warehouse>(
                 request.Page,

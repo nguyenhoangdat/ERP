@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using Restmium.ERP.Services.Warehouse.Domain.Entities;
+using System;
 
 namespace Restmium.ERP.Services.Warehouse.Application.Commands
 {
@@ -8,6 +9,11 @@ namespace Restmium.ERP.Services.Warehouse.Application.Commands
         public StoreUnitsForReceiptItemAtPositionCommand(long receiptId, long positionId, int wareId, int count)
         {
             this.ReceiptId = receiptId;
+
+            if (positionId <= 1)
+            {
+                throw new ArgumentOutOfRangeException(nameof(positionId));
+            }
             this.PositionId = positionId;
             this.WareId = wareId;
             this.Count = count;

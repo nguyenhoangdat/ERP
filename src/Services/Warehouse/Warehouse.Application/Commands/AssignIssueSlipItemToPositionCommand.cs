@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using Restmium.ERP.Services.Warehouse.Domain.Entities;
+using System;
 
 namespace Restmium.ERP.Services.Warehouse.Application.Commands
 {
@@ -9,6 +10,11 @@ namespace Restmium.ERP.Services.Warehouse.Application.Commands
         {
             this.IssueSlipId = issueSlipId;
             this.WareId = wareId;
+
+            if (positionId <= 1)
+            {
+                throw new ArgumentOutOfRangeException(nameof(positionId));
+            }
             this.PositionId = positionId;
         }
 

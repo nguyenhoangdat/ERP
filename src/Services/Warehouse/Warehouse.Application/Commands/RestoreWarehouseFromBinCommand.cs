@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using System;
 
 namespace Restmium.ERP.Services.Warehouse.Application.Commands
 {
@@ -6,6 +7,10 @@ namespace Restmium.ERP.Services.Warehouse.Application.Commands
     {
         public RestoreWarehouseFromBinCommand(int warehouseId)
         {
+            if (warehouseId <= 1)
+            {
+                throw new ArgumentOutOfRangeException(nameof(warehouseId));
+            }
             this.WarehouseId = warehouseId;
         }
 

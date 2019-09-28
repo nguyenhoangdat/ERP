@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using Restmium.ERP.Services.Warehouse.Domain.Entities;
+using System;
 
 namespace Restmium.ERP.Services.Warehouse.Application.Commands
 {
@@ -7,6 +8,11 @@ namespace Restmium.ERP.Services.Warehouse.Application.Commands
     {
         public FindPositionByIdCommand(long id)
         {
+            if (id <= 1)
+            {
+                throw new ArgumentOutOfRangeException(nameof(id));
+            }
+
             this.Id = id;
         }
 

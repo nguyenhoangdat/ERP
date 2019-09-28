@@ -29,7 +29,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
                 throw new EntityNotFoundException(string.Format(Properties.Resources.Ware_EntityNotFoundException, request.WareId));
             }
 
-            IQueryable<Position> positions = this.DatabaseContext.Positions.Where(x => x.GetWare().Id == request.WareId);
+            IQueryable<Position> positions = this.DatabaseContext.Positions.Where(x => 1 < x.Section.WarehouseId && x.GetWare().Id == request.WareId);
 
             return positions
                 .GroupBy(e => e.Section.WarehouseId)
