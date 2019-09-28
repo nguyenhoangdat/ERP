@@ -18,11 +18,15 @@ namespace Restmium.ERP.Services.Warehouse.Application.Commands
 
         public class Item
         {
-            public Item(int wareId, long positionId, int countOrdered)
+            public Item(int wareId, int countOrdered)
             {
                 this.WareId = wareId;
-                this.PositionId = positionId;
+                this.PositionId = 1;
                 this.CountOrdered = countOrdered;
+            }
+            public Item(int wareId, long positionId, int countOrdered) : this(wareId, countOrdered)
+            {
+                this.PositionId = positionId;
             }
 
             public int WareId { get; }

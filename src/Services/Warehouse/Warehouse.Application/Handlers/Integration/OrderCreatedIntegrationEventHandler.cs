@@ -74,7 +74,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Integration
                 // Positions will be selected manually
                 if (positionCounts == null)
                 {
-                    modelItems.AddLast(new CreateIssueSlipCommand.Item(ware.Id, 1, item.Units)); // 1 - NonExisting Position
+                    modelItems.AddLast(new CreateIssueSlipCommand.Item(ware.Id, item.Units)); // Unassigned
                 }
                 else
                 {

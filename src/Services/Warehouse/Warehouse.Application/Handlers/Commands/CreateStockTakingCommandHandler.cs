@@ -30,7 +30,7 @@ namespace Restmium.ERP.Services.Warehouse.Application.Handlers.Commands
             List<StockTaking.Item> items = new List<StockTaking.Item>(request.Items.Count);
             foreach (CreateStockTakingCommand.Item item in request.Items)
             {
-                items.Add(new StockTaking.Item(0, item.WareId, item.PositionId, item.CurrentStock, item.CountedStock));
+                items.Add(new StockTaking.Item(0, item.WareId, item.PositionId, item.CurrentStock, 0));
             }
 
             StockTaking stockTaking = this.DatabaseContext.StockTakings.Add(new StockTaking(request.Name, items)).Entity;
