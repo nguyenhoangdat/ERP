@@ -28,7 +28,7 @@ namespace Restmium.ERP.Services.Warehouse.Domain.Entities.Extensions
 
         public static bool CanBeDeleted(this Section section)
         {
-            throw new System.NotImplementedException("SectionExtensions.CanBeDeleted()"); // TODO: 2019.2 Implement CanBeDeleted
+            return section.UtcMovedToBin != null;
         }
     }
 }
