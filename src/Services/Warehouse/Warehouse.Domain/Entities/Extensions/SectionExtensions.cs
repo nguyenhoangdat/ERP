@@ -4,16 +4,16 @@ namespace Restmium.ERP.Services.Warehouse.Domain.Entities.Extensions
 {
     public static class SectionExtensions
     {
-        public static bool CanBeMovedToBin(this Section section)
+        public static bool CanBeMovedToBin(this Section section, bool ignoreSystemEntity = false)
         {
-            if (section.UtcMovedToBin != null)
+            if ((ignoreSystemEntity == false && section.IsSystemEntity) || section.UtcMovedToBin != null)
             {
                 return false;
             }
 
             foreach (Position item in section.Positions.Where(x => x.UtcMovedToBin == null))
             {
-                if (item.CanBeMovedToBin() == false)
+                if (item.CanBeMovedToBin(ignoreSystemEntity) == false)
                 {
                     return false;
                 }

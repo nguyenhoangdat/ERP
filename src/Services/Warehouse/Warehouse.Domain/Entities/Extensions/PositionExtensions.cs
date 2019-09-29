@@ -138,9 +138,9 @@ namespace Restmium.ERP.Services.Warehouse.Domain.Entities.Extensions
             return position.StockTakingItems.Count(x => x.UtcCounted == null) == 0;
         }
 
-        public static bool CanBeMovedToBin(this Position position)
+        public static bool CanBeMovedToBin(this Position position, bool ignoreSystemEntity = false)
         {
-            if (position.UtcMovedToBin != null || position.CountWare() != 0)
+            if ((ignoreSystemEntity == false && position.IsSystemEntity) || position.UtcMovedToBin != null || position.CountWare() != 0)
             {
                 return false;
             }
