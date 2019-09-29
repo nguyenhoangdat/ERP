@@ -10,20 +10,21 @@ namespace Restmium.ERP.Services.Warehouse.Domain.Entities
         {
             this.Sections = new HashSet<Section>();
         }
-        public Warehouse(string name, Address address) : this()
+        public Warehouse(string name, Address address, bool isSystemEntity = false) : this()
         {
             this.Name = name;
             this.Address = address;
+            this.IsSystemEntity = isSystemEntity;
         }
-        public Warehouse(string name, Address address, ICollection<Section> sections) : this(name, address)
+        public Warehouse(string name, Address address, ICollection<Section> sections, bool isSystemEntity = false) : this(name, address, isSystemEntity)
         {
             this.Sections = sections;
         }
-        public Warehouse(int id, string name, Address address) : this(name, address)
+        public Warehouse(int id, string name, Address address, bool isSystemEntity = false) : this(name, address, isSystemEntity)
         {
             this.Id = id;
         }
-        public Warehouse(int id, string name, Address address, ICollection<Section> sections) : this(name, address, sections)
+        public Warehouse(int id, string name, Address address, ICollection<Section> sections, bool isSystemEntity = false) : this(name, address, sections, isSystemEntity)
         {
             this.Id = id;
         }
@@ -36,6 +37,9 @@ namespace Restmium.ERP.Services.Warehouse.Domain.Entities
 
         [Required]
         public virtual Address Address { get; set; }
+
+        [Required]
+        public bool IsSystemEntity { get; }
 
         public virtual ICollection<Section> Sections { get; protected set; }
     }

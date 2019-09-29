@@ -10,24 +10,20 @@ namespace Restmium.ERP.Services.Warehouse.Domain.Entities
         {
             this.Positions = new HashSet<Position>();
         }
-        public Section(string name, int warehouseId) : this()
+        public Section(string name, int warehouseId, bool isSystemEntity = false) : this()
         {
             this.Name = name;
             this.WarehouseId = warehouseId;
+            this.IsSystemEntity = isSystemEntity;
         }
-        public Section(string name, int warehouseId, ICollection<Position> positions) : this(name, warehouseId)
+        public Section(string name, int warehouseId, ICollection<Position> positions, bool isSystemEntity = false) : this(name, warehouseId, isSystemEntity)
         {
             this.Positions = positions;
         }
-        public Section(string name, Warehouse warehouse) : this()
-        {
-            this.Name = name;
-            this.Warehouse = warehouse;
-        }
-        public Section(string name, Warehouse warehouse, ICollection<Position> positions) : this(name, warehouse)
-        {
-            this.Positions = positions;
-        }
+        public Section(string name, Warehouse warehouse, bool isSystemEntity = false) : this(name, warehouse.Id, isSystemEntity)
+        { }
+        public Section(string name, Warehouse warehouse, ICollection<Position> positions, bool isSystemEntity = false) : this(name, warehouse.Id, positions, isSystemEntity)
+        { }
 
         [Required]
         public int Id { get; set; }
@@ -38,6 +34,9 @@ namespace Restmium.ERP.Services.Warehouse.Domain.Entities
         [Required]
         public int WarehouseId { get; set; }
         public virtual Warehouse Warehouse { get; set; }
+
+        [Required]
+        public bool IsSystemEntity { get; }
 
         public virtual ICollection<Position> Positions { get; protected set; }
     }
