@@ -49,9 +49,12 @@ namespace Warehouse.Domain.Tests.Entities
             Assert.IsNull(position.GetWare());
 
             position = this.DatabaseContext.Positions.FirstOrDefault(x => x.Id == 2);
-            Assert.IsTrue(position.GetWare().Id == 1);
+            Assert.IsNull(position.GetWare());
 
             position = this.DatabaseContext.Positions.FirstOrDefault(x => x.Id == 3);
+            Assert.IsTrue(position.GetWare().Id == 1);
+
+            position = this.DatabaseContext.Positions.FirstOrDefault(x => x.Id == 4);
             Assert.IsFalse(position.GetWare().Id == 1);
         }
         [TestMethod, TestCategory("Extensions")]
@@ -63,24 +66,27 @@ namespace Warehouse.Domain.Tests.Entities
             Assert.IsNull(position.GetLastWare());
 
             position = this.DatabaseContext.Positions.FirstOrDefault(x => x.Id == 2);
-            Assert.IsTrue(position.GetLastWare().Id == 1);
+            Assert.IsNull(position.GetLastWare());
 
             position = this.DatabaseContext.Positions.FirstOrDefault(x => x.Id == 3);
-            Assert.IsTrue(position.GetLastWare().Id == 2);
+            Assert.IsTrue(position.GetLastWare().Id == 1);
 
             position = this.DatabaseContext.Positions.FirstOrDefault(x => x.Id == 4);
-            Assert.IsTrue(position.GetLastWare().Id == 3);
+            Assert.IsTrue(position.GetLastWare().Id == 2);
 
             position = this.DatabaseContext.Positions.FirstOrDefault(x => x.Id == 5);
-            Assert.IsTrue(position.GetLastWare().Id == 4);
+            Assert.IsTrue(position.GetLastWare().Id == 3);
 
             position = this.DatabaseContext.Positions.FirstOrDefault(x => x.Id == 6);
-            Assert.IsNull(position.GetLastWare());
+            Assert.IsTrue(position.GetLastWare().Id == 4);
 
             position = this.DatabaseContext.Positions.FirstOrDefault(x => x.Id == 7);
             Assert.IsNull(position.GetLastWare());
 
             position = this.DatabaseContext.Positions.FirstOrDefault(x => x.Id == 8);
+            Assert.IsNull(position.GetLastWare());
+
+            position = this.DatabaseContext.Positions.FirstOrDefault(x => x.Id == 9);
             Assert.IsNull(position.GetLastWare());
         }
         [TestMethod, TestCategory("Extensions")]
@@ -92,16 +98,16 @@ namespace Warehouse.Domain.Tests.Entities
             Assert.IsTrue(position.CountWare() == 0);
 
             position = this.DatabaseContext.Positions.FirstOrDefault(x => x.Id == 2);
-            Assert.IsTrue(position.CountWare() == 9);
+            Assert.IsTrue(position.CountWare() == 0);
 
             position = this.DatabaseContext.Positions.FirstOrDefault(x => x.Id == 3);
-            Assert.IsTrue(position.CountWare() == 5);
+            Assert.IsTrue(position.CountWare() == 9);
 
             position = this.DatabaseContext.Positions.FirstOrDefault(x => x.Id == 4);
             Assert.IsTrue(position.CountWare() == 5);
 
             position = this.DatabaseContext.Positions.FirstOrDefault(x => x.Id == 5);
-            Assert.IsTrue(position.CountWare() == 0);
+            Assert.IsTrue(position.CountWare() == 5);
 
             position = this.DatabaseContext.Positions.FirstOrDefault(x => x.Id == 6);
             Assert.IsTrue(position.CountWare() == 0);
@@ -110,6 +116,9 @@ namespace Warehouse.Domain.Tests.Entities
             Assert.IsTrue(position.CountWare() == 0);
 
             position = this.DatabaseContext.Positions.FirstOrDefault(x => x.Id == 8);
+            Assert.IsTrue(position.CountWare() == 0);
+
+            position = this.DatabaseContext.Positions.FirstOrDefault(x => x.Id == 9);
             Assert.IsTrue(position.CountWare() == 0);
         }
         [TestMethod, TestCategory("Extensions")]
@@ -120,17 +129,14 @@ namespace Warehouse.Domain.Tests.Entities
             position = this.DatabaseContext.Positions.FirstOrDefault(x => x.Id == 1);
             Assert.IsTrue(position.CountAvailableWare() == 0);
 
-            position = this.DatabaseContext.Positions.FirstOrDefault(x => x.Id == 2);
+            position = this.DatabaseContext.Positions.FirstOrDefault(x => x.Id == 3);
             Assert.IsTrue(position.CountAvailableWare() == 9);
 
-            position = this.DatabaseContext.Positions.FirstOrDefault(x => x.Id == 3);
+            position = this.DatabaseContext.Positions.FirstOrDefault(x => x.Id == 4);
             Assert.IsTrue(position.CountAvailableWare() == 5);
 
-            position = this.DatabaseContext.Positions.FirstOrDefault(x => x.Id == 4);
-            Assert.IsTrue(position.CountAvailableWare() == 4); // 1 reserved unit
-
             position = this.DatabaseContext.Positions.FirstOrDefault(x => x.Id == 5);
-            Assert.IsTrue(position.CountAvailableWare() == 0);
+            Assert.IsTrue(position.CountAvailableWare() == 4); // 1 reserved unit
 
             position = this.DatabaseContext.Positions.FirstOrDefault(x => x.Id == 6);
             Assert.IsTrue(position.CountAvailableWare() == 0);
@@ -140,12 +146,15 @@ namespace Warehouse.Domain.Tests.Entities
 
             position = this.DatabaseContext.Positions.FirstOrDefault(x => x.Id == 8);
             Assert.IsTrue(position.CountAvailableWare() == 0);
+
+            position = this.DatabaseContext.Positions.FirstOrDefault(x => x.Id == 9);
+            Assert.IsTrue(position.CountAvailableWare() == 0);
         }
 
         [TestMethod, TestCategory("Extensions")]
         public void HasCapacity()
         {
-            Position position = this.DatabaseContext.Positions.FirstOrDefault(x => x.Id == 2);
+            Position position = this.DatabaseContext.Positions.FirstOrDefault(x => x.Id == 3);
             Ware ware = this.DatabaseContext.Wares.FirstOrDefault(x => x.Id == 1);
 
             Assert.IsTrue(position.HasCapacity(ware, 120));
@@ -159,7 +168,7 @@ namespace Warehouse.Domain.Tests.Entities
         [TestMethod, TestCategory("Extensions")]
         public void HasLoadCapacity()
         {
-            Position position = this.DatabaseContext.Positions.FirstOrDefault(x => x.Id == 2);
+            Position position = this.DatabaseContext.Positions.FirstOrDefault(x => x.Id == 3);
             Ware ware = this.DatabaseContext.Wares.FirstOrDefault(x => x.Id == 1);
 
             Assert.IsTrue(position.HasLoadCapacity(ware, 120));
@@ -173,7 +182,7 @@ namespace Warehouse.Domain.Tests.Entities
         [TestMethod, TestCategory("Extensions")]
         public void HasSpaceCapacity()
         {
-            Position position = this.DatabaseContext.Positions.FirstOrDefault(x => x.Id == 2);
+            Position position = this.DatabaseContext.Positions.FirstOrDefault(x => x.Id == 3);
             Ware ware = this.DatabaseContext.Wares.FirstOrDefault(x => x.Id == 1);
 
             Assert.IsTrue(position.HasSpaceCapacity(ware, 432));
@@ -188,7 +197,7 @@ namespace Warehouse.Domain.Tests.Entities
         [TestMethod, TestCategory("Extensions")]
         public void MaxCapacity()
         {
-            Position position = this.DatabaseContext.Positions.FirstOrDefault(x => x.Id == 2);
+            Position position = this.DatabaseContext.Positions.FirstOrDefault(x => x.Id == 3);
             Ware ware = this.DatabaseContext.Wares.FirstOrDefault(x => x.Id == 1);
 
             Assert.IsTrue(position.MaxCapacity(ware) == 120);
@@ -199,7 +208,7 @@ namespace Warehouse.Domain.Tests.Entities
         [TestMethod, TestCategory("Extensions")]
         public void MaxLoadCapacity()
         {
-            Position position = this.DatabaseContext.Positions.FirstOrDefault(x => x.Id == 2);
+            Position position = this.DatabaseContext.Positions.FirstOrDefault(x => x.Id == 3);
             Ware ware = this.DatabaseContext.Wares.FirstOrDefault(x => x.Id == 1);
 
             Assert.IsTrue(position.MaxLoadCapacity(ware) == 120);
@@ -210,7 +219,7 @@ namespace Warehouse.Domain.Tests.Entities
         [TestMethod, TestCategory("Extensions")]
         public void MaxSpaceCapacity()
         {
-            Position position = this.DatabaseContext.Positions.FirstOrDefault(x => x.Id == 2);
+            Position position = this.DatabaseContext.Positions.FirstOrDefault(x => x.Id == 3);
             Ware ware = this.DatabaseContext.Wares.FirstOrDefault(x => x.Id == 1);
 
             Assert.IsTrue(position.MaxSpaceCapacity(ware) == 432);
@@ -224,10 +233,10 @@ namespace Warehouse.Domain.Tests.Entities
         {
             Position position;
 
-            position = this.DatabaseContext.Positions.FirstOrDefault(x => x.Id == 2);
+            position = this.DatabaseContext.Positions.FirstOrDefault(x => x.Id == 3);
             Assert.IsTrue(position.HasAllIssueSlipItemsProcessed());
 
-            position = this.DatabaseContext.Positions.FirstOrDefault(x => x.Id == 4);
+            position = this.DatabaseContext.Positions.FirstOrDefault(x => x.Id == 5);
             Assert.IsFalse(position.HasAllIssueSlipItemsProcessed());
         }
         [TestMethod, TestCategory("Extensions")]
@@ -235,10 +244,10 @@ namespace Warehouse.Domain.Tests.Entities
         {
             Position position;
 
-            position = this.DatabaseContext.Positions.FirstOrDefault(x => x.Id == 3);
+            position = this.DatabaseContext.Positions.FirstOrDefault(x => x.Id == 4);
             Assert.IsTrue(position.HasAllReceiptItemsProcessed());
 
-            position = this.DatabaseContext.Positions.FirstOrDefault(x => x.Id == 2);
+            position = this.DatabaseContext.Positions.FirstOrDefault(x => x.Id == 3);
             Assert.IsFalse(position.HasAllReceiptItemsProcessed());
         }
         [TestMethod, TestCategory("Extensions")]
@@ -246,10 +255,10 @@ namespace Warehouse.Domain.Tests.Entities
         {
             Position position;
 
-            position = this.DatabaseContext.Positions.FirstOrDefault(x => x.Id == 2);
+            position = this.DatabaseContext.Positions.FirstOrDefault(x => x.Id == 3);
             Assert.IsTrue(position.HasAllStockTakingItemsProcessed());
 
-            position = this.DatabaseContext.Positions.FirstOrDefault(x => x.Id == 5);
+            position = this.DatabaseContext.Positions.FirstOrDefault(x => x.Id == 6);
             Assert.IsFalse(position.HasAllStockTakingItemsProcessed());
         }
 

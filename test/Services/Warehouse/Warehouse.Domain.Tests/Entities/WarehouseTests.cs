@@ -49,6 +49,9 @@ namespace Warehouse.Domain.Tests.Entities
             warehouse = this.DatabaseContext.Warehouses.FirstOrDefault(x => x.Id == 1);
             Assert.IsFalse(warehouse.CanBeMovedToBin());
 
+            warehouse = this.DatabaseContext.Warehouses.FirstOrDefault(x => x.Id == 2);
+            Assert.IsFalse(warehouse.CanBeMovedToBin());
+
             warehouse = this.DatabaseContext.Warehouses.FirstOrDefault(x => x.Id == 3);
             Assert.IsFalse(warehouse.CanBeMovedToBin());
         }

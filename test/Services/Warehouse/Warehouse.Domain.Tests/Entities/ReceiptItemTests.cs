@@ -48,7 +48,7 @@ namespace Warehouse.Domain.Tests.Entities
             item = this.DatabaseContext.ReceiptItems
                 .FirstOrDefault(x =>
                     x.ReceiptId == 2 &&
-                    x.PositionId == 2 &&
+                    x.PositionId == 3 &&
                     x.WareId == 1);
             Assert.IsTrue(item.CanBeMovedToBin());
 
@@ -56,7 +56,7 @@ namespace Warehouse.Domain.Tests.Entities
             item = this.DatabaseContext.ReceiptItems
                 .FirstOrDefault(x =>
                     x.ReceiptId == 1 &&
-                    x.PositionId == 2 &&
+                    x.PositionId == 3 &&
                     x.WareId == 1);
             Assert.IsFalse(item.CanBeMovedToBin());
         }
@@ -78,7 +78,7 @@ namespace Warehouse.Domain.Tests.Entities
             item = this.DatabaseContext.ReceiptItems
                 .FirstOrDefault(x =>
                     x.ReceiptId == 1 &&
-                    x.PositionId == 2 &&
+                    x.PositionId == 3 &&
                     x.WareId == 1);
             Assert.IsFalse(item.CanBeRestoredFromBin());
         }

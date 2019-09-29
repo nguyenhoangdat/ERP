@@ -84,11 +84,11 @@ namespace Warehouse.Domain.Tests.Entities
         {
             IssueSlip issueSlip = this.DatabaseContext.IssueSlips.FirstOrDefault(x => x.OrderId == 1);
 
-            Assert.IsTrue(issueSlip.HasSectionId(2));
+            Assert.IsTrue(issueSlip.HasSectionId(3));
 
             Assert.IsFalse(issueSlip.HasSectionId(0));
-            Assert.IsFalse(issueSlip.HasSectionId(1)); // Unassigned position (system)
-            Assert.IsFalse(issueSlip.HasSectionId(3));
+            Assert.IsFalse(issueSlip.HasSectionId(2)); // Unassigned position (system)
+            Assert.IsFalse(issueSlip.HasSectionId(4));
         }
 
         [TestMethod, TestCategory("Extensions")]
@@ -96,12 +96,12 @@ namespace Warehouse.Domain.Tests.Entities
         {
             IssueSlip issueSlip = this.DatabaseContext.IssueSlips.FirstOrDefault(x => x.OrderId == 2);
 
-            Assert.IsTrue(issueSlip.HasSectionIdWithUnissuedUnits(2)); // Exists
+            Assert.IsTrue(issueSlip.HasSectionIdWithUnissuedUnits(3)); // Exists
 
             Assert.IsFalse(issueSlip.HasSectionIdWithUnissuedUnits(0)); // Doesn't exit
-            Assert.IsFalse(issueSlip.HasSectionIdWithUnissuedUnits(1)); // Unassigned position (system)
+            Assert.IsFalse(issueSlip.HasSectionIdWithUnissuedUnits(2)); // Unassigned position (system)
 
-            Assert.IsFalse(issueSlip.HasSectionIdWithUnissuedUnits(3));
+            Assert.IsFalse(issueSlip.HasSectionIdWithUnissuedUnits(4));
         }
 
         [TestMethod, TestCategory("Extensions")]

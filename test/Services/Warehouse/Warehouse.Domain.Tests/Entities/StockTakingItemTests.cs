@@ -50,13 +50,13 @@ namespace Warehouse.Domain.Tests.Entities
             item = this.DatabaseContext.StockTakingItems
                 .FirstOrDefault(x =>
                     x.StockTakingId == 2 &&
-                    x.PositionId == 7);
+                    x.PositionId == 8);
             Assert.IsTrue(item.CanBeMovedToBin());
 
             item = this.DatabaseContext.StockTakingItems
                 .FirstOrDefault(x =>
                     x.StockTakingId == 2 &&
-                    x.PositionId == 8);
+                    x.PositionId == 9);
             Assert.IsFalse(item.CanBeMovedToBin());
         }
         [TestMethod, TestCategory("Extensions")]
@@ -67,13 +67,13 @@ namespace Warehouse.Domain.Tests.Entities
             item = this.DatabaseContext.StockTakingItems
                 .FirstOrDefault(x =>
                     x.StockTakingId == 2 &&
-                    x.PositionId == 7);
+                    x.PositionId == 8);
             Assert.IsFalse(item.CanBeRestoredFromBin());
 
             item = this.DatabaseContext.StockTakingItems
                 .FirstOrDefault(x =>
                     x.StockTakingId == 2 &&
-                    x.PositionId == 8);
+                    x.PositionId == 9);
             Assert.IsTrue(item.CanBeRestoredFromBin());
         }
     }

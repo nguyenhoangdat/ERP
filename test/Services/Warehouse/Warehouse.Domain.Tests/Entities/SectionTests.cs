@@ -53,7 +53,7 @@ namespace Warehouse.Domain.Tests.Entities
             section.UtcMovedToBin = null;
             Assert.IsTrue(section.CanBeMovedToBin());
 
-            section = this.DatabaseContext.Sections.FirstOrDefault(x => x.Id == 1);
+            section = this.DatabaseContext.Sections.FirstOrDefault(x => x.Id == 2);
             Assert.IsFalse(section.CanBeMovedToBin());
         }
         [TestMethod, TestCategory("Extensions")]

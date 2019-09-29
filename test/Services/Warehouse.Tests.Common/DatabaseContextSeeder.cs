@@ -11,11 +11,6 @@ namespace Restmium.ERP.Services.Warehouse.Tests.Common
     {
         public void Seed(DatabaseContext databaseContext)
         {
-            if (this.SeedSystemEntities(databaseContext) != 3)
-            {
-                throw new Exception("System entities seed failed!");
-            }
-
             // Create Addresses
             Address addressPrague = new Address()
             {
@@ -26,12 +21,8 @@ namespace Restmium.ERP.Services.Warehouse.Tests.Common
             };
 
             // Create Warehouses
-            Domain.Entities.Warehouse warehousePrague = new Domain.Entities.Warehouse(name: "Warehouse - Prague", addressPrague)
-            {
-                UtcCreated = DateTime.UtcNow.AddMonths(-1)
-            };
-            databaseContext.Warehouses.Add(warehousePrague);
-            databaseContext.SaveChanges();
+            this.SeedWarehouse(databaseContext, "System", new Address("System", "System", "System", "System", "System"), DateTime.UtcNow.AddYears(-1), true);
+            Domain.Entities.Warehouse warehousePrague = this.SeedWarehouse(databaseContext, "Warehouse - Prague", addressPrague, DateTime.UtcNow.AddMonths(-1), false);
 
             // Create Sections
             Section sectionA = databaseContext.Sections.Add(new Section(name: "Section A", warehousePrague)
@@ -119,7 +110,7 @@ namespace Restmium.ERP.Services.Warehouse.Tests.Common
                     {
                         new Receipt.Item(
                             receiptId: 0,
-                            positionId: 2,
+                            positionId: 3,
                             wareId: 1,
                             countOrdered: 10,
                             countReceived: 10,
@@ -129,7 +120,7 @@ namespace Restmium.ERP.Services.Warehouse.Tests.Common
                         },
                         new Receipt.Item(
                             receiptId: 0,
-                            positionId: 3,
+                            positionId: 4,
                             wareId: 2,
                             countOrdered: 5,
                             countReceived: 5,
@@ -139,7 +130,7 @@ namespace Restmium.ERP.Services.Warehouse.Tests.Common
                         },
                         new Receipt.Item(
                             receiptId: 0,
-                            positionId: 4,
+                            positionId: 5,
                             wareId: 3,
                             countOrdered: 5,
                             countReceived: 5,
@@ -149,7 +140,7 @@ namespace Restmium.ERP.Services.Warehouse.Tests.Common
                         },
                         new Receipt.Item(
                             receiptId: 0,
-                            positionId: 5,
+                            positionId: 6,
                             wareId: 4,
                             countOrdered: 1,
                             countReceived: 1,
@@ -164,7 +155,7 @@ namespace Restmium.ERP.Services.Warehouse.Tests.Common
             databaseContext.Movements.Add(
                 new Movement(
                     wareId: 1,
-                    positionId: 2,
+                    positionId: 3,
                     direction: Movement.Direction.In,
                     countChange: 10,
                     countTotal: 10)
@@ -174,7 +165,7 @@ namespace Restmium.ERP.Services.Warehouse.Tests.Common
             databaseContext.Movements.Add(
                 new Movement(
                     wareId: 2,
-                    positionId: 3,
+                    positionId: 4,
                     direction: Movement.Direction.In,
                     countChange: 5,
                     countTotal: 5)
@@ -184,7 +175,7 @@ namespace Restmium.ERP.Services.Warehouse.Tests.Common
             databaseContext.Movements.Add(
                 new Movement(
                     wareId: 3,
-                    positionId: 4,
+                    positionId: 5,
                     direction: Movement.Direction.In,
                     countChange: 5,
                     countTotal: 5)
@@ -194,7 +185,7 @@ namespace Restmium.ERP.Services.Warehouse.Tests.Common
             databaseContext.Movements.Add(
                 new Movement(
                     wareId: 4,
-                    positionId: 5,
+                    positionId: 6,
                     direction: Movement.Direction.In,
                     countChange: 1,
                     countTotal: 1)
@@ -209,7 +200,12 @@ namespace Restmium.ERP.Services.Warehouse.Tests.Common
                     utcExpected: DateTime.UtcNow.AddDays(2).AddHours(5),
                     items: new List<Receipt.Item>()
                     {
-                        new Receipt.Item(0, 2, 1, 10, 0)
+                        new Receipt.Item(
+                            receiptId: 0,
+                            positionId: 3,
+                            wareId: 1,
+                            countOrdered: 10,
+                            countReceived: 0)
                         {
                             UtcCreated = DateTime.UtcNow.AddDays(-2)
                         }
@@ -250,7 +246,7 @@ namespace Restmium.ERP.Services.Warehouse.Tests.Common
                         new IssueSlip.Item(
                             issueSlipId: 0,
                             wareId: 1,
-                            positionId: 2,
+                            positionId: 3,
                             requestedUnits: 1,
                             issuedUnits: 1)
                         {
@@ -259,7 +255,7 @@ namespace Restmium.ERP.Services.Warehouse.Tests.Common
                         new IssueSlip.Item(
                             issueSlipId: 0,
                             wareId: 4,
-                            positionId: 5,
+                            positionId: 6,
                             requestedUnits: 1,
                             issuedUnits: 1)
                         {
@@ -272,7 +268,7 @@ namespace Restmium.ERP.Services.Warehouse.Tests.Common
             databaseContext.Movements.Add(
                 new Movement(
                     wareId: 1,
-                    positionId: 2,
+                    positionId: 3,
                     direction: Movement.Direction.Out,
                     countChange: 1,
                     countTotal: 9)
@@ -282,7 +278,7 @@ namespace Restmium.ERP.Services.Warehouse.Tests.Common
             databaseContext.Movements.Add(
                new Movement(
                    wareId: 4,
-                   positionId: 5,
+                   positionId: 6,
                    direction: Movement.Direction.Out,
                    countChange: 1,
                    countTotal: 0)
@@ -301,7 +297,7 @@ namespace Restmium.ERP.Services.Warehouse.Tests.Common
                         new IssueSlip.Item(
                             issueSlipId: 0,
                             wareId: 2,
-                            positionId: 1, // Unassigned position
+                            positionId: 2, // Unassigned position in Warehouse
                             requestedUnits: 1,
                             issuedUnits: 0) // Unissued item
                         {
@@ -310,7 +306,7 @@ namespace Restmium.ERP.Services.Warehouse.Tests.Common
                         new IssueSlip.Item(
                             issueSlipId: 0,
                             wareId: 3,
-                            positionId: 4,
+                            positionId: 5,
                             requestedUnits: 1,
                             issuedUnits: 0) // Unissued item
                         {
@@ -319,7 +315,7 @@ namespace Restmium.ERP.Services.Warehouse.Tests.Common
                         new IssueSlip.Item(
                             issueSlipId: 0,
                             wareId: 3,
-                            positionId: 1,
+                            positionId: 2,
                             requestedUnits: 1,
                             issuedUnits: 0) // Unissued item
                         {
@@ -330,7 +326,7 @@ namespace Restmium.ERP.Services.Warehouse.Tests.Common
                 {
                     UtcCreated = DateTime.UtcNow.AddDays(-1)
                 });
-            databaseContext.Positions.FirstOrDefault(x => x.Id == 4).ReservedUnits += 1;
+            databaseContext.Positions.FirstOrDefault(x => x.Id == 5).ReservedUnits += 1;
             databaseContext.SaveChanges();
 
             // IssueSlip - Current - Cancelled order
@@ -344,7 +340,7 @@ namespace Restmium.ERP.Services.Warehouse.Tests.Common
                         new IssueSlip.Item(
                             issueSlipId: 0,
                             wareId: 2,
-                            positionId: 1, // Unassigned position
+                            positionId: 2, // Unassigned position
                             requestedUnits: 1,
                             issuedUnits: 0) // Unissued
                         {
@@ -366,14 +362,14 @@ namespace Restmium.ERP.Services.Warehouse.Tests.Common
                     name: "StockTaking for Warehouse - Praha",
                     items: new List<StockTaking.Item>()
                     {
-                        new StockTaking.Item(stockTakingId: 0, wareId: 1, positionId: 2, currentStock: 9, countedStock: 9, utcCounted: DateTime.UtcNow.AddDays(-1)),
-                        new StockTaking.Item(stockTakingId: 0, wareId: 2, positionId: 3, currentStock: 5, countedStock: 0, utcCounted: DateTime.UtcNow.AddDays(-1)),
-                        new StockTaking.Item(stockTakingId: 0, wareId: 3, positionId: 4, currentStock: 5, countedStock: 0, utcCounted: DateTime.UtcNow.AddDays(-1)),
-                        new StockTaking.Item(stockTakingId: 0, wareId: 4, positionId: 5, currentStock: 0, countedStock: 0),
+                        new StockTaking.Item(stockTakingId: 0, wareId: 1, positionId: 3, currentStock: 9, countedStock: 9, utcCounted: DateTime.UtcNow.AddDays(-1)),
+                        new StockTaking.Item(stockTakingId: 0, wareId: 2, positionId: 4, currentStock: 5, countedStock: 0, utcCounted: DateTime.UtcNow.AddDays(-1)),
+                        new StockTaking.Item(stockTakingId: 0, wareId: 3, positionId: 5, currentStock: 5, countedStock: 0, utcCounted: DateTime.UtcNow.AddDays(-1)),
+                        new StockTaking.Item(stockTakingId: 0, wareId: 4, positionId: 6, currentStock: 0, countedStock: 0),
 
-                        new StockTaking.Item(stockTakingId: 0, wareId: null, positionId: 6, currentStock: 0, countedStock: 0, utcCounted: DateTime.UtcNow.AddDays(-1)),
                         new StockTaking.Item(stockTakingId: 0, wareId: null, positionId: 7, currentStock: 0, countedStock: 0, utcCounted: DateTime.UtcNow.AddDays(-1)),
-                        new StockTaking.Item(stockTakingId: 0, wareId: null, positionId: 8, currentStock: 0, countedStock: 0, utcCounted: DateTime.UtcNow.AddDays(-1))
+                        new StockTaking.Item(stockTakingId: 0, wareId: null, positionId: 8, currentStock: 0, countedStock: 0, utcCounted: DateTime.UtcNow.AddDays(-1)),
+                        new StockTaking.Item(stockTakingId: 0, wareId: null, positionId: 9, currentStock: 0, countedStock: 0, utcCounted: DateTime.UtcNow.AddDays(-1))
                     }));
             databaseContext.SaveChanges();
 
@@ -382,15 +378,15 @@ namespace Restmium.ERP.Services.Warehouse.Tests.Common
                     name: "StockTaking - Possible to Delete",
                     items: new List<StockTaking.Item>()
                     {
-                        new StockTaking.Item(stockTakingId: 0, wareId: null, positionId: 6, currentStock: 0, countedStock: 0, utcCounted: DateTime.UtcNow.AddHours(-1))
-                        {
-                            UtcCreated = DateTime.UtcNow.AddHours(-2)
-                        },
                         new StockTaking.Item(stockTakingId: 0, wareId: null, positionId: 7, currentStock: 0, countedStock: 0, utcCounted: DateTime.UtcNow.AddHours(-1))
                         {
                             UtcCreated = DateTime.UtcNow.AddHours(-2)
                         },
                         new StockTaking.Item(stockTakingId: 0, wareId: null, positionId: 8, currentStock: 0, countedStock: 0, utcCounted: DateTime.UtcNow.AddHours(-1))
+                        {
+                            UtcCreated = DateTime.UtcNow.AddHours(-2)
+                        },
+                        new StockTaking.Item(stockTakingId: 0, wareId: null, positionId: 9, currentStock: 0, countedStock: 0, utcCounted: DateTime.UtcNow.AddHours(-1))
                         {
                             UtcCreated = DateTime.UtcNow.AddHours(-2),
                             UtcMovedToBin = DateTime.UtcNow.AddHours(-2)
@@ -404,17 +400,17 @@ namespace Restmium.ERP.Services.Warehouse.Tests.Common
                     name: "StockTaking - Possible to Delete",
                     items: new List<StockTaking.Item>()
                     {
-                        new StockTaking.Item(stockTakingId: 0, wareId: null, positionId: 6, currentStock: 0, countedStock: 0, utcCounted: DateTime.UtcNow.AddHours(-1))
-                        {
-                            UtcCreated = DateTime.UtcNow.AddHours(-2),
-                            UtcMovedToBin = DateTime.UtcNow
-                        },
                         new StockTaking.Item(stockTakingId: 0, wareId: null, positionId: 7, currentStock: 0, countedStock: 0, utcCounted: DateTime.UtcNow.AddHours(-1))
                         {
                             UtcCreated = DateTime.UtcNow.AddHours(-2),
                             UtcMovedToBin = DateTime.UtcNow
                         },
                         new StockTaking.Item(stockTakingId: 0, wareId: null, positionId: 8, currentStock: 0, countedStock: 0, utcCounted: DateTime.UtcNow.AddHours(-1))
+                        {
+                            UtcCreated = DateTime.UtcNow.AddHours(-2),
+                            UtcMovedToBin = DateTime.UtcNow
+                        },
+                        new StockTaking.Item(stockTakingId: 0, wareId: null, positionId: 9, currentStock: 0, countedStock: 0, utcCounted: DateTime.UtcNow.AddHours(-1))
                         {
                             UtcCreated = DateTime.UtcNow.AddHours(-2),
                             UtcMovedToBin = DateTime.UtcNow
@@ -434,26 +430,27 @@ namespace Restmium.ERP.Services.Warehouse.Tests.Common
             this.SeedPossibleToDeleteWarehouse(databaseContext);
         }
 
-        private int SeedSystemEntities(DatabaseContext databaseContext)
+        private Domain.Entities.Warehouse SeedWarehouse(DatabaseContext databaseContext, string name, Address address, DateTime utcCreated, bool isSystemEntity)
         {
-            int count = 0;
+            Domain.Entities.Warehouse warehouse =
+                new Domain.Entities.Warehouse(name, address, new List<Section>()
+                {
+                    new Section(
+                        name: "System",
+                        warehouseId: 0,
+                        positions: new List<Position>()
+                        {
+                            new Position("System", 0, 0, 0, 0, 0, true)
+                        },
+                        isSystemEntity: true)
+                }, isSystemEntity)
+                {
+                    UtcCreated = utcCreated
+                };
+            databaseContext.Warehouses.Add(warehouse);
+            databaseContext.SaveChanges();
 
-            databaseContext.Warehouses.Add(new Domain.Entities.Warehouse(name: "System", new Address()
-            {
-                Street = "System",
-                City = "System",
-                Country = "System",
-                ZipCode = "System"
-            }));
-            count += databaseContext.SaveChanges();
-
-            databaseContext.Sections.Add(new Section(name: "System", warehouseId: 1));
-            count += databaseContext.SaveChanges();
-
-            databaseContext.Positions.Add(new Position(name: "System", width: 0, height: 0, depth: 0, maxWeight: 0, sectionId: 1));
-            count += databaseContext.SaveChanges();
-
-            return count;
+            return warehouse;
         }
         private int SeedDeletedWarehouse(DatabaseContext databaseContext)
         {
