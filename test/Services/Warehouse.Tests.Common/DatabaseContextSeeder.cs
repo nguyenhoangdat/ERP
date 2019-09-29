@@ -427,7 +427,7 @@ namespace Restmium.ERP.Services.Warehouse.Tests.Common
 
             // Always do last
             this.SeedDeletedWarehouse(databaseContext);
-            this.SeedPossibleToDeleteWarehouse(databaseContext);
+            this.SeedWarehouse(databaseContext, "Possible to Move to Bin", new Address("", "", "", ""), DateTime.UtcNow, false);
         }
 
         private Domain.Entities.Warehouse SeedWarehouse(DatabaseContext databaseContext, string name, Address address, DateTime utcCreated, bool isSystemEntity)
@@ -484,30 +484,6 @@ namespace Restmium.ERP.Services.Warehouse.Tests.Common
                     UtcMovedToBin = DateTime.UtcNow.AddHours(-1)
                 });
 
-            return databaseContext.SaveChanges();
-        }
-        private int SeedPossibleToDeleteWarehouse(DatabaseContext databaseContext)
-        {
-            databaseContext.Warehouses.Add(
-                new Domain.Entities.Warehouse(
-                    name: "Warehouse - Possible to Delete",
-                    address: new Address()
-                    {
-                        Street = "Unknown Street",
-                        City = "Non-existing City",
-                        Country = "Extincted country",
-                        ZipCode = "1159"
-                    },
-                    sections: new List<Section>()
-                    {
-                        new Section(
-                            name: "Section - Possible to Delete",
-                            warehouseId: 0,
-                            positions: new List<Position>()
-                            {
-                                new Position(name: "Position - Possible to Delete", width: 965, height: 400, depth: 400, maxWeight: 30000, 0)
-                            })
-                    }));
             return databaseContext.SaveChanges();
         }
     }
