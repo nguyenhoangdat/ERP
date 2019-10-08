@@ -1,7 +1,7 @@
 # ERP
 Modular ERP application based on Microservices and ASP.NET Core
 
-## Modules
+## Microservices
 - Catalog.API
 - Identity.API
 - Ordering.API
